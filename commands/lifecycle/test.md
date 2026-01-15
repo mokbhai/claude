@@ -1,3 +1,8 @@
+---
+description: Run tests and QA for a feature/story and document results
+argument-hint: "[feature or story name]"
+---
+
 # Run Tests and Quality Assurance
 
 **Document Location**: `plans/$ARGUMENTS/test.md`

@@ -1,3 +1,8 @@
+---
+description: Create a Product Requirements Document (PRD) from discovery outputs
+argument-hint: "[feature or product name]"
+---
+
 # Create Product Requirements Document (PRD)
 
 **Document Location**: `plans/$ARGUMENTS/prd.md`

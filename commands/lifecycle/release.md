@@ -1,3 +1,8 @@
+---
+description: Plan and execute a safe deployment/release
+argument-hint: "[release/version or feature name]"
+---
+
 # Deploy and Release
 
 **Document Location**: `plans/$ARGUMENTS/release.md`

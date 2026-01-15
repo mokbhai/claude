@@ -1,343 +1,120 @@
-# Command Creator Assistant
+---
+description: Create or update a Claude Code slash command (Markdown file)
+argument-hint: "[command-name] (optional)"
+---
 
-<task>
-You are a command creation specialist. Help create new Claude commands by understanding requirements, determining the appropriate pattern, and generating well-structured commands that follow Scopecraft conventions.
-</task>
+# Command Creator
 
-<context>
-CRITICAL: Read the command creation guide first: @/docs/claude-commands-guide.md
+Create or update a Markdown-based slash command file with correct frontmatter, argument placeholders, and (optional) bash pre-execution via `!` lines.
 
-This meta-command helps create other commands by:
-1. Understanding the command's purpose
-2. Determining its category and pattern
-3. Choosing command location (project vs user)
-4. Generating the command file
-5. Creating supporting resources
-6. Updating documentation
-</context>
+## Slash commands: quick reference
 
-<command_categories>
-1. **Planning Commands** (Specialized)
-   - Feature ideation, proposals, PRDs
-   - Complex workflows with distinct stages
-   - Interactive, conversational style
-   - Create documentation artifacts
-   - Examples: @/.claude/commands/01_brainstorm-feature.md
-             @/.claude/commands/02_feature-proposal.md
+Claude Code supports built-in slash commands (like `/help`, `/config`, `/todos`) and **custom slash commands** defined by Markdown files.
 
-2. **Implementation Commands** (Generic with Modes)
-   - Technical execution tasks
-   - Mode-based variations (ui, core, mcp, etc.)
-   - Follow established patterns
-   - Update task states
-   - Example: @/.claude/commands/implement.md
+- **Built-in commands**: Provided by Claude Code itself (see official docs for the full list).
+- **Custom commands**: Markdown files Claude Code can run as a prompt template.
 
-3. **Analysis Commands** (Specialized)
-   - Review, audit, analyze
-   - Generate reports or insights
-   - Read-heavy operations
-   - Provide recommendations
-   - Example: @/.claude/commands/review.md
+Official docs: https://docs.claude.com/en/docs/claude-code/slash-commands
 
-4. **Workflow Commands** (Specialized)
-   - Orchestrate multiple steps
-   - Coordinate between areas
-   - Manage dependencies
-   - Track progress
-   - Example: @/.claude/commands/04_feature-planning.md
+### How custom commands are discovered
 
-5. **Utility Commands** (Generic or Specialized)
-   - Tools, helpers, maintenance
-   - Simple operations
-   - May or may not need modes
-</command_categories>
+Claude Code typically loads custom commands from:
 
-<pattern_research>
-## Before Creating: Study Similar Commands
+- **Project commands** (shared via repo): `.claude/commands/`
+- **Personal commands** (available everywhere): `~/.claude/commands/`
 
-1. **List existing commands in target directory**:
-   ```bash
-   # For project commands
-   ls -la /.claude/commands/
-   
-   # For user commands
-   ls -la ~/.claude/commands/
-   ```
+This repository keeps command sources under `commands/` for organization. If your Claude Code setup expects `.claude/commands/`, sync/copy the generated command file there.
 
-2. **Read similar commands for patterns**:
-   - How do they structure <task> sections?
-   - What MCP tools do they use?
-   - How do they handle arguments?
-   - What documentation do they reference?
+### Syntax
 
-3. **Common patterns to look for**:
-   ```markdown
-   # MCP tool usage for tasks
-   Use tool: mcp__scopecraft-cmd__task_create
-   Use tool: mcp__scopecraft-cmd__task_update
-   Use tool: mcp__scopecraft-cmd__task_list
-   
-   # NOT CLI commands
-   ❌ Run: scopecraft task list
-   ✅ Use tool: mcp__scopecraft-cmd__task_list
-   ```
+`/<command-name> [arguments]`
 
-4. **Standard references to include**:
-   - @/docs/organizational-structure-guide.md
-   - @/docs/command-resources/{relevant-templates}
-   - @/docs/claude-commands-guide.md
-</pattern_research>
+- `<command-name>` is derived from the filename (without `.md`).
+- Subdirectories provide **namespacing** in `/help` descriptions, but do **not** change the command name.
 
-<interview_process>
-## Phase 1: Understanding Purpose
+### Namespacing rules (important)
 
-"Let's create a new command. First, let me check what similar commands exist..."
+- `.claude/commands/frontend/test.md` and `.claude/commands/backend/test.md` both create `/test`.
+- The subdirectory shows up as a qualifier in `/help` (e.g. `(project:frontend)`), so you can keep multiple commands with the same filename.
+- If a project and user command share a name, the **project** one takes precedence.
 
-*Use Glob to find existing commands in the target category*
+### Arguments
 
-"Based on existing patterns, please describe:"
-1. What problem does this command solve?
-2. Who will use it and when?
-3. What's the expected output?
-4. Is it interactive or batch?
+Use placeholders inside the Markdown body:
 
-## Phase 2: Category Classification
+- `$ARGUMENTS`: captures the full raw argument string.
+- `$1`, `$2`, ...: positional arguments when roles matter.
 
-Based on responses and existing examples:
-- Is this like existing planning commands? (Check: brainstorm-feature, feature-proposal)
-- Is this like implementation commands? (Check: implement.md)
-- Does it need mode variations?
-- Should it follow analysis patterns? (Check: review.md)
+Examples:
 
-## Phase 3: Pattern Selection
+- `/fix-issue 123 high-priority` → `$ARGUMENTS` becomes `"123 high-priority"`.
+- `/review-pr 456 high alice` → `$1="456"`, `$2="high"`, `$3="alice"`.
 
-**Study similar commands first**:
+### Bash command execution (`!`)
+
+Prefix a line with `!` to run a bash command before the prompt executes; its output is included in context.
+
+If you use any `!` lines, add `allowed-tools` in frontmatter to permit the specific bash commands you intend to run.
+
+Recommended style in this repo: use standalone lines that begin with `!` under a `## Context` heading.
+
+### File references (`@`)
+
+You can include file contents by referencing paths with `@`, e.g. `@src/index.ts` or `@README.md`.
+
+### Frontmatter fields you’ll commonly use
+
+- `description` (recommended/required for best UX): short, one-line summary shown in `/help`.
+- `argument-hint` (recommended): a hint string shown in autocomplete.
+- `allowed-tools` (required if you use `!` bash execution): list of allowed tools.
+- Optional advanced fields: `context: fork`, `agent`, `model`, `disable-model-invocation`, `hooks`.
+
+## First, ask (keep it short)
+
+1. **Command name**: what should the user type? (Filename becomes `/<command-name>`)
+2. **One-line description**: shown in `/help` and required for programmatic invocation.
+3. **Arguments**: do we need all args (`$ARGUMENTS`) or positional (`$1`, `$2`, ...)?
+4. **Bash context**: should the command run any `!` bash snippets? If yes, list the exact commands and add `allowed-tools: Bash(...)`.
+5. **Where to place it in this repo**: pick a subdirectory under `commands/` for namespacing (directory affects description only, not the command name).
+
+If the user doesn’t have a clear spec, propose 2-3 options and ask them to choose.
+
+## Output requirements
+
+Create/update a file at `commands/<namespace>/<command-name>.md` with:
+
+1. **YAML frontmatter** (top of file) containing:
+   - `description` (required)
+   - `argument-hint` (recommended)
+   - `allowed-tools` (required if using `!` bash execution)
+
+2. A concise body using this structure:
+   - `## Context` (optional) with `!` commands (only if needed)
+   - `## Your task` describing exactly what Claude should do
+   - `## Output` describing what the user will get
+
+## Minimal template
+
 ```markdown
-# Read a similar command
-@{similar-command-path}
+---
+description: <one line>
+argument-hint: "[args]"
+allowed-tools:
+  - Bash(<cmd>:*)
+  - Bash(<cmd>:*)
+---
 
-# Note patterns:
-- Task description style
-- Argument handling
-- MCP tool usage
-- Documentation references
-- Human review sections
+## Context
+!git status
+
+## Your task
+Do the thing using: $ARGUMENTS
+
+## Output
+- Summary of actions taken
+- Files changed (if any)
 ```
 
-## Phase 4: Command Location
+Use `$ARGUMENTS` when you just need “the rest of the user input”. Use `$1`, `$2`, etc. when argument roles matter.
 
-🎯 **Critical Decision: Where should this command live?**
-
-**Project Command** (`.claude/commands/`)
-- Specific to this project's workflow
-- Uses project conventions
-- References project documentation
-- Integrates with project MCP tools
-
-**User Command** (`~/.claude/commands/`)
-- General-purpose utility
-- Reusable across projects
-- Personal productivity tool
-- Not project-specific
-
-Ask: "Should this be:
-1. A project command (specific to this codebase)
-2. A user command (available in all projects)?"
-
-## Phase 5: Resource Planning
-
-Check existing resources:
-```bash
-# Check templates
-ls -la /docs/command-resources/planning-templates/
-ls -la /docs/command-resources/implement-modes/
-
-# Check which guides exist
-ls -la /docs/
-```
-</interview_process>
-
-<generation_patterns>
-## Critical: Copy Patterns from Similar Commands
-
-Before generating, read similar commands and note:
-
-1. **MCP Tool Usage**:
-   ```markdown
-   # From existing commands
-   Use mcp__scopecraft-cmd__task_create
-   Use mcp__scopecraft-cmd__feature_get
-   Use mcp__scopecraft-cmd__phase_list
-   ```
-
-2. **Standard References**:
-   ```markdown
-   <context>
-   Key Reference: @/docs/organizational-structure-guide.md
-   Template: @/docs/command-resources/planning-templates/{template}.md
-   Guide: @/docs/claude-commands-guide.md
-   </context>
-   ```
-
-3. **Task Update Patterns**:
-   ```markdown
-   <task_updates>
-   After implementation:
-   1. Update task status to appropriate state
-   2. Add implementation log entries
-   3. Mark checklist items as complete
-   4. Document any decisions made
-   </task_updates>
-   ```
-
-4. **Human Review Sections**:
-   ```markdown
-   <human_review_needed>
-   Flag decisions needing verification:
-   - [ ] Assumptions about workflows
-   - [ ] Technical approach choices
-   - [ ] Pattern-based suggestions
-   </human_review_needed>
-   ```
-</generation_patterns>
-
-<implementation_steps>
-1. **Create Command File**
-   - Determine location based on project/user choice
-   - Generate content following established patterns
-   - Include all required sections
-
-2. **Create Supporting Files** (if project command)
-   - Templates in `/docs/command-resources/`
-   - Mode guides if generic command
-   - Example documentation
-
-3. **Update Documentation** (if project command)
-   - Add to claude-commands-guide.md
-   - Update feature-development-workflow.md if workflow command
-   - Add to README if user-facing
-
-4. **Test the Command**
-   - Create example usage scenarios
-   - Verify argument handling
-   - Check MCP tool integration
-</implementation_steps>
-
-<creation_checklist>
-Before finalizing:
-- [ ] Studied similar commands in the category
-- [ ] Command follows naming conventions (use numeric prefix for ordered workflows)
-- [ ] Includes proper task/context structure
-- [ ] References @organizational-structure-guide.md
-- [ ] Uses MCP tools (not CLI) - check existing patterns
-- [ ] Includes human review sections
-- [ ] Has clear examples like other commands
-- [ ] Updates task states appropriately
-- [ ] Creates proper documentation
-- [ ] Follows established patterns from similar commands
-- [ ] Correct command prefix (project: or user:)
-</creation_checklist>
-
-<example_session>
-User: "I need a command to help validate our API documentation"
-
-🔍 **Research**: Let me check existing analysis commands...
-
-*Use Read tool to examine: /.claude/commands/review.md*
-
-I notice the review command:
-- Uses MCP tools for task operations
-- Includes human review sections
-- References organizational structure
-- Has clear output formatting
-
-🤔 **Question**: Can you tell me more about this API documentation validation?
-- What format is the documentation in?
-- What aspects need validation?
-- Should it create tasks for issues found?
-
-User: "It's OpenAPI specs, need to check for completeness and consistency"
-
-💡 **Category**: This is an Analysis command similar to 'review'.
-
-🔍 **Pattern Check**: Looking at review.md, I see it:
-```markdown
-<task>
-You are a code reviewer conducting a comprehensive review...
-</task>
-
-<mcp_usage>
-Always use MCP tools:
-- mcp__scopecraft-cmd__task_list
-- mcp__scopecraft-cmd__task_update
-</mcp_usage>
-```
-
-🎯 **Location Question**: Should this be:
-1. A project command (specific to this API project)
-2. A user command (useful for all your API projects)
-
-User: "Project command - it needs to reference our specific API standards"
-
-✅ Creating project command: `/.claude/commands/validate-api.md`
-
-Generated command (following review.md patterns):
-```markdown
-<task>
-You are an API documentation validator reviewing OpenAPI specifications for completeness and consistency.
-</task>
-
-<context>
-References:
-- API Standards: @/docs/api-standards.md
-- Organizational Structure: @/docs/organizational-structure-guide.md
-Similar to: @/.claude/commands/review.md
-</context>
-
-<validation_process>
-1. Load OpenAPI spec files
-2. Check required endpoints documented
-3. Validate response schemas
-4. Verify authentication documented
-5. Check for missing examples
-</validation_process>
-
-<mcp_usage>
-If issues found, create tasks:
-- Use tool: mcp__scopecraft-cmd__task_create
-- Type: "bug" or "documentation"
-- Phase: Current active phase
-- Area: "docs" or "api"
-</mcp_usage>
-
-<human_review_needed>
-Flag for manual review:
-- [ ] Breaking changes detected
-- [ ] Security implications unclear
-- [ ] Business logic assumptions
-</human_review_needed>
-```
-</example_session>
-
-<final_output>
-After gathering all information:
-
-1. **Command Created**:
-   - Location: {chosen location}
-   - Name: {command-name}
-   - Category: {category}
-   - Pattern: {specialized/generic}
-
-2. **Resources Created**:
-   - Supporting templates: {list}
-   - Documentation updates: {list}
-
-3. **Usage Instructions**:
-   - Command: `/{prefix}:{name}`
-   - Example: {example usage}
-
-4. **Next Steps**:
-   - Test the command
-   - Refine based on usage
-   - Add to command documentation
-</final_output>
+Avoid custom XML-like tag blocks. Use plain Markdown headings and lists instead.

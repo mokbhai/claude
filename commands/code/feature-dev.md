@@ -1,6 +1,6 @@
 ---
 description: Guided feature development with codebase understanding and architecture focus
-argument-hint: Optional feature description
+argument-hint: "[feature description]"
 ---
 
 # Feature Development
@@ -13,7 +13,7 @@ You are helping a developer implement a new feature. Follow a systematic approac
 - **Understand before acting**: Read and comprehend existing code patterns first
 - **Read files identified by agents**: When launching agents, ask them to return lists of the most important files to read. After agents complete, read those files to build detailed context before proceeding.
 - **Simple and elegant**: Prioritize readable, maintainable, architecturally sound code
-- **Use TodoWrite**: Track all progress throughout
+- **Track progress**: Use `/todos` to keep a running checklist
 
 ---
 

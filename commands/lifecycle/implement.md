@@ -1,3 +1,8 @@
+---
+description: Implement a story from the design, with tests and a PR-ready checklist
+argument-hint: "[story name or ID]"
+---
+
 # Implement Story with Tests
 
 **Document Location**: `plans/$ARGUMENTS/implement.md`
@@ -12,96 +17,12 @@ Follow this systematic implementation approach for: **$ARGUMENTS**
 
 Before starting implementation, gather key details:
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What testing approach should be used?",
-        "header": "Testing Approach",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Test-Driven Development (TDD)",
-            "description": "Write tests first, then implement"
-          },
-          {
-            "label": "Test Alongside",
-            "description": "Write tests while implementing"
-          },
-          {
-            "label": "Test After",
-            "description": "Write tests after implementation"
-          },
-          {
-            "label": "No Tests",
-            "description": "Minimal or no testing (not recommended)"
-          }
-        ]
-      },
-      {
-        "question": "What type of code is being implemented?",
-        "header": "Code Type",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Frontend/UI",
-            "description": "User interface components"
-          },
-          {
-            "label": "Backend/API",
-            "description": "Server-side logic"
-          },
-          {
-            "label": "Database",
-            "description": "Schema, migrations, queries"
-          },
-          {
-            "label": "Infrastructure",
-            "description": "DevOps, config, deployment"
-          }
-        ]
-      },
-      {
-        "question": "Are there specific performance requirements?",
-        "header": "Performance",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "Critical Performance",
-            "description": "Optimized for speed, efficient algorithms"
-          },
-          {
-            "label": "Standard Performance",
-            "description": "Acceptable performance is fine"
-          },
-          {
-            "label": "Not Performance Critical",
-            "description": "Focus on correctness over speed"
-          }
-        ]
-      },
-      {
-        "question": "What level of error handling is needed?",
-        "header": "Error Handling",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "Comprehensive",
-            "description": "Handle all edge cases, detailed error messages"
-          },
-          {
-            "label": "Standard",
-            "description": "Handle common errors appropriately"
-          },
-          {
-            "label": "Basic",
-            "description": "Minimal error handling, focus on happy path"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user:
+
+1. What testing approach should be used? (TDD / alongside / after / minimal)
+2. What type of code is being implemented? (Frontend/UI / Backend/API / Database / Infrastructure)
+3. Are there specific performance requirements? (critical / standard / not performance critical)
+4. What level of error handling is needed? (comprehensive / standard / basic)
 
 Use the answers to guide the implementation approach below.
 

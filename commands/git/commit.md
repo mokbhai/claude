@@ -1,4 +1,23 @@
-# Claude Command: Commit
+---
+description: Create a well-structured git commit from current changes
+argument-hint: "[--no-verify] [extra context]"
+allowed-tools:
+  - Bash(git status:*)
+  - Bash(git diff:*)
+  - Bash(git add:*)
+  - Bash(git commit:*)
+  - Bash(git restore:*)
+  - Bash(git reset:*)
+  - Bash(git branch:*)
+  - Bash(git rev-parse:*)
+  - Bash(git log:*)
+  - Bash(ls:*)
+  - Bash(test:*)
+  - Bash(cat:*)
+  - Bash(head:*)
+---
+
+# Commit
 
 This command helps you create well-formatted commits with conventional commit messages and emoji.
 
@@ -16,10 +35,17 @@ Or with options:
 
 ## What This Command Does
 
-1. Unless specified with `--no-verify`, automatically runs pre-commit checks:
-   - `pnpm lint` to ensure code quality
-   - `pnpm build` to verify the build succeeds
-   - `pnpm generate:docs` to update documentation
+## Context
+
+!git branch --show-current || true
+!git status --porcelain=v1 || true
+!git diff --staged || true
+!git diff --stat || true
+!test -f package.json && cat package.json | head -n 120 || true
+
+1. Unless specified with `--no-verify` in `$ARGUMENTS`, run reasonable repo checks (only if they exist): lint, build/typecheck, and tests.
+  - Prefer existing scripts (from `package.json`) or established tooling in the repo.
+  - Don’t invent commands (e.g. don’t assume `pnpm`); detect what the repo uses.
 2. Checks which files are staged with `git status`
 3. If 0 files are staged, automatically adds all modified and new files with `git add`
 4. Performs a `git diff` to understand what changes are being committed

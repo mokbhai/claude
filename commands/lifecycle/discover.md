@@ -1,3 +1,8 @@
+---
+description: Discovery interview and product vision doc (writes plans/<name>/discovery.md)
+argument-hint: "[feature or product name]"
+---
+
 # Discover and Define Product Vision
 
 **Document Location**: `plans/$ARGUMENTS/discovery.md`
@@ -10,106 +15,12 @@ Follow this systematic discovery approach for: **$ARGUMENTS**
 
 ### Step 0: User Interview
 
-Before starting the discovery process, gather key information by interviewing the user:
+Before starting the discovery process, ask the user:
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What type of work are you planning?",
-        "header": "Work Type",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "New Product",
-            "description": "Building something from scratch"
-          },
-          {
-            "label": "New Feature",
-            "description": "Adding functionality to existing product"
-          },
-          {
-            "label": "Improvement",
-            "description": "Enhancing existing functionality"
-          },
-          {
-            "label": "Bug Fix",
-            "description": "Fixing issues or defects"
-          }
-        ]
-      },
-      {
-        "question": "What is driving this work?",
-        "header": "Motivation",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "User Feedback",
-            "description": "Direct feedback from users"
-          },
-          {
-            "label": "Business Need",
-            "description": "Business requirement or goal"
-          },
-          {
-            "label": "Technical Debt",
-            "description": "Technical improvements needed"
-          },
-          {
-            "label": "Market Opportunity",
-            "description": "Competitive or market-driven"
-          }
-        ]
-      },
-      {
-        "question": "What is your primary goal?",
-        "header": "Goal",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "Solve User Problem",
-            "description": "Address pain points for users"
-          },
-          {
-            "label": "Increase Revenue",
-            "description": "Drive business growth"
-          },
-          {
-            "label": "Improve Efficiency",
-            "description": "Optimize processes or performance"
-          },
-          {
-            "label": "Learn/Explore",
-            "description": "Educational or experimental"
-          }
-        ]
-      },
-      {
-        "question": "What technical constraints exist?",
-        "header": "Constraints",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Tight Deadline",
-            "description": "Time-sensitive delivery needed"
-          },
-          {
-            "label": "Limited Resources",
-            "description": "Budget or team constraints"
-          },
-          {
-            "label": "Tech Stack Limitations",
-            "description": "Must use specific technologies"
-          },
-          {
-            "label": "Legacy Integration",
-            "description": "Must work with existing systems"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+1. What type of work is this? (new product / new feature / improvement / bug fix)
+2. What is driving it? (user feedback / business need / tech debt / market opportunity)
+3. What is the primary goal? (solve user problem / revenue / efficiency / learning)
+4. What constraints exist? (deadline / resources / required tech stack / legacy integration)
 
 Use the answers to guide the discovery process below.
 
@@ -139,58 +50,10 @@ Ask follow-up questions to understand:
 
 ### Step 3: Identify Success Metrics
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "How will you measure success?",
-        "header": "Success Metrics",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "User Adoption",
-            "description": "Number of users using the feature"
-          },
-          {
-            "label": "Revenue Impact",
-            "description": "Direct revenue generation or savings"
-          },
-          {
-            "label": "User Satisfaction",
-            "description": "NPS, surveys, feedback"
-          },
-          {
-            "label": "Performance Metrics",
-            "description": "Speed, efficiency, reliability"
-          }
-        ]
-      },
-      {
-        "question": "What is the timeline for this project?",
-        "header": "Timeline",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "Urgent (< 1 week)",
-            "description": "Critical timeline"
-          },
-          {
-            "label": "Short-term (1-4 weeks)",
-            "description": "Quick delivery needed"
-          },
-          {
-            "label": "Medium-term (1-3 months)",
-            "description": "Standard project timeline"
-          },
-          {
-            "label": "Long-term (3+ months)",
-            "description": "Major initiative"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user:
+
+1. How will you measure success? (adoption / revenue impact / satisfaction / performance)
+2. What’s the timeline? (urgent <1w / short 1-4w / medium 1-3m / long 3m+)
 
 ### Step 4: Research & Analysis
 
@@ -201,35 +64,12 @@ Ask follow-up questions to understand:
 
 ### Step 5: Define Constraints & Assumptions
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What are the main technical constraints?",
-        "header": "Tech Constraints",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Existing Tech Stack",
-            "description": "Must work with current technologies"
-          },
-          {
-            "label": "Performance Requirements",
-            "description": "Specific performance targets"
-          },
-          {
-            "label": "Security Requirements",
-            "description": "Security or compliance needs"
-          },
-          {
-            "label": "Scalability Needs",
-            "description": "Must handle significant load"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user for the main constraints:
+
+- Existing tech stack that must be used
+- Performance targets
+- Security/compliance requirements
+- Scalability/load expectations
 
 Document:
 - Time constraints (deadlines, milestones)
@@ -239,35 +79,12 @@ Document:
 
 ### Step 6: Stakeholder Analysis
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "Who are the key stakeholders?",
-        "header": "Stakeholders",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "End Users",
-            "description": "People who will use the feature"
-          },
-          {
-            "label": "Business Team",
-            "description": "Sales, marketing, management"
-          },
-          {
-            "label": "Engineering Team",
-            "description": "Developers, DevOps, QA"
-          },
-          {
-            "label": "Support Team",
-            "description": "Customer support, documentation"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user who the key stakeholders are:
+
+- End users
+- Business
+- Engineering
+- Support / documentation
 
 For each stakeholder:
 - Who are they?

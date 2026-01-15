@@ -1,10 +1,15 @@
-# Intelligently Refactor and Improve Code Quality
+---
+description: Refactor code safely while preserving behavior
+argument-hint: "[scope or goal]"
+---
 
-Intelligently refactor and improve code quality
+# Refactor
+
+Refactor code safely and incrementally.
 
 ## Instructions
 
-Follow this systematic approach to refactor code: **$ARGUMENTS**
+Refactor scope/goal: $ARGUMENTS
 
 1. **Pre-Refactoring Analysis**
    - Identify the code that needs refactoring and the reasons why
@@ -30,7 +35,7 @@ Follow this systematic approach to refactor code: **$ARGUMENTS**
    - Plan the refactoring in small, incremental steps
 
 4. **Environment Setup**
-   - Create a new branch: git checkout -b refactor/$ARGUMENTS
+   - If the repo uses git branching, create/switch to a dedicated refactor branch (ask before doing it)
    - Ensure all tests pass before starting
    - Set up any additional tooling needed (profilers, analyzers)
 

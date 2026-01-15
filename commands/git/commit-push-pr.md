@@ -1,4 +1,25 @@
-# Claude Command: Commit, Push & PR
+---
+description: Commit changes, push branch, and open a GitHub pull request
+argument-hint: "[--no-verify] [extra context]"
+allowed-tools:
+   - Bash(git status:*)
+   - Bash(git diff:*)
+   - Bash(git add:*)
+   - Bash(git commit:*)
+   - Bash(git push:*)
+   - Bash(git restore:*)
+   - Bash(git reset:*)
+   - Bash(git branch:*)
+   - Bash(git rev-parse:*)
+   - Bash(git log:*)
+   - Bash(gh:*)
+   - Bash(ls:*)
+   - Bash(test:*)
+   - Bash(cat:*)
+   - Bash(head:*)
+---
+
+# Commit, Push & PR
 
 This command creates well-formatted commits, pushes them to the remote repository, and creates a pull request - all in one seamless workflow.
 
@@ -16,10 +37,18 @@ Or with options:
 
 ## What This Command Does
 
-1. **Pre-commit Checks** (unless `--no-verify` is specified):
-   - `pnpm lint` to ensure code quality
-   - `pnpm build` to verify the build succeeds
-   - `pnpm generate:docs` to update documentation
+## Context
+
+!git branch --show-current || true
+!git status --porcelain=v1 || true
+!git diff --staged || true
+!git log --oneline -10 || true
+!test -f package.json && cat package.json | head -n 120 || true
+!gh --version || true
+
+1. **Pre-commit Checks** (unless `--no-verify` is present in `$ARGUMENTS`):
+   - Run repo-appropriate checks (lint/build/tests) if they exist.
+   - Don’t assume a package manager; detect from the repo.
 
 2. **Branch Management**:
    - If on `main` or `master`, creates a new feature branch

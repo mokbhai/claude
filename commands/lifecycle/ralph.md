@@ -1,3 +1,8 @@
+---
+description: Orchestrate parallel autonomous implementation across stories (Ralph loop)
+argument-hint: "\"feature-name\" [workers] [max-iterations-per-story] [sleep-seconds]"
+---
+
 # Ralph Loop - Parallel Autonomous Implementation
 
 **Purpose**: Set up and manage parallel autonomous agents to implement all stories from breakdown

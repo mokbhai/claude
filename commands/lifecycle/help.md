@@ -1,3 +1,8 @@
+---
+description: Overview and usage guide for the lifecycle slash commands
+argument-hint: "(no args)"
+---
+
 # Software Development Lifecycle Help
 
 Complete guide to the custom software development lifecycle commands

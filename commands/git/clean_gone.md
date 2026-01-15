@@ -1,10 +1,33 @@
 ---
 description: Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees.
+argument-hint: "(no args)"
+allowed-tools:
+   - Bash(git fetch:*)
+   - Bash(git branch:*)
+   - Bash(git worktree:*)
+   - Bash(git rev-parse:*)
+   - Bash(grep:*)
+   - Bash(sed:*)
+   - Bash(awk:*)
+   - Bash(cat:*)
+   - Bash(ls:*)
+   - Bash(test:*)
+   - Bash(echo:*)
 ---
+
+## Context
+
+!git fetch --prune || true
+!git branch -v || true
+!git worktree list || true
 
 ## Your Task
 
 You need to execute the following bash commands to clean up stale local branches that have been deleted from the remote repository.
+
+## Safety
+
+Before deleting anything, summarize what you plan to remove (branches + any worktree paths) and ask the user to confirm.
 
 ## Commands to Execute
 

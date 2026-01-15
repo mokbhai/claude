@@ -1,3 +1,8 @@
+---
+description: Break a PRD into independent epics and stories (parallelizable plan)
+argument-hint: "[feature or product name]"
+---
+
 # Break Down into Independent Epics and Stories
 
 **Document Location**: `plans/$ARGUMENTS/breakdown.md`

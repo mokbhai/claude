@@ -1,3 +1,8 @@
+---
+description: Do a comprehensive code review using a structured checklist
+argument-hint: "[PR URL, branch name, or brief context]"
+---
+
 # Code Review Checklist
 
 **Document Location**: `plans/$ARGUMENTS/review.md`

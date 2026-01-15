@@ -1,3 +1,8 @@
+---
+description: Write a technical design doc for an epic or story
+argument-hint: "[epic-or-story-name]"
+---
+
 # Technical Design for Epic or Story
 
 **Document Location**: `plans/$ARGUMENTS/design.md` (for Epic) or `plans/$ARGUMENTS/stories/{story-name}.md` (for Story)
@@ -12,27 +17,7 @@ Follow this systematic design approach for: **$ARGUMENTS**
 
 First, identify the scope of this design:
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What type of design document do you need?",
-        "header": "Design Scope",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "Epic Design",
-            "description": "Big picture architecture, multiple stories, high-level design"
-          },
-          {
-            "label": "Story Design",
-            "description": "Specific implementation, single story, detailed design"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user: is this an **Epic design** (big-picture, multi-story) or a **Story design** (single implementation slice)?
 
 Then proceed with the appropriate interview questions below.
 
@@ -42,289 +27,72 @@ Then proceed with the appropriate interview questions below.
 
 ### Step 1: Architecture & Integration
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What type of architecture is this?",
-        "header": "Architecture",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Frontend Only",
-            "description": "UI/components, no backend changes"
-          },
-          {
-            "label": "Backend Only",
-            "description": "API/services, no UI changes"
-          },
-          {
-            "label": "Full Stack",
-            "description": "Both frontend and backend changes"
-          },
-          {
-            "label": "Infrastructure",
-            "description": "DevOps, databases, cloud services"
-          }
-        ]
-      },
-      {
-        "question": "Does this integrate with existing systems?",
-        "header": "Integration",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Standalone",
-            "description": "No integration needed"
-          },
-          {
-            "label": "Internal APIs",
-            "description": "Connects to existing backend services"
-          },
-          {
-            "label": "External APIs",
-            "description": "Third-party services or APIs"
-          },
-          {
-            "label": "Database Changes",
-            "description": "Schema changes or new tables"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user:
+
+1. What kind of change is this?
+   - frontend-only
+   - backend-only
+   - full-stack
+   - infrastructure (devops/db)
+2. What does it integrate with?
+   - standalone
+   - internal APIs
+   - external APIs
+   - database changes
 
 ### Step 2: Data & Performance
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What are the performance requirements?",
-        "header": "Performance",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Low Latency",
-            "description": "Response time critical (<200ms)"
-          },
-          {
-            "label": "High Throughput",
-            "description": "Handle many concurrent requests"
-          },
-          {
-            "label": "Data Intensive",
-            "description": "Large datasets, complex queries"
-          },
-          {
-            "label": "Standard Performance",
-            "description": "No special performance requirements"
-          }
-        ]
-      },
-      {
-        "question": "What database considerations apply?",
-        "header": "Database",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "New Tables",
-            "description": "Creating new data structures"
-          },
-          {
-            "label": "Schema Changes",
-            "description": "Modifying existing tables"
-          },
-          {
-            "label": "Data Migration",
-            "description": "Migrating existing data"
-          },
-          {
-            "label": "No DB Changes",
-            "description": "No database impact"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user:
+
+1. Performance requirements (low latency / high throughput / data-intensive / standard)
+2. Database impact (new tables / schema changes / data migration / none)
 
 ### Step 3: Security & Compliance
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What security considerations apply?",
-        "header": "Security",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "User Data (PII)",
-            "description": "Personally identifiable information"
-          },
-          {
-            "label": "Authentication/Authorization",
-            "description": "User access control"
-          },
-          {
-            "label": "Data Encryption",
-            "description": "Sensitive data protection"
-          },
-          {
-            "label": "API Security",
-            "description": "Rate limiting, input validation"
-          },
-          {
-            "label": "Compliance",
-            "description": "GDPR, HIPAA, SOC2, etc."
-          },
-          {
-            "label": "No Special Security",
-            "description": "Standard security practices"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user what security/compliance considerations apply:
+
+- PII / user data
+- authn/authz
+- encryption
+- API security (validation, rate limiting)
+- compliance (GDPR/HIPAA/SOC2/etc)
 
 ### Step 4: UI/UX Considerations (if applicable)
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What are the UI/UX considerations?",
-        "header": "UI/UX",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Responsive Design",
-            "description": "Mobile, tablet, desktop support"
-          },
-          {
-            "label": "Accessibility",
-            "description": "WCAG compliance, screen readers"
-          },
-          {
-            "label": "Real-time Updates",
-            "description": "WebSockets, live data"
-          },
-          {
-            "label": "Complex Interactions",
-            "description": "Drag-drop, multi-step workflows"
-          },
-          {
-            "label": "No UI Component",
-            "description": "Backend or infrastructure only"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+If there is UI work, ask the user what matters:
+
+- responsive design targets
+- accessibility requirements
+- real-time updates
+- complex interactions (drag/drop, multi-step)
 
 ### Step 5: Error Handling & Edge Cases
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What error handling strategies are needed?",
-        "header": "Error Handling",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "User-Facing Errors",
-            "description": "Friendly error messages for users"
-          },
-          {
-            "label": "Retry Logic",
-            "description": "Automatic retry for transient failures"
-          },
-          {
-            "label": "Graceful Degradation",
-            "description": "Function with reduced capability"
-          },
-          {
-            "label": "Comprehensive Logging",
-            "description": "Detailed error tracking"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user about error-handling expectations:
+
+- user-facing errors vs silent failures
+- retry policy for transient failures
+- graceful degradation requirements
+- logging/monitoring expectations
 
 ### Step 6: Testing Strategy
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What testing approach is needed?",
-        "header": "Testing",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Unit Tests",
-            "description": "Individual component/function testing"
-          },
-          {
-            "label": "Integration Tests",
-            "description": "API and database interaction testing"
-          },
-          {
-            "label": "E2E Tests",
-            "description": "Full user journey testing"
-          },
-          {
-            "label": "Performance Tests",
-            "description": "Load and stress testing"
-          },
-          {
-            "label": "Security Tests",
-            "description": "Vulnerability scanning"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user what testing approach is needed:
+
+- unit tests
+- integration tests (API/DB)
+- end-to-end tests
+- performance/load tests
+- security tests
 
 ### Step 7: File Structure & Organization
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "How should files be organized?",
-        "header": "File Structure",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "Feature-Based",
-            "description": "Group by feature/domain"
-          },
-          {
-            "label": "Layer-Based",
-            "description": "Group by layer (components, services, utils)"
-          },
-          {
-            "label": "Hybrid",
-            "description": "Mix of feature and layer organization"
-          },
-          {
-            "label": "Follow Existing",
-            "description": "Match current project structure"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user how this should fit the repo structure:
+
+- follow existing structure (default)
+- feature-based grouping
+- layer-based grouping
+- hybrid
 
 ---
 
@@ -332,122 +100,29 @@ Then proceed with the appropriate interview questions below.
 
 ### Step 1: Implementation Approach
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What's the implementation complexity?",
-        "header": "Complexity",
-        "multiSelect": false,
-        "options": [
-          {
-            "label": "Simple",
-            "description": "Straightforward, clear path"
-          },
-          {
-            "label": "Moderate",
-            "description": "Some complexity or unknowns"
-          },
-          {
-            "label": "Complex",
-            "description": "Multiple components, tricky logic"
-          }
-        ]
-      },
-      {
-        "question": "What files need to be modified?",
-        "header": "File Changes",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "New Files",
-            "description": "Creating new components/services"
-          },
-          {
-            "label": "Modify Existing",
-            "description": "Updating current files"
-          },
-          {
-            "label": "Delete/Remove",
-            "description": "Removing deprecated code"
-          },
-          {
-            "label": "Refactor",
-            "description": "Restructuring existing code"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user:
+
+1. Implementation complexity (simple / moderate / complex)
+2. Expected file changes (new files / modify existing / delete/remove / refactor)
 
 ### Step 2: Edge Cases & Validation
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What edge cases need to be handled?",
-        "header": "Edge Cases",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Null/Undefined",
-            "description": "Missing data or empty values"
-          },
-          {
-            "label": "Boundary Conditions",
-            "description": "Min/max values, limits"
-          },
-          {
-            "label": "Concurrent Access",
-            "description": "Race conditions, simultaneous updates"
-          },
-          {
-            "label": "Large Datasets",
-            "description": "Performance with lots of data"
-          },
-          {
-            "label": "Invalid Input",
-            "description": "Malformed data, wrong types"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user which edge cases matter:
+
+- missing/null values
+- boundary limits
+- concurrency/races
+- large datasets/performance
+- invalid/malformed input
 
 ### Step 3: Dependencies & Integration
 
-<AskUserQuestion>
-  {
-    "questions": [
-      {
-        "question": "What dependencies exist?",
-        "header": "Dependencies",
-        "multiSelect": true,
-        "options": [
-          {
-            "label": "Internal Services",
-            "description": "Other parts of the codebase"
-          },
-          {
-            "label": "External APIs",
-            "description": "Third-party services"
-          },
-          {
-            "label": "Database",
-            "description": "Data layer dependencies"
-          },
-          {
-            "label": "No Dependencies",
-            "description": "Can be implemented independently"
-          }
-        ]
-      }
-    ]
-  }
-</AskUserQuestion>
+Ask the user what dependencies exist:
+
+- internal services / other parts of the codebase
+- external APIs / third-party services
+- database / storage systems
+- none (can be implemented independently)
 
 ---
 
