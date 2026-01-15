@@ -273,72 +273,130 @@ This lifecycle provides a structured approach to software development with 8 pha
 
 ---
 
-## 🆕 Ralph Loop - Autonomous Implementation
+## 🆕 Ralph Loop - Parallel Autonomous Implementation
 
-**Purpose**: Automate implementation of stories using Ralph Wiggum technique
+**Purpose**: Spin up multiple parallel workers to autonomously implement all stories
 
-**When to use**: After completing design phase, want autonomous implementation
+**When to use**: After completing design phase, want fast parallel implementation
 
 **What it does**:
-- Reads breakdown.md for incomplete stories
-- Implements one story per iteration
-- Runs tests to verify
-- Commits if successful
-- Learns from previous iterations
-- Continues until complete or max iterations
+- **Analyzes dependencies** in breakdown.md
+- **Creates N worker scripts** that run in parallel
+- **Coordinates workers** through shared task queue with locks
+- **Runs autonomously** until all stories complete
+- **Workers claim available tasks** that have no unmet dependencies
 
 **Usage**:
 ```bash
-# Command form
-/ralph "feature-name" [max-iterations] [sleep-seconds]
-
-# Script form (recommended)
-./commands/lifecycle/ralph-loop.sh "feature-name" [max-iterations] [sleep-seconds]
+/ralph "feature-name" [workers] [max-iterations] [sleep-seconds]
 ```
+
+**Parameters**:
+- `feature-name`: Name from plans directory
+- `workers`: Number of parallel workers (default: 3)
+- `max-iterations`: Max retry attempts per story (default: 10)
+- `sleep-seconds`: Delay between polls (default: 2)
 
 **Examples**:
 ```bash
-# Default: 10 iterations, 2s sleep
-./ralph-loop.sh "User Authentication"
+# Default: 3 parallel workers
+/ralph "User Authentication"
 
-# More iterations for large features
-./ralph-loop.sh "User Authentication" 50
+# More workers for large feature with many independent stories
+/ralph "User Authentication" 8
 
-# Longer sleep to avoid rate limits
-./ralph-loop.sh "User Authentication" 20 5
+# Conservative settings for rate-limited APIs
+/ralph "User Authentication" 5 20 5
 ```
 
 **How It Works**:
+
+**Setup Phase** (runs once):
+1. Parses `breakdown.md` for dependencies
+2. Creates `task-queue.json` with available/blocked/completed tasks
+3. Generates N worker scripts (`workers/worker-{1..N}.sh`)
+4. Starts all workers in parallel as background processes
+
+**Worker Loop** (each worker runs continuously):
 ```
-1. Read plans/{feature}/breakdown.md
-2. Find first incomplete story [ ]
-3. Read technical design for that story
-4. Implement with tests
-5. Verify tests pass
-6. If pass: commit, mark [x], update progress.txt
-7. If fail: record error, try again next iteration
-8. Repeat until all [x] or max iterations
+1. Acquire lock on task-queue.json
+2. Claim first available task (no unmet dependencies)
+3. Release lock
+4. Read design, implement, run tests
+5. If pass: commit, mark complete, claim next task
+6. If fail: record error, release task back to queue
+7. Repeat until no tasks available
+8. When all workers idle: exit with <promise>COMPLETE</promise>
+```
+
+**Architecture**:
+```
+plans/{feature}/
+├── task-queue.json      ← Shared state: available/claimed/completed
+├── worker-state.json    ← Worker health tracking
+├── progress.txt         ← Combined progress log
+└── workers/             ← Generated autonomous scripts
+    ├── worker-1.sh
+    ├── worker-2.sh
+    └── worker-N.sh
+```
+
+**Dependency Example**:
+```markdown
+## Epic 1: User Registration
+### Story 1.1: Registration endpoint
+- Dependencies: None → Available immediately (Worker 1 claims)
+
+### Story 1.2: Email verification
+- Dependencies: Story 1.1 → Blocked until 1.1 completes
+
+## Epic 2: User Profile
+### Story 2.1: User model
+- Dependencies: None → Available immediately (Worker 2 claims)
+
+### Story 2.2: Profile page
+- Dependencies: Story 2.1 → Blocked until 2.1 completes
+
+Result: Workers 1 and 2 run in parallel on 1.1 and 2.1
 ```
 
 **Progress Tracking**:
-- All progress tracked in `plans/{feature}/progress.txt`
-- Learnings carried between iterations
-- Failed attempts documented for retry
-- Can be stopped and resumed
+```bash
+# Real-time monitoring
+tail -f plans/{feature}/progress.txt
+
+# Worker status
+cat plans/{feature}/worker-state.json | jq '.'
+
+# Task queue
+cat plans/{feature}/task-queue.json | jq '.available | length'
+```
+
+**Managing Workers**:
+```bash
+# Stop gracefully (finish current tasks)
+pkill -TERM -f "workers/worker-"
+
+# Stop immediately
+pkill -KILL -f "workers/worker-"
+
+# Resume after stop
+./plans/{feature}/workers/worker-1.sh &
+```
 
 **When to Use Ralph Loop**:
-- ✅ Well-defined stories with clear acceptance criteria
+- ✅ Multiple independent stories (different epics, components)
+- ✅ Clear dependency mapping in breakdown.md
 - ✅ Comprehensive technical design completed
-- ✅ Tests can verify implementation
-- ✅ Repetitive implementation patterns
-- ✅ Want to speed up implementation
+- ✅ Tests can verify implementation independently
+- ✅ Want to speed up implementation with parallelism
 
 **When NOT to Use Ralph Loop**:
-- ❌ Complex, ambiguous requirements
+- ❌ All stories have sequential dependencies (no parallelism benefit)
 - ❌ No technical design yet
 - ❌ Requires human judgment/creativity
 - ❌ Critical security/safety implications
-- ❌ First time using this pattern
+- ❌ Tests have shared state/require isolation
 
 **See Also**: `/ralph` command for full documentation
 
@@ -386,24 +444,27 @@ This lifecycle provides a structured approach to software development with 8 pha
 /release "v1.3.0"
 ```
 
-### Example 4: New Feature with Ralph Loop (Autonomous)
+### Example 4: New Feature with Ralph Loop (Parallel Autonomous)
 
 ```bash
-# Feature: User Authentication with autonomous implementation
+# Feature: User Authentication with parallel autonomous implementation
 /discover "User Authentication"
 /prd "User Authentication"
 /breakdown "User Authentication"
 
-# Design all epics first
+# Design all epics first (ensure dependencies are marked)
 /design "Epic: User Registration"
 /design "Epic: User Login"
 /design "Epic: Password Reset"
 
-# 🚀 Let Ralph implement all stories autonomously
-./ralph-loop.sh "User Authentication" 50 3
+# 🚀 Let Ralph implement all stories with 5 parallel workers
+/ralph "User Authentication" 5
 
-# Review what Ralph built
-/review "PRs from Ralph loop"
+# Monitor progress in another terminal
+tail -f plans/User\ Authentication/progress.txt
+
+# When complete, review what Ralph built
+/review "All PRs from Ralph workers"
 /test "User Authentication"
 /release "v1.2.0"
 ```
@@ -416,14 +477,17 @@ This lifecycle provides a structured approach to software development with 8 pha
 /prd "Checkout System"
 /breakdown "Checkout System"
 
-# Implement complex parts manually
+# Implement complex parts manually (e.g., payment integration)
 /design "Epic: Payment Processing"
 /implement "Story: Integrate Stripe"
 /review "PR #100: Stripe integration"
 
-# Let Ralph handle simpler stories
+# Let Ralph handle simpler stories with 3 parallel workers
 /design "Epic: Cart Management"
-./ralph-loop.sh "Checkout System" 20 2
+/ralph "Checkout System" 3
+
+# Monitor workers
+cat plans/Checkout\ System/worker-state.json | jq '.'
 
 # Final testing and release
 /test "Checkout System"
