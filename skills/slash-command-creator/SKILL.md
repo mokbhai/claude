@@ -62,7 +62,7 @@ allowed-tools: Tool1, Tool2
 Process $1 as first parameter, $2 as second, etc.
 ```
 
-**Bash Integration**: Execute shell commands with `!` prefix
+**Bash Integration**: Execute shell commands with `Exclamation mark` prefix
 
 ```yaml
 ---
@@ -71,7 +71,7 @@ description: Command that needs shell execution
 ---
 
 ## Context
-- Git: !`git --help`
+- Git: Exclamation mark`git --help`
 
 ## Your task
 Execute based on the above context
@@ -346,7 +346,7 @@ Before finalizing a command, verify:
 - [ ] Frontmatter includes required fields
 - [ ] Argument placeholders are correct ($1, $2, $ARGUMENTS)
 - [ ] File references use @ prefix
-- [ ] Bash commands use ! prefix in allowed sections
+- [ ] Bash commands use Exclamation mark prefix in allowed sections
 - [ ] Tools are properly declared in allowed-tools
 - [ ] Description is clear and concise
 - [ ] Argument hint shows expected parameters
