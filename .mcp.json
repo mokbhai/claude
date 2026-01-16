@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "search": {
+      "type": "http",
+      "url": "https://n8n.jainparichay.online/mcp/mcp-for-claude-code"
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "env": {}
+    }
+  }
+}
