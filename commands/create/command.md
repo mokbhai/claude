@@ -5,7 +5,7 @@ argument-hint: "[command-name] (optional)"
 
 # Command Creator
 
-Create or update a Markdown-based slash command file with correct frontmatter, argument placeholders, and (optional) bash pre-execution via `!` lines.
+Create or update a Markdown-based slash command file with correct frontmatter, argument placeholders, and (optional) bash pre-execution using exclamation mark lines.
 
 ## Slash commands: quick reference
 
@@ -52,7 +52,7 @@ Examples:
 
 ### Bash command execution
 
-Prefix a line with exclamation mark to run a bash command before the prompt executes. The pattern is: exclamation mark followed by backtick, then the command, then closing backtick.
+Prefix a line with exclamation mark to run a bash command before the prompt executes. The syntax is exclamation mark, then the command inside backticks.
 
 Example format under a Context section:
 
@@ -74,7 +74,7 @@ You can include file contents by referencing paths with `@`, e.g. `@src/index.ts
 
 - `description` (recommended/required for best UX): short, one-line summary shown in `/help`.
 - `argument-hint` (recommended): a hint string shown in autocomplete.
-- `allowed-tools` (required if you use `!` bash execution): list of allowed tools.
+- `allowed-tools` (required if you use exclamation-mark bash execution): list of allowed tools.
 - Optional advanced fields: `context: fork`, `agent`, `model`, `disable-model-invocation`, `hooks`.
 
 ## First, ask (keep it short)
@@ -82,7 +82,7 @@ You can include file contents by referencing paths with `@`, e.g. `@src/index.ts
 1. **Command name**: what should the user type? (Filename becomes `/<command-name>`)
 2. **One-line description**: shown in `/help` and required for programmatic invocation.
 3. **Arguments**: do we need all args (`$ARGUMENTS`) or positional (`$1`, `$2`, ...)?
-4. **Bash context**: should the command run any `!` bash snippets? If yes, list the exact commands and add `allowed-tools: Bash(...)`.
+4. **Bash context**: should the command run any exclamation-mark bash snippets? If yes, list the exact commands and add `allowed-tools: Bash(...)`.
 5. **Where to place it in this repo**: pick a subdirectory under `commands/` for namespacing (directory affects description only, not the command name).
 
 If the user doesn’t have a clear spec, propose 2-3 options and ask them to choose.
@@ -94,10 +94,10 @@ Create/update a file at `commands/<namespace>/<command-name>.md` with:
 1. **YAML frontmatter** (top of file) containing:
    - `description` (required)
    - `argument-hint` (recommended)
-   - `allowed-tools` (required if using `!` bash execution)
+   - `allowed-tools` (required if using exclamation-mark bash execution)
 
 2. A concise body using this structure:
-   - `## Context` (optional) with `!` commands (only if needed)
+   - `## Context` (optional) with exclamation-mark commands (only if needed)
    - `## Your task` describing exactly what Claude should do
    - `## Output` describing what the user will get
 
