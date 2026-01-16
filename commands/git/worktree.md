@@ -2,12 +2,12 @@
 argument-hint: "[description of work]"
 description: Create a git worktree with auto-generated branch name from description
 allowed-tools:
-   - Bash(git worktree:*)
-   - Bash(mkdir:*)
-   - Bash(grep:*)
-   - Bash(cat:*)
-   - Bash(test:*)
-   - Bash(echo:*)
+  - Bash(git worktree:*)
+  - Bash(mkdir:*)
+  - Bash(grep:*)
+  - Bash(cat:*)
+  - Bash(test:*)
+  - Bash(echo:*)
 ---
 
 Create a new git worktree at `./worktree/{type}/{description}` for parallel branch development.
@@ -36,12 +36,14 @@ Create a new git worktree at `./worktree/{type}/{description}` for parallel bran
    - Example: "add user login" → `feat/add-user-login`
 
 3. **Create the worktree**:
+
    ```bash
    mkdir -p ./worktree
    git worktree add ./worktree/{generated-branch-name} -b {generated-branch-name}
    ```
 
 4. **Add `worktree/` to `.gitignore`**:
+
    ```bash
    if ! grep -q "^worktree/" .gitignore 2>/dev/null; then
      echo "worktree/" >> .gitignore

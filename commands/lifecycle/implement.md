@@ -31,11 +31,12 @@ Use the answers to guide the implementation approach below.
 ## Implementation Steps
 
 ### 1. Pre-Implementation Setup
-   - Review the technical design document
-   - Review acceptance criteria
-   - Ensure design is approved
-   - Check that all dependencies are complete
-   - Create or switch to feature branch: `git checkout -b feature/story-id-description`
+
+- Review the technical design document
+- Review acceptance criteria
+- Ensure design is approved
+- Check that all dependencies are complete
+- Create or switch to feature branch: `git checkout -b feature/story-id-description`
 
 2. **Understand the Context**
    - Read existing related code
@@ -96,6 +97,7 @@ Use the answers to guide the implementation approach below.
 ## Implementation Checklist
 
 ### Before Starting
+
 - [ ] Technical design reviewed and approved
 - [ ] Acceptance criteria understood
 - [ ] Dependencies completed
@@ -103,6 +105,7 @@ Use the answers to guide the implementation approach below.
 - [ ] Development environment ready
 
 ### During Implementation
+
 - [ ] Tests written first (TDD)
 - [ ] Implementation follows design
 - [ ] Code follows project conventions
@@ -112,6 +115,7 @@ Use the answers to guide the implementation approach below.
 - [ ] Tests are comprehensive
 
 ### Before PR
+
 - [ ] All tests passing (unit + integration)
 - [ ] Linting passes
 - [ ] Type checking passes (if applicable)
@@ -120,6 +124,7 @@ Use the answers to guide the implementation approach below.
 - [ ] Code committed with clear messages
 
 ### PR Creation
+
 - [ ] PR description clear and complete
 - [ ] References story/design documents
 - [ ] Screenshots included (if applicable)
@@ -127,6 +132,7 @@ Use the answers to guide the implementation approach below.
 - [ ] Documentation updated
 
 ### After Review
+
 - [ ] Reviewer feedback addressed
 - [ ] All requested changes made
 - [ ] Tests added/updated
@@ -135,6 +141,7 @@ Use the answers to guide the implementation approach below.
 ## Best Practices
 
 ### Code Quality
+
 ```typescript
 // ✅ Good: Clear, descriptive names
 function calculateUserAge(birthDate: Date): number {
@@ -152,6 +159,7 @@ function calc(d: Date): number {
 ```
 
 ### Error Handling
+
 ```typescript
 // ✅ Good: Specific error handling
 async function fetchUser(id: string) {
@@ -162,7 +170,7 @@ async function fetchUser(id: string) {
     if (error instanceof NotFoundError) {
       throw new UserNotFoundError(id);
     }
-    throw new ApiError('Failed to fetch user', error);
+    throw new ApiError("Failed to fetch user", error);
   }
 }
 
@@ -179,25 +187,26 @@ async function fetchUser(id: string) {
 ```
 
 ### Testing
+
 ```typescript
 // ✅ Good: Descriptive test with clear assertions
-describe('calculateUserAge', () => {
-  it('should return correct age for a given birth date', () => {
-    const birthDate = new Date('1990-01-01');
+describe("calculateUserAge", () => {
+  it("should return correct age for a given birth date", () => {
+    const birthDate = new Date("1990-01-01");
     const age = calculateUserAge(birthDate);
     expect(age).toBeGreaterThanOrEqual(34);
   });
 
-  it('should handle future dates', () => {
-    const futureDate = new Date('2050-01-01');
+  it("should handle future dates", () => {
+    const futureDate = new Date("2050-01-01");
     expect(() => calculateUserAge(futureDate)).toThrow();
   });
 });
 
 // ❌ Bad: Vague test, poor assertions
-describe('calculateUserAge', () => {
-  it('works', () => {
-    const result = calculateUserAge(new Date('1990-01-01'));
+describe("calculateUserAge", () => {
+  it("works", () => {
+    const result = calculateUserAge(new Date("1990-01-01"));
     expect(result).toBeTruthy();
   });
 });
@@ -232,14 +241,17 @@ Related to #124
 
 ```markdown
 ## Summary
+
 Brief description of what this PR implements
 
 ## Story
+
 - Story ID: #[number]
 - Title: [Story title]
 - Design doc: [link to technical design]
 
 ## Changes
+
 - [ ] New feature
 - [ ] Bug fix
 - [ ] Refactor
@@ -247,14 +259,17 @@ Brief description of what this PR implements
 - [ ] Documentation
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] Manual testing completed
 
 ## Screenshots (if applicable)
+
 [Add screenshots for UI changes]
 
 ## Checklist
+
 - [ ] Code follows project standards
 - [ ] All tests passing
 - [ ] Self-review completed
@@ -262,24 +277,28 @@ Brief description of what this PR implements
 - [ ] No merge conflicts
 
 ## Notes
+
 [Any additional context for reviewers]
 ```
 
 ## Troubleshooting
 
 ### Tests Failing
+
 1. Check test error messages carefully
 2. Verify test data is correct
 3. Check for race conditions
 4. Verify mocks/stubs are configured correctly
 
 ### Linting Errors
+
 1. Read error messages carefully
 2. Run linter with auto-fix if available
 3. Check project style guide
 4. Ask for help if needed
 
 ### Merge Conflicts
+
 1. Pull latest changes from main
 2. Resolve conflicts locally
 3. Test thoroughly after resolving
@@ -306,23 +325,28 @@ After implementation, provide:
 # Implementation Complete: [Story ID - Story Title]
 
 ## Summary
+
 [What was implemented]
 
 ## Changes Made
+
 - **Files Modified**: [list files]
 - **Files Created**: [list files]
 - **Tests Added**: [test files and coverage]
 
 ## Testing
+
 - [ ] Unit tests: X passing, Y failing
 - [ ] Integration tests: X passing, Y failing
 - [ ] Manual testing: [results]
 
 ## PR
+
 - **Branch**: `feature/story-id-description`
 - **PR Link**: [link once created]
 
 ## Definition of Done
+
 - [ ] Code complete
 - [ ] Tests passing
 - [ ] Code reviewed
@@ -330,5 +354,6 @@ After implementation, provide:
 - [ ] Ready for merge
 
 ## Notes
+
 [Any additional notes or blockers]
 ```

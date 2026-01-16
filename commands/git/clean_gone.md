@@ -2,17 +2,17 @@
 description: Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees.
 argument-hint: "(no args)"
 allowed-tools:
-   - Bash(git fetch:*)
-   - Bash(git branch:*)
-   - Bash(git worktree:*)
-   - Bash(git rev-parse:*)
-   - Bash(grep:*)
-   - Bash(sed:*)
-   - Bash(awk:*)
-   - Bash(cat:*)
-   - Bash(ls:*)
-   - Bash(test:*)
-   - Bash(echo:*)
+  - Bash(git fetch:*)
+  - Bash(git branch:*)
+  - Bash(git worktree:*)
+  - Bash(git rev-parse:*)
+  - Bash(grep:*)
+  - Bash(sed:*)
+  - Bash(awk:*)
+  - Bash(cat:*)
+  - Bash(ls:*)
+  - Bash(test:*)
+  - Bash(echo:*)
 ---
 
 ## Context
@@ -33,14 +33,16 @@ Before deleting anything, summarize what you plan to remove (branches + any work
 
 1. **First, list branches to identify any with [gone] status**
    Execute this command:
+
    ```bash
    git branch -v
    ```
-   
+
    Note: Branches with a '+' prefix have associated worktrees and must have their worktrees removed before deletion.
 
 2. **Next, identify worktrees that need to be removed for [gone] branches**
    Execute this command:
+
    ```bash
    git worktree list
    ```
@@ -73,4 +75,3 @@ After executing these commands, you will:
 - Provide feedback on which worktrees and branches were removed
 
 If no branches are marked as [gone], report that no cleanup was needed.
-

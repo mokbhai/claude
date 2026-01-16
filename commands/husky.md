@@ -32,9 +32,11 @@ Set up Husky in a safe, repo-aware way.
 3. If changes are needed, propose the smallest plan and ask for confirmation (unless `$ARGUMENTS` contains `--yes`).
 4. Install/initialize Husky in a repo-compatible way (prefer `npx husky-init`) and ensure a `prepare` script exists.
 5. Add/update minimal hooks (confirm before writing):
-  - `pre-commit`: run `lint-staged`
-  - `pre-push`: run a reasonably fast test/typecheck command if one exists
-  - `commit-msg`: add commitlint only if it already exists in the repo
+
+- `pre-commit`: run `lint-staged`
+- `pre-push`: run a reasonably fast test/typecheck command if one exists
+- `commit-msg`: add commitlint only if it already exists in the repo
+
 6. Configure `lint-staged` using existing tooling; don’t invent lint/format commands.
 7. Explain how to verify hooks and how to temporarily skip them.
 
@@ -43,4 +45,3 @@ Set up Husky in a safe, repo-aware way.
 - Detected tooling + current hook state
 - Files changed/created
 - Commands to verify locally
-

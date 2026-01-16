@@ -122,6 +122,7 @@ const paddingClasses = {
 ```
 
 Usage:
+
 ```astro
 ---
 import Card from '@/components/Card/Card.astro';
@@ -171,6 +172,7 @@ try {
 ```
 
 Usage:
+
 ```astro
 ---
 import DataFetcher from '@/components/DataFetcher.astro';
@@ -309,6 +311,7 @@ const { title, description, noHeader, noFooter } = Astro.props;
 ```
 
 Usage:
+
 ```astro
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
@@ -461,6 +464,7 @@ const { label, name, type = 'text', required, error } = Astro.props;
 ```
 
 Usage:
+
 ```astro
 ---
 import Form from '@/components/Form/Form.astro';

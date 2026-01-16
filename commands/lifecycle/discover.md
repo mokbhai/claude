@@ -29,12 +29,14 @@ Use the answers to guide the discovery process below.
 ### Step 1: Understand the Context
 
 Based on the interview responses, clarify:
+
 - **Work Type**: [From interview]
 - **Motivation**: [From interview]
 - **Primary Goal**: [From interview]
 - **Constraints**: [From interview]
 
 Additional context to gather:
+
 - Who requested this?
 - What is the urgency/priority?
 - What happens if we don't do this?
@@ -42,6 +44,7 @@ Additional context to gather:
 ### Step 2: Define the Problem Statement
 
 Ask follow-up questions to understand:
+
 - What specific problem are we solving?
 - Who experiences this problem?
 - What are the pain points?
@@ -72,6 +75,7 @@ Ask the user for the main constraints:
 - Scalability/load expectations
 
 Document:
+
 - Time constraints (deadlines, milestones)
 - Resource constraints (team availability, budget)
 - Technical constraints (from interview)
@@ -87,6 +91,7 @@ Ask the user who the key stakeholders are:
 - Support / documentation
 
 For each stakeholder:
+
 - Who are they?
 - What are their expectations?
 - How will this affect them?
@@ -100,6 +105,7 @@ For each stakeholder:
 ### Step 8: Create Product Vision
 
 Based on all the information gathered:
+
 - Write a clear, concise vision statement (1-2 sentences)
 - Define the target users
 - Outline the core value proposition
@@ -116,19 +122,23 @@ Create a discovery document with the information gathered.
 # Discovery: $ARGUMENTS
 
 ## Overview
+
 - **Type**: [New Product/Feature/Improvement/Bug Fix]
 - **Motivation**: [User Feedback/Business Need/Technical Debt/Market Opportunity]
 - **Goal**: [Solve User Problem/Increase Revenue/Improve Efficiency/Learn]
 - **Timeline**: [Urgent/Short-term/Medium-term/Long-term]
 
 ## Problem Statement
+
 [What problem are we solving?]
 
 ## Success Metrics
+
 - [From interview responses]
 - Specific targets if available
 
 ## Constraints
+
 - Time: [from interview]
 - Resources: [from interview]
 - Technical: [from interview]
@@ -138,35 +148,43 @@ Create a discovery document with the information gathered.
   - Scalability considerations
 
 ## Assumptions
+
 - [Assumption 1 to validate]
 - [Assumption 2 to validate]
 
 ## Stakeholders
+
 [From interview - impact on each group]
 
 ## Risks
+
 - [Risk 1]: [mitigation]
 - [Risk 2]: [mitigation]
 
 ## Product Vision
+
 [1-2 sentence vision statement]
 
 ## Interview Summary
 
 ### User's Primary Concerns
+
 - [Key concerns expressed during interview]
 
 ### Technical Implications Identified
+
 - [Performance considerations]
 - [Security considerations]
 - [Integration challenges]
 - [Scalability needs]
 
 ### Tradeoffs Discussed
+
 - [Tradeoff 1]: [chosen approach and rationale]
 - [Tradeoff 2]: [chosen approach and rationale]
 
 ## Next Steps
+
 - [ ] Proceed to /prd
 - [ ] Additional research needed
 - [ ] [Other action]

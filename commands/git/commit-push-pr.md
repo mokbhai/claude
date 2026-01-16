@@ -2,21 +2,21 @@
 description: Commit changes, push branch, and open a GitHub pull request
 argument-hint: "[--no-verify] [extra context]"
 allowed-tools:
-   - Bash(git status:*)
-   - Bash(git diff:*)
-   - Bash(git add:*)
-   - Bash(git commit:*)
-   - Bash(git push:*)
-   - Bash(git restore:*)
-   - Bash(git reset:*)
-   - Bash(git branch:*)
-   - Bash(git rev-parse:*)
-   - Bash(git log:*)
-   - Bash(gh:*)
-   - Bash(ls:*)
-   - Bash(test:*)
-   - Bash(cat:*)
-   - Bash(head:*)
+  - Bash(git status:*)
+  - Bash(git diff:*)
+  - Bash(git add:*)
+  - Bash(git commit:*)
+  - Bash(git push:*)
+  - Bash(git restore:*)
+  - Bash(git reset:*)
+  - Bash(git branch:*)
+  - Bash(git rev-parse:*)
+  - Bash(git log:*)
+  - Bash(gh:*)
+  - Bash(ls:*)
+  - Bash(test:*)
+  - Bash(cat:*)
+  - Bash(head:*)
 ---
 
 # Commit, Push & PR
@@ -26,11 +26,13 @@ This command creates well-formatted commits, pushes them to the remote repositor
 ## Usage
 
 To commit, push, and create a PR, just type:
+
 ```
 /commit-push-pr
 ```
 
 Or with options:
+
 ```
 /commit-push-pr --no-verify
 ```
@@ -75,17 +77,20 @@ Or with options:
 ## Best Practices
 
 ### Commits
+
 - **Atomic commits**: Each commit should contain related changes that serve a single purpose
 - **Conventional commit format**: Use the format `<type>: <description>`
 - **Present tense, imperative mood**: Write commit messages as commands
 - **Concise first line**: Keep the first line under 72 characters
 
 ### Branches
+
 - **Descriptive names**: Use branch names like `feat/user-auth`, `fix/memory-leak`, `refactor/api-calls`
 - **Scope prefixes**: Use type prefixes to indicate the purpose (feat/, fix/, chore/, etc.)
 - **Kebab-case**: Use hyphens to separate words in branch names
 
 ### Pull Requests
+
 - **Clear titles**: PR title should summarize the change (generated from first commit)
 - **Structured description**: Organized with sections for Summary, Changes, Testing, Checklist
 - **Linked issues**: Include issue references like `Closes #123` or `Relates to #456`
@@ -162,23 +167,29 @@ The auto-generated PR description follows this structure:
 
 ```markdown
 ## Summary
+
 [Brief 1-3 bullet points describing what this PR does]
 
 ## Changes
+
 [Detailed list of changes, grouped by commit type]
+
 - ✨ **Features**: ...
 - 🐛 **Bug Fixes**: ...
 - 📝 **Documentation**: ...
 - 🔧 **Chores**: ...
 
 ## Test Plan
+
 [Bulleted checklist of testing completed]
+
 - [ ] Unit tests pass
 - [ ] Integration tests pass
 - [ ] Manual testing completed
 - [ ] Edge cases covered
 
 ## Checklist
+
 - [ ] Code follows project style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
@@ -200,6 +211,7 @@ When analyzing the diff, consider splitting commits based on:
 ## Examples
 
 **Single feature commit:**
+
 ```
 Branch: feat/user-authentication
 Commit: ✨ feat: add JWT-based user authentication
@@ -207,6 +219,7 @@ PR Title: ✨ feat: add JWT-based user authentication
 ```
 
 **Multi-commit PR:**
+
 ```
 Branch: fix/payment-processing
 
@@ -220,6 +233,7 @@ PR Description includes all commits grouped by type
 ```
 
 **Complex feature with multiple parts:**
+
 ```
 Branch: feat/api-redesign
 
@@ -254,16 +268,19 @@ PR Description organizes all commits by type
 ## Troubleshooting
 
 **If `gh` is not installed:**
+
 ```bash
 brew install gh
 gh auth login
 ```
 
 **If branch already exists on remote:**
+
 - The command will still push new commits
 - Existing PR will be updated with new commits
 
 **If pre-commit checks fail:**
+
 - Review the error output
 - Fix issues and run `/commit-push-pr` again
 - Or use `--no-verify` to skip checks (not recommended)

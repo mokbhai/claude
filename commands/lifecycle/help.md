@@ -79,6 +79,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: Starting any new feature, product, or improvement
 
 **What it does**:
+
 - Defines the problem statement
 - Identifies success metrics
 - Documents constraints and assumptions
@@ -89,6 +90,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **Output**: Discovery document with problem statement, success metrics, constraints, and product vision
 
 **Example**:
+
 ```bash
 /discover "User Authentication System"
 ```
@@ -102,6 +104,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: After discovery phase is complete
 
 **What it does**:
+
 - Defines user personas
 - Documents use cases
 - Specifies functional requirements
@@ -113,6 +116,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **Output**: Detailed PRD with all requirements documented
 
 **Example**:
+
 ```bash
 /prd "User Authentication System"
 ```
@@ -126,6 +130,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: After PRD is complete and approved
 
 **What it does**:
+
 - Groups related requirements into epics
 - Ensures each epic is functionally independent
 - Creates stories following INVEST criteria
@@ -134,6 +139,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 - Maximizes parallel execution opportunities
 
 **Key Principles**:
+
 - Each epic should be independently deployable
 - Stories should be executable in parallel when possible
 - Minimize cross-epic dependencies
@@ -141,6 +147,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **Output**: Epic and story breakdown with dependency matrix
 
 **Example**:
+
 ```bash
 /breakdown "User Authentication System"
 ```
@@ -154,12 +161,14 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: Before implementing an epic or story
 
 **What it does**:
+
 - **Epic Design**: Architecture, data model, API design, component structure, key decisions
 - **Story Design**: Implementation steps, component changes, edge cases, testing strategy
 
 **Output**: Technical design document with implementation guidance
 
 **Example**:
+
 ```bash
 /design "Epic 1: User Registration"
 /design "Story 1.1: Create registration endpoint"
@@ -174,6 +183,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: Ready to write code after design is approved
 
 **What it does**:
+
 - Guides test-first approach (TDD)
 - Step-by-step implementation
 - Code quality checks
@@ -182,6 +192,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 - Pull request creation
 
 **Best Practices**:
+
 - Write tests first (Red-Green-Refactor)
 - Run tests frequently
 - Commit often with clear messages
@@ -190,6 +201,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **Output**: Implemented code with tests, ready for review
 
 **Example**:
+
 ```bash
 /implement "Story 1.1: Create registration endpoint"
 ```
@@ -203,6 +215,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: Reviewing a pull request
 
 **What it does**:
+
 - Review code quality and functionality
 - Check test coverage
 - Assess performance and security
@@ -210,6 +223,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 - Provide constructive feedback
 
 **Review Categories**:
+
 - **Must Fix**: Blocking issues (security, bugs, tests)
 - **Should Fix**: Important improvements (performance, error handling)
 - **Could Fix**: Optional improvements (style, optimizations)
@@ -218,6 +232,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **Output**: Code review with feedback and approval decision
 
 **Example**:
+
 ```bash
 /review "PR #123: User registration implementation"
 ```
@@ -231,6 +246,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: After implementation, before release
 
 **What it does**:
+
 - Unit testing
 - Integration testing
 - End-to-end testing
@@ -243,6 +259,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **Output**: Test results with issues documented
 
 **Example**:
+
 ```bash
 /test "User Authentication Feature"
 ```
@@ -256,6 +273,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: All testing complete, ready for production
 
 **What it does**:
+
 - Version bumping (following semantic versioning)
 - Changelog updates
 - Pre-deployment testing
@@ -265,6 +283,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 - Release communication
 
 **Deployment Strategies**:
+
 - Blue-Green Deployment
 - Canary Deployment
 - Rolling Deployment
@@ -272,6 +291,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **Output**: Released feature with documentation
 
 **Example**:
+
 ```bash
 /release "v1.2.0"
 ```
@@ -285,6 +305,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 **When to use**: After completing design phase, want fast parallel implementation
 
 **What it does**:
+
 - **Analyzes dependencies** in breakdown.md
 - **Creates N worker scripts** that run in parallel
 - **Coordinates workers** through shared task queue with locks
@@ -292,17 +313,20 @@ This lifecycle provides a structured approach to software development with 8 pha
 - **Workers claim available tasks** that have no unmet dependencies
 
 **Usage**:
+
 ```bash
 /ralph "feature-name" [workers] [max-iterations] [sleep-seconds]
 ```
 
 **Parameters**:
+
 - `feature-name`: Name from plans directory
 - `workers`: Number of parallel workers (default: 3)
 - `max-iterations`: Max retry attempts per story (default: 10)
 - `sleep-seconds`: Delay between polls (default: 2)
 
 **Examples**:
+
 ```bash
 # Default: 3 parallel workers
 /ralph "User Authentication"
@@ -317,12 +341,14 @@ This lifecycle provides a structured approach to software development with 8 pha
 **How It Works**:
 
 **Setup Phase** (runs once):
+
 1. Parses `breakdown.md` for dependencies
 2. Creates `task-queue.json` with available/blocked/completed tasks
 3. Generates N worker scripts (`workers/worker-{1..N}.sh`)
 4. Starts all workers in parallel as background processes
 
 **Worker Loop** (each worker runs continuously):
+
 ```
 1. Acquire lock on task-queue.json
 2. Claim first available task (no unmet dependencies)
@@ -335,6 +361,7 @@ This lifecycle provides a structured approach to software development with 8 pha
 ```
 
 **Architecture**:
+
 ```
 plans/{feature}/
 ├── task-queue.json      ← Shared state: available/claimed/completed
@@ -347,25 +374,33 @@ plans/{feature}/
 ```
 
 **Dependency Example**:
+
 ```markdown
 ## Epic 1: User Registration
+
 ### Story 1.1: Registration endpoint
+
 - Dependencies: None → Available immediately (Worker 1 claims)
 
 ### Story 1.2: Email verification
+
 - Dependencies: Story 1.1 → Blocked until 1.1 completes
 
 ## Epic 2: User Profile
+
 ### Story 2.1: User model
+
 - Dependencies: None → Available immediately (Worker 2 claims)
 
 ### Story 2.2: Profile page
+
 - Dependencies: Story 2.1 → Blocked until 2.1 completes
 
 Result: Workers 1 and 2 run in parallel on 1.1 and 2.1
 ```
 
 **Progress Tracking**:
+
 ```bash
 # Real-time monitoring
 tail -f plans/{feature}/progress.txt
@@ -378,6 +413,7 @@ cat plans/{feature}/task-queue.json | jq '.available | length'
 ```
 
 **Managing Workers**:
+
 ```bash
 # Stop gracefully (finish current tasks)
 pkill -TERM -f "workers/worker-"
@@ -390,6 +426,7 @@ pkill -KILL -f "workers/worker-"
 ```
 
 **When to Use Ralph Loop**:
+
 - ✅ Multiple independent stories (different epics, components)
 - ✅ Clear dependency mapping in breakdown.md
 - ✅ Comprehensive technical design completed
@@ -397,6 +434,7 @@ pkill -KILL -f "workers/worker-"
 - ✅ Want to speed up implementation with parallelism
 
 **When NOT to Use Ralph Loop**:
+
 - ❌ All stories have sequential dependencies (no parallelism benefit)
 - ❌ No technical design yet
 - ❌ Requires human judgment/creativity
@@ -504,6 +542,7 @@ cat plans/Checkout\ System/worker-state.json | jq '.'
 ## Best Practices
 
 ### General Workflow
+
 1. **Complete each phase before moving to the next**
 2. **Get approvals at key checkpoints** (PRD, design, implementation)
 3. **Document everything** for future reference
@@ -513,41 +552,49 @@ cat plans/Checkout\ System/worker-state.json | jq '.'
 ### Phase-Specific Tips
 
 **Discovery**:
+
 - Ask "why?" at least 5 times
 - Focus on outcomes, not outputs
 - Validate assumptions with data
 
 **PRD**:
+
 - Be specific and measurable
 - Prioritize ruthlessly
 - Include acceptance criteria
 
 **Breakdown**:
+
 - Minimize dependencies
 - Think vertical slices (end-to-end)
 - Each epic should be independently valuable
 
 **Design**:
+
 - Document trade-offs
 - Consider testing upfront
 - Think about deployment and rollback
 
 **Implementation**:
+
 - Follow test-driven development
 - Run tests frequently
 - Self-review before PR
 
 **Review**:
+
 - Be constructive and specific
 - Explain the "why"
 - Acknowledge good work
 
 **Testing**:
+
 - Test edge cases, not just happy paths
 - Automate what you can
 - Document manual procedures
 
 **Release**:
+
 - Have a rollback plan
 - Monitor continuously
 - Communicate clearly
@@ -557,16 +604,21 @@ cat plans/Checkout\ System/worker-state.json | jq '.'
 ## Common Questions
 
 ### Can I skip phases?
+
 For simple changes (bug fixes, small features), you can skip early phases (Discovery, PRD, Breakdown) and start with Design or Implementation.
 
 ### How long should each phase take?
+
 It depends on complexity:
+
 - **Small feature**: 1-2 days total
 - **Medium feature**: 1-2 weeks total
 - **Large feature**: 1-2 months total
 
 ### What if I discover issues during implementation?
+
 If you find gaps in the design or requirements:
+
 1. Document the issue
 2. Go back to Design or PRD phase
 3. Update documentation
@@ -574,9 +626,11 @@ If you find gaps in the design or requirements:
 5. Continue implementation
 
 ### Can multiple epics be developed in parallel?
+
 Yes! That's the goal of the Breakdown phase. Each epic should be independently developable by different team members.
 
 ### How do I handle dependencies between stories?
+
 Document them clearly in the Breakdown phase. If you have many dependencies, consider refactoring your epic boundaries.
 
 ---
@@ -584,6 +638,7 @@ Document them clearly in the Breakdown phase. If you have many dependencies, con
 ## Command Aliases
 
 You can also use shortened versions:
+
 - `/disc` - Discovery
 - `/plan` - PRD (planning)
 - `/break` - Breakdown
@@ -598,6 +653,7 @@ You can also use shortened versions:
 ## Getting Help
 
 If you need help with a specific command:
+
 ```bash
 /help discover    # Help with discovery phase
 /help prd         # Help with PRD phase
@@ -610,6 +666,7 @@ If you need help with a specific command:
 ```
 
 Or use the command without arguments to see its full instructions:
+
 ```bash
 /discover
 /prd
@@ -626,11 +683,13 @@ Or use the command without arguments to see its full instructions:
 ## Additional Resources
 
 ### Related Commands
+
 - `/create-hook` - Create custom hooks
 - `/create-command` - Create custom slash commands
 - `/refactor` - Refactor code (code/refactor.md)
 
 ### Documentation
+
 - Check your project's `CLAUDE.md` for project-specific guidelines
 - Review technical design documents before implementing
 - Keep documentation updated throughout the lifecycle
@@ -648,6 +707,7 @@ This lifecycle provides a **structured, systematic approach** to software develo
 - ✅ **Quality checks** before release
 
 **Key Benefits**:
+
 - Reduced rework through upfront planning
 - Parallel execution for faster delivery
 - Higher quality through comprehensive testing
@@ -655,6 +715,7 @@ This lifecycle provides a **structured, systematic approach** to software develo
 - Predictable, reliable releases
 
 **Next Steps**:
+
 1. Start with `/discover` for your next feature
 2. Follow each phase sequentially
 3. Adapt the process to your team's needs

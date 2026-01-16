@@ -138,6 +138,7 @@ Based on the interview responses, create a comprehensive design document using t
 # Technical Design: $ARGUMENTS (Epic)
 
 ## 1. Overview
+
 **Epic Goal**: [what this epic achieves]
 **Stories Included**: [list of story IDs]
 **Dependencies**: [from interview]
@@ -146,28 +147,32 @@ Based on the interview responses, create a comprehensive design document using t
 ## 2. Architecture Overview
 
 ### Architecture Type
+
 [From interview responses]
 
 ### Integration Points
+
 - [ ] Internal APIs: [details]
 - [ ] External APIs: [details]
 - [ ] Database: [details]
 
 ### Component Diagram
 ```
+
 [Architecture diagram based on interview answers]
 
 Example:
-┌─────────────┐         ┌─────────────┐
-│  Frontend   │◄───────►│   Backend   │
-│  (React)    │  HTTP   │  (Node.js)  │
-└─────────────┘         └──────┬──────┘
-                              │
-                              ▼
-                       ┌─────────────┐
-                       │  Database   │
-                       │ (PostgreSQL)│
-                       └─────────────┘
+┌─────────────┐ ┌─────────────┐
+│ Frontend │◄───────►│ Backend │
+│ (React) │ HTTP │ (Node.js) │
+└─────────────┘ └──────┬──────┘
+│
+▼
+┌─────────────┐
+│ Database │
+│ (PostgreSQL)│
+└─────────────┘
+
 ```
 
 ## 3. Data Model
@@ -254,9 +259,11 @@ Example:
 
 ### Directory Structure
 ```
+
 [Proposed structure]
 src/
 ├── [organization based on interview]
+
 ```
 
 ## 10. Implementation Order
@@ -295,7 +302,7 @@ src/
 
 **Document Location**: `plans/$ARGUMENTS/stories/{story-name}.md`
 
-```markdown
+````markdown
 # Technical Design: $ARGUMENTS (Story)
 
 **Epic**: [Epic name]
@@ -304,16 +311,19 @@ src/
 ## 1. Interview Summary
 
 ### Complexity & Scope
+
 - **Complexity**: [Simple/Moderate/Complex]
 - **File Changes**: [from interview]
 - **Dependencies**: [from interview]
 
 ### Key Considerations
+
 - **Edge Cases**: [from interview]
 - **Performance**: [from interview]
 - **Security**: [from interview]
 
 ## 2. Acceptance Criteria Review
+
 - [ ] [Criterion 1]
 - [ ] [Criterion 2]
 - [ ] [Criterion 3]
@@ -321,21 +331,27 @@ src/
 ## 3. Component/Module Changes
 
 ### Files to Modify
+
 [From interview]
+
 - `src/path/to/file1.ts` - [what changes]
 - `src/path/to/file2.ts` - [what changes]
 
 ### New Files to Create
+
 [From interview]
+
 - `src/path/to/newFile.ts` - [purpose]
 
 ### Function Signatures
+
 ```typescript
 // New function
 function functionName(param1: Type1, param2: Type2): ReturnType {
   // implementation
 }
 ```
+````
 
 ## 4. Implementation Steps
 
@@ -350,31 +366,38 @@ function functionName(param1: Type1, param2: Type2): ReturnType {
 ## 5. Edge Cases & Validation
 
 ### Edge Cases [From Interview]
-| Scenario | Expected Behavior | Implementation |
-|----------|-------------------|----------------|
-| [Case 1] | [behavior] | [how to implement] |
-| [Case 2] | [behavior] | [how to implement] |
+
+| Scenario | Expected Behavior | Implementation     |
+| -------- | ----------------- | ------------------ |
+| [Case 1] | [behavior]        | [how to implement] |
+| [Case 2] | [behavior]        | [how to implement] |
 
 ### Input Validation
+
 - [Field 1]: [validation rules]
 - [Field 2]: [validation rules]
 
 ## 6. Error Handling
 
 ### Error Scenarios
+
 [From interview]
+
 - [Error 1]: [how to handle]
 - [Error 2]: [how to handle]
 
 ## 7. Data Changes
 
 ### Database Changes (if any)
+
 [From interview]
+
 - **Table**: [table_name]
   - Change: [description]
   - Migration: [file path]
 
 ### API Calls (if any)
+
 - **Method**: GET/POST/PUT/DELETE
 - **Endpoint**: `/api/path`
 - **Request**: [body/params]
@@ -383,19 +406,21 @@ function functionName(param1: Type1, param2: Type2): ReturnType {
 ## 8. Testing Strategy
 
 ### Unit Tests
+
 ```typescript
-describe('functionName', () => {
-  it('should [expected behavior]', () => {
+describe("functionName", () => {
+  it("should [expected behavior]", () => {
     // test
   });
 
-  it('should handle [edge case from interview]', () => {
+  it("should handle [edge case from interview]", () => {
     // test
   });
 });
 ```
 
 ## 9. Definition of Done
+
 - [ ] Code implemented
 - [ ] Edge cases handled [from interview]
 - [ ] Unit tests passing (coverage > X%)
@@ -404,8 +429,10 @@ describe('functionName', () => {
 - [ ] Documentation updated
 
 ## 10. Dependencies [From Interview]
+
 - [ ] [Dependency 1]
 - [ ] [Dependency 2]
+
 ```
 
 ## Tips
@@ -427,3 +454,4 @@ describe('functionName', () => {
 - Document assumptions from interview
 - Get feedback before implementing
 - Update design if implementation reveals issues
+```

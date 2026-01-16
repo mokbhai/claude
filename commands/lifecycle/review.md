@@ -78,6 +78,7 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 ## Code Review Checklist
 
 ### Functionality
+
 - [ ] Solves the stated problem
 - [ ] Acceptance criteria met
 - [ ] Edge cases handled
@@ -85,6 +86,7 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 - [ ] Logic is correct
 
 ### Code Quality
+
 - [ ] Code is readable and clear
 - [ ] Naming conventions followed
 - [ ] Code is well-organized
@@ -93,6 +95,7 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 - [ ] Design patterns used appropriately
 
 ### Testing
+
 - [ ] Tests are comprehensive
 - [ ] Test coverage is adequate
 - [ ] Tests are meaningful
@@ -100,6 +103,7 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 - [ ] Tests are maintainable
 
 ### Performance
+
 - [ ] No obvious performance issues
 - [ ] Database queries optimized
 - [ ] Efficient algorithms used
@@ -107,6 +111,7 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 - [ ] Caching used appropriately
 
 ### Security
+
 - [ ] Input validation present
 - [ ] SQL injection prevented
 - [ ] XSS vulnerabilities avoided
@@ -115,6 +120,7 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 - [ ] Secrets not hardcoded
 
 ### Documentation
+
 - [ ] Code comments where needed
 - [ ] Complex logic explained
 - [ ] Documentation updated
@@ -122,12 +128,14 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 - [ ] README updated (if needed)
 
 ### Compatibility
+
 - [ ] Backward compatible
 - [ ] Breaking changes documented
 - [ ] Cross-browser tested (if frontend)
 - [ ] Platform compatibility verified
 
 ### Style & Conventions
+
 - [ ] Follows project style guide
 - [ ] Linting passes
 - [ ] Type checking passes
@@ -136,7 +144,9 @@ Follow this systematic code review approach for: **$ARGUMENTS**
 ## Review Categories
 
 ### Must Fix (Blocking)
+
 Issues that must be addressed before merge:
+
 - Critical bugs
 - Security vulnerabilities
 - Test failures
@@ -144,7 +154,9 @@ Issues that must be addressed before merge:
 - Major logic errors
 
 ### Should Fix (Strongly Recommended)
+
 Important improvements:
+
 - Performance issues
 - Missing error handling
 - Incomplete test coverage
@@ -152,14 +164,18 @@ Important improvements:
 - Missing documentation
 
 ### Could Fix (Optional)
+
 Nice-to-have improvements:
+
 - Code style inconsistencies
 - Minor optimizations
 - Extra documentation
 - Alternative approaches
 
 ### Learning Opportunities
+
 Share knowledge:
+
 - Better patterns or practices
 - Alternative implementations
 - Relevant resources
@@ -170,44 +186,53 @@ Share knowledge:
 ## Code Review: [PR Title]
 
 ### Overall
+
 [Overall impression - positive, needs work, etc.]
 
 ### Must Fix 🚨
+
 1. **[Issue Title]**
    - Location: [file:line]
    - Issue: [description]
    - Suggestion: [how to fix]
 
 ### Should Fix ⚠️
+
 1. **[Issue Title]**
    - Location: [file:line]
    - Issue: [description]
    - Suggestion: [how to fix]
 
 ### Could Fix 💡
+
 1. **[Suggestion]**
    - Location: [file:line]
    - Why: [reasoning]
    - Suggestion: [improvement]
 
 ### Nitpicks 📝
+
 1. **[Minor issue]**
    - Location: [file:line]
    - Suggestion: [style improvement]
 
 ### Questions ❓
+
 1. **[Question about approach/implementation]**
    - [question details]
 
 ### Kudos 🎉
+
 - [Something done well - be specific]
 
 ### Summary
+
 - [ ] Changes requested
 - [ ] Approved with changes
 - [ ] Approved
 
 ## Next Steps
+
 1. Address must-fix items
 2. Consider should-fix items
 3. Update PR when ready
@@ -217,6 +242,7 @@ Share knowledge:
 ## Common Issues to Look For
 
 ### Code Smells
+
 ```typescript
 // ❌ Long function - hard to understand
 function processUser(userData) {
@@ -232,6 +258,7 @@ function processUser(userData) {
 ```
 
 ### Duplicate Code
+
 ```typescript
 // ❌ Duplicated logic
 function calculateDiscountA(price) {
@@ -249,6 +276,7 @@ function calculateDiscount(price, rate = 0.9) {
 ```
 
 ### Magic Numbers
+
 ```typescript
 // ❌ Magic number
 setTimeout(() => callback(), 86400000);
@@ -259,6 +287,7 @@ setTimeout(() => callback(), DAY_IN_MS);
 ```
 
 ### Poor Error Handling
+
 ```typescript
 // ❌ Swallowing errors
 try {
@@ -271,12 +300,13 @@ try {
 try {
   await riskyOperation();
 } catch (e) {
-  logger.error('Operation failed', e);
-  throw new OperationError('Failed to complete operation', e);
+  logger.error("Operation failed", e);
+  throw new OperationError("Failed to complete operation", e);
 }
 ```
 
 ### Missing Tests
+
 ```typescript
 // ❌ Complex logic without tests
 function calculateTax(amount, region) {
@@ -285,18 +315,17 @@ function calculateTax(amount, region) {
 }
 
 // ✅ Better - tested
-describe('calculateTax', () => {
-  it('calculates correct tax for US region', () => {
-    expect(calculateTax(100, 'US')).toBe(10);
+describe("calculateTax", () => {
+  it("calculates correct tax for US region", () => {
+    expect(calculateTax(100, "US")).toBe(10);
   });
 
-  it('handles zero amount', () => {
-    expect(calculateTax(0, 'US')).toBe(0);
+  it("handles zero amount", () => {
+    expect(calculateTax(0, "US")).toBe(0);
   });
 
-  it('throws on invalid region', () => {
-    expect(() => calculateTax(100, 'INVALID'))
-      .toThrow('Invalid region');
+  it("throws on invalid region", () => {
+    expect(() => calculateTax(100, "INVALID")).toThrow("Invalid region");
   });
 });
 ```
@@ -304,29 +333,34 @@ describe('calculateTax', () => {
 ## Tips for Reviewers
 
 ### Be Constructive
+
 - Focus on the code, not the person
 - Explain the "why" behind suggestions
 - Provide examples or alternatives
 - Acknowledge good work
 
 ### Be Thorough
+
 - Don't rush the review
 - Check both code and tests
 - Verify acceptance criteria
 - Consider security and performance
 
 ### Be Timely
+
 - Review promptly
 - Respond to questions
 - Re-review quickly after updates
 
 ### Be Respectful
+
 - Assume good intent
 - Ask questions instead of making demands
 - Offer to help if needed
 - Remember we're all learning
 
 ### Be Specific
+
 - Point to exact lines/files
 - Explain issues clearly
 - Provide actionable feedback
@@ -335,6 +369,7 @@ describe('calculateTax', () => {
 ## Tips for Authors
 
 ### Before Requesting Review
+
 - Self-review your changes
 - Ensure all tests pass
 - Update documentation
@@ -342,6 +377,7 @@ describe('calculateTax', () => {
 - Address obvious issues first
 
 ### During Review
+
 - Be open to feedback
 - Ask clarifying questions
 - Explain your approach if questioned
@@ -349,6 +385,7 @@ describe('calculateTax', () => {
 - Learn from the review
 
 ### After Review
+
 - Address feedback promptly
 - Update PR description if needed
 - Request re-review for major changes
@@ -360,6 +397,7 @@ describe('calculateTax', () => {
 # Code Review Complete: [PR Title]
 
 ## Review Summary
+
 **Overall**: [Approved / Approved with changes / Changes requested]
 **Time to review**: [X minutes]
 **Files changed**: [X files, Y additions, Z deletions]
@@ -367,30 +405,37 @@ describe('calculateTax', () => {
 ## Findings
 
 ### Must Fix 🚨
+
 - [ ] [Issue 1]
 - [ ] [Issue 2]
 
 ### Should Fix ⚠️
+
 - [ ] [Issue 1]
 - [ ] [Issue 2]
 
 ### Could Fix 💡
+
 - [ ] [Suggestion 1]
 
 ### Kudos 🎉
+
 - [What was done well]
 
 ## Recommendations
+
 1. [Actionable recommendation 1]
 2. [Actionable recommendation 2]
 
 ## Final Verdict
+
 - [ ] **Approve** - Ready to merge
 - [ ] **Approve with changes** - Minor changes needed
 - [ ] **Request changes** - Significant changes needed
 - [ ] **Needs discussion** - Questions to resolve
 
 ## Next Steps
+
 - [ ] Author to address must-fix items
 - [ ] Re-review after updates
 - [ ] Merge once approved

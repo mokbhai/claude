@@ -15,15 +15,17 @@ npx astro add react
 #### Manual Setup
 
 1. Install dependencies:
+
 ```bash
 npm install @astrojs/react react react-dom
 npm install -D @types/react @types/react-dom
 ```
 
 2. Update `astro.config.mjs`:
+
 ```javascript
-import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
+import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
 
 export default defineConfig({
   integrations: [react()],
@@ -31,6 +33,7 @@ export default defineConfig({
 ```
 
 3. Update `tsconfig.json`:
+
 ```json
 {
   "compilerOptions": {
@@ -64,27 +67,29 @@ import { useState } from 'react';
 
 ```jsx
 // src/components/ReactCounter.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function ReactCounter({ initialCount = 0, step = 1, max = 10 }) {
   const [count, setCount] = useState(initialCount);
 
   useEffect(() => {
-    console.log('Counter mounted');
+    console.log("Counter mounted");
   }, []);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm max-w-sm mx-auto">
-      <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Count: {count}</p>
+      <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        Count: {count}
+      </p>
       <div className="flex gap-2">
         <button
-          onClick={() => setCount(c => Math.min(c + step, max))}
+          onClick={() => setCount((c) => Math.min(c + step, max))}
           className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors duration-200"
         >
           Increment
         </button>
         <button
-          onClick={() => setCount(c => Math.max(c - step, 0))}
+          onClick={() => setCount((c) => Math.max(c - step, 0))}
           className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-colors duration-200"
         >
           Decrement
@@ -106,14 +111,16 @@ npx astro add vue
 #### Manual Setup
 
 1. Install dependencies:
+
 ```bash
 npm install @astrojs/vue vue
 ```
 
 2. Update `astro.config.mjs`:
+
 ```javascript
-import { defineConfig } from 'astro/config';
-import vue from '@astrojs/vue';
+import { defineConfig } from "astro/config";
+import vue from "@astrojs/vue";
 
 export default defineConfig({
   integrations: [vue()],
@@ -133,8 +140,12 @@ import VueCounter from '../components/VueCounter.vue';
 ```vue
 <!-- src/components/VueCounter.vue -->
 <template>
-  <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm max-w-sm mx-auto">
-    <p class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Count: {{ count }}</p>
+  <div
+    class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm max-w-sm mx-auto"
+  >
+    <p class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      Count: {{ count }}
+    </p>
     <div class="flex gap-2">
       <button
         @click="increment"
@@ -153,13 +164,13 @@ import VueCounter from '../components/VueCounter.vue';
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 
 const props = defineProps({
   initialValue: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
 const count = ref(props.initialValue);
@@ -173,7 +184,7 @@ const decrement = () => {
 };
 
 onMounted(() => {
-  console.log('Vue component mounted');
+  console.log("Vue component mounted");
 });
 </script>
 ```
@@ -189,14 +200,16 @@ npx astro add svelte
 #### Manual Setup
 
 1. Install dependencies:
+
 ```bash
 npm install @astrojs/svelte svelte
 ```
 
 2. Update `astro.config.mjs`:
+
 ```javascript
-import { defineConfig } from 'astro/config';
-import svelte from '@astrojs/svelte';
+import { defineConfig } from "astro/config";
+import svelte from "@astrojs/svelte";
 
 export default defineConfig({
   integrations: [svelte()],
@@ -266,35 +279,39 @@ npx astro add tailwind
 #### Manual Setup
 
 1. Install dependencies:
+
 ```bash
 npm install -D tailwindcss @astrojs/tailwind
 ```
 
 2. Initialize Tailwind:
+
 ```bash
 npx tailwindcss init
 ```
 
 3. Update `tailwind.config.js`:
+
 ```javascript
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ["Inter", "sans-serif"],
       },
     },
   },
   plugins: [],
-}
+};
 ```
 
 4. Update `astro.config.mjs`:
+
 ```javascript
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   integrations: [tailwind()],
@@ -302,6 +319,7 @@ export default defineConfig({
 ```
 
 5. Create `src/styles/global.css`:
+
 ```css
 @tailwind base;
 @tailwind components;
@@ -309,7 +327,7 @@ export default defineConfig({
 
 @layer base {
   html {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 }
 ```
@@ -379,14 +397,16 @@ npx astro add mdx
 #### Manual Setup
 
 1. Install dependencies:
+
 ```bash
 npm install @astrojs/mdx
 ```
 
 2. Update `astro.config.mjs`:
+
 ```javascript
-import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   integrations: [mdx()],
@@ -395,7 +415,7 @@ export default defineConfig({
 
 #### Usage
 
-```mdx
+````mdx
 ---
 // src/pages/blog/post.mdx
 import Counter from '../../components/Counter.jsx';
@@ -415,9 +435,11 @@ This is an MDX file with React components:
 ## Code Examples
 
 ```js
-console.log('Hello MDX!');
+console.log("Hello MDX!");
 ```
-```
+````
+
+````
 
 ### Content Collections with MDX
 
@@ -435,7 +457,7 @@ const blog = defineCollection({
 });
 
 export const collections = { blog };
-```
+````
 
 ```mdx
 ---
@@ -445,7 +467,7 @@ pubDate: 2024-01-01
 tags: ['astro', 'mdx']
 ---
 
-import { Chart } from '@astrojs/chart';
+import { Chart } from "@astrojs/chart";
 
 # My Blog Post
 
@@ -457,17 +479,20 @@ import { Chart } from '@astrojs/chart';
 ### Prisma
 
 1. Install dependencies:
+
 ```bash
 npm install prisma @prisma/client
 npm install -D prisma
 ```
 
 2. Initialize Prisma:
+
 ```bash
 npx prisma init
 ```
 
 3. Create schema:
+
 ```prisma
 // prisma/schema.prisma
 generator client {
@@ -489,9 +514,10 @@ model Post {
 ```
 
 4. Create client instance:
+
 ```typescript
 // src/lib/prisma.ts
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -499,6 +525,7 @@ export default prisma;
 ```
 
 5. Use in Astro pages:
+
 ```astro
 ---
 import prisma from '@/lib/prisma';
@@ -522,12 +549,14 @@ const posts = await prisma.post.findMany({
 ### GraphQL (with Apollo Client)
 
 1. Install dependencies:
+
 ```bash
 npm install @apollo/client graphql
 npm install -D @types/graphql
 ```
 
 2. Create Apollo provider:
+
 ```astro
 ---
 // src/providers/ApolloProvider.astro
@@ -546,10 +575,11 @@ const client = new ApolloClient({
 ```
 
 3. Create GraphQL query component:
+
 ```jsx
 // src/components/PostList.jsx
-import { useQuery, gql } from '@apollo/client';
-import client from '../lib/apollo-client';
+import { useQuery, gql } from "@apollo/client";
+import client from "../lib/apollo-client";
 
 const GET_POSTS = gql`
   query GetPosts {
@@ -571,7 +601,7 @@ export default function PostList() {
 
   return (
     <div>
-      {data.posts.map(post => (
+      {data.posts.map((post) => (
         <article key={post.id}>
           <h3>{post.title}</h3>
           <p>{post.content}</p>
@@ -587,15 +617,17 @@ export default function PostList() {
 ### Auth.js (NextAuth)
 
 1. Install dependencies:
+
 ```bash
 npm install @auth/core
 ```
 
 2. Create auth API route:
+
 ```javascript
 // src/pages/api/auth/[...auth].js
-import { Auth } from '@auth/core';
-import GitHub from '@auth/core/providers/github';
+import { Auth } from "@auth/core";
+import GitHub from "@auth/core/providers/github";
 
 export const { GET, POST } = Auth({
   providers: [
@@ -610,18 +642,20 @@ export const { GET, POST } = Auth({
 ```
 
 3. Create auth utilities:
+
 ```typescript
 // src/lib/auth.ts
 export async function getSession(request: Request) {
-  const url = new URL('/api/auth/session', request.url);
+  const url = new URL("/api/auth/session", request.url);
   const response = await fetch(url, {
-    headers: { cookie: request.headers.get('cookie') ?? '' },
+    headers: { cookie: request.headers.get("cookie") ?? "" },
   });
   return response.json();
 }
 ```
 
 4. Protect routes:
+
 ```astro
 ---
 // src/pages/dashboard.astro
@@ -642,23 +676,26 @@ if (!session?.user) {
 ### Vercel
 
 1. Install adapter:
+
 ```bash
 npm install @astrojs/vercel
 ```
 
 2. Update config:
+
 ```javascript
 // astro.config.mjs
-import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel/serverless';
+import { defineConfig } from "astro/config";
+import vercel from "@astrojs/vercel/serverless";
 
 export default defineConfig({
-  output: 'server',
+  output: "server",
   adapter: vercel(),
 });
 ```
 
 3. Environment variables (in Vercel dashboard):
+
 ```
 DATABASE_URL=
 AUTH_SECRET=
@@ -669,23 +706,26 @@ GITHUB_SECRET=
 ### Netlify
 
 1. Install adapter:
+
 ```bash
 npm install @astrojs/netlify
 ```
 
 2. Update config:
+
 ```javascript
 // astro.config.mjs
-import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify/functions';
+import { defineConfig } from "astro/config";
+import netlify from "@astrojs/netlify/functions";
 
 export default defineConfig({
-  output: 'server',
+  output: "server",
   adapter: netlify(),
 });
 ```
 
 3. Create Netlify redirects:
+
 ```
 # netlify.toml
 [[redirects]]
@@ -704,22 +744,25 @@ export default defineConfig({
 ### Storybook (for UI components)
 
 1. Install dependencies:
+
 ```bash
 npm install -D @storybook/addon-essentials @storybook/addon-interactions @storybook/blocks storybook @storybook/addon-astro
 ```
 
 2. Initialize Storybook:
+
 ```bash
 npx storybook@latest init
 ```
 
 3. Configure `.storybook/main.js`:
+
 ```javascript
 module.exports = {
-  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
-  addons: ['@storybook/addon-essentials'],
+  stories: ["../src/**/*.stories.@(js|jsx|ts|tsx|mdx)"],
+  addons: ["@storybook/addon-essentials"],
   framework: {
-    name: '@storybook/addon-astro',
+    name: "@storybook/addon-astro",
     options: {},
   },
 };
@@ -728,23 +771,26 @@ module.exports = {
 ### Vitest (for testing)
 
 1. Install dependencies:
+
 ```bash
 npm install -D vitest @vitest/ui jsdom
 ```
 
 2. Configure `vitest.config.ts`:
+
 ```typescript
-import { defineConfig } from 'vitest/config';
-import astro from 'astro/config';
+import { defineConfig } from "vitest/config";
+import astro from "astro/config";
 
 export default defineConfig({
   test: {
-    environment: 'jsdom',
+    environment: "jsdom",
   },
 });
 ```
 
 3. Create test:
+
 ```typescript
 // src/components/Button.test.tsx
 import { test, expect } from 'vitest';
@@ -785,8 +831,8 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src'),
-        '@/components': path.resolve(__dirname, './src/components'),
+        "@": path.resolve(__dirname, "./src"),
+        "@/components": path.resolve(__dirname, "./src/components"),
       },
     },
   },
@@ -800,12 +846,12 @@ Solution: Code splitting and dynamic imports
 
 ```javascript
 // Lazy load components
-const HeavyComponent = lazy(() => import('./HeavyComponent'));
+const HeavyComponent = lazy(() => import("./HeavyComponent"));
 
 // Use with Suspense in React
 <Suspense fallback={<Loading />}>
   <HeavyComponent />
-</Suspense>
+</Suspense>;
 ```
 
 This integration guide helps you properly set up and configure various integrations for your Astro projects.

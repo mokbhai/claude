@@ -1,6 +1,6 @@
 ---
 description: Orchestrate parallel autonomous implementation across stories (Ralph loop)
-argument-hint: "\"feature-name\" [workers] [max-iterations-per-story] [sleep-seconds]"
+argument-hint: '"feature-name" [workers] [max-iterations-per-story] [sleep-seconds]'
 ---
 
 # Ralph Loop - Parallel Autonomous Implementation
@@ -8,6 +8,7 @@ argument-hint: "\"feature-name\" [workers] [max-iterations-per-story] [sleep-sec
 **Purpose**: Set up and manage parallel autonomous agents to implement all stories from breakdown
 
 **What it does**:
+
 - Creates worker scripts that run in parallel when stories are independent
 - Analyzes dependencies to schedule work efficiently
 - Coordinates workers through shared state management
@@ -20,12 +21,14 @@ argument-hint: "\"feature-name\" [workers] [max-iterations-per-story] [sleep-sec
 ```
 
 **Parameters**:
+
 - `feature-name`: Name of the feature (matches plans directory)
 - `workers`: Number of parallel workers (default: 3)
 - `max-iterations-per-story`: Max retry attempts per story (default: 10)
 - `sleep-seconds`: Delay between worker polls (default: 2)
 
 **Examples**:
+
 ```bash
 /ralph "User Authentication"              # 3 workers, 10 iterations each, 2s sleep
 /ralph "User Authentication" 5            # 5 parallel workers
@@ -62,17 +65,23 @@ argument-hint: "\"feature-name\" [workers] [max-iterations-per-story] [sleep-sec
 When you run `/ralph "feature-name"`, the system:
 
 1. **Analyzes Dependencies** from `breakdown.md`
+
    ```markdown
    ## Epic 1: User Registration
+
    ### Story 1.1: Create registration endpoint
+
    - Depends on: None
    - [ ] Implement endpoint
+
    ### Story 1.2: Email verification
+
    - Depends on: Story 1.1
    - [ ] Implement verification
    ```
 
 2. **Creates Task Queue** (`task-queue.json`)
+
    ```json
    {
      "available": ["1.1", "2.1", "3.1"],
@@ -136,18 +145,20 @@ After Worker 1 completes 1.1:
 ### Shared State Files
 
 **`task-queue.json`** - Thread-safe task distribution
+
 ```json
 {
   "available": ["2.1", "3.1"],
-  "in-progress": {"1.1": "worker-1"},
+  "in-progress": { "1.1": "worker-1" },
   "completed": [],
   "failed": {},
-  "dependencies": {"1.2": ["1.1"]},
+  "dependencies": { "1.2": ["1.1"] },
   "last-updated": "2025-01-15T10:30:00Z"
 }
 ```
 
 **`worker-state.json`** - Worker health tracking
+
 ```json
 {
   "worker-1": {
@@ -237,10 +248,12 @@ $ /ralph "User Authentication" 5
 ## Progress Tracking
 
 **`progress.txt`** - Unified progress from all workers
+
 ```markdown
 # Ralph Progress - User Authentication
 
 ## Worker Activity
+
 - Total Workers: 5
 - Active: 4, Idle: 1
 - Started: 2025-01-15 10:22:00
@@ -248,6 +261,7 @@ $ /ralph "User Authentication" 5
 ## Completed Stories
 
 ### Story 1.1: Create registration endpoint
+
 - Worker: worker-2
 - Completed: 2025-01-15 10:24:15
 - Duration: 2m 15s
@@ -255,6 +269,7 @@ $ /ralph "User Authentication" 5
 - Commit: feat: implement registration endpoint
 
 ### Story 3.1: Create user profile model
+
 - Worker: worker-4
 - Completed: 2025-01-15 10:23:42
 - Duration: 1m 48s
@@ -262,6 +277,7 @@ $ /ralph "User Authentication" 5
 - Commit: feat: add user profile model
 
 ### Story 4.1: Design settings UI
+
 - Worker: worker-1
 - Completed: 2025-01-15 10:25:30
 - Duration: 3m 05s
@@ -269,13 +285,16 @@ $ /ralph "User Authentication" 5
 - Commit: feat: implement settings UI component
 
 ## Failed Attempts
+
 ### Story 2.2: Payment integration
+
 - Worker: worker-3
 - Attempts: 2/10
 - Last Error: Stripe API key not configured
 - Action: Released to queue, will retry
 
 ## Remaining
+
 - Stories: 3
 - Est. Time: 6-10 minutes
 ```
@@ -283,6 +302,7 @@ $ /ralph "User Authentication" 5
 ## When All Complete
 
 When all stories are done, workers:
+
 1. Detect empty task queue
 2. Verify all tests pass
 3. Generate summary report
@@ -312,6 +332,7 @@ When all stories are done, workers:
 ## Managing Workers
 
 ### Monitor Workers
+
 ```bash
 # Real-time progress
 tail -f plans/{feature}/progress.txt
@@ -324,6 +345,7 @@ cat plans/{feature}/task-queue.json | jq '.available | length'
 ```
 
 ### Stop Workers
+
 ```bash
 # Graceful stop (workers finish current task)
 pkill -TERM -f "workers/worker-"
@@ -336,6 +358,7 @@ pkill -f "workers/worker-3.sh"
 ```
 
 ### Resume After Stop
+
 ```bash
 # Workers read current state and continue
 # No special command needed - just run workers directly
@@ -346,6 +369,7 @@ pkill -f "workers/worker-3.sh"
 ## Best Practices
 
 ### Choosing Worker Count
+
 ```bash
 # Rule of thumb: min(#CPU cores, #parallelizable stories)
 
@@ -360,16 +384,22 @@ pkill -f "workers/worker-3.sh"
 ```
 
 ### Structuring for Parallelism
+
 ```markdown
 ## Good for Parallelism ✅
 
 ### Epic 1: User Service (Backend)
+
 ### Story 1.1: User model - No deps
+
 ### Story 1.2: Auth service - No deps
+
 ### Story 1.3: User controller - No deps
 
 ### Epic 2: User UI (Frontend)
+
 ### Story 2.1: Login page - No deps
+
 ### Story 2.2: Signup page - No deps
 
 → 5 workers can tackle 1.1, 1.2, 1.3, 2.1, 2.2 simultaneously
@@ -377,13 +407,16 @@ pkill -f "workers/worker-3.sh"
 ## Bad for Parallelism ❌
 
 ### Story 1.1: Base model
+
 ### Story 1.2: Extends 1.1
+
 ### Story 1.3: Extends 1.2
 
 → Must run sequentially, only 1 worker effective
 ```
 
 ### Sleep Time Tuning
+
 ```bash
 # Fast network, powerful API → Lower sleep
 /ralph "Feature" 5 10 0.5
@@ -412,6 +445,7 @@ The breakdown.md should include dependencies for parallel execution:
 ## Epic 1: User Registration
 
 ### Story 1.1: Create registration endpoint
+
 **Dependencies**: None
 **Estimated**: 2 hours
 
@@ -422,6 +456,7 @@ The breakdown.md should include dependencies for parallel execution:
 - [ ] Write integration tests
 
 ### Story 1.2: Email verification
+
 **Dependencies**: Story 1.1 (needs registration endpoint)
 **Estimated**: 1.5 hours
 
@@ -432,6 +467,7 @@ The breakdown.md should include dependencies for parallel execution:
 ## Epic 2: User Profile (can run in parallel with Epic 1)
 
 ### Story 2.1: Create profile model
+
 **Dependencies**: None
 **Estimated**: 1 hour
 
@@ -441,6 +477,7 @@ The breakdown.md should include dependencies for parallel execution:
 ```
 
 Workers will:
+
 - Parse dependencies from each story
 - Only claim stories with all dependencies met
 - Mark complete `[x]` when done
@@ -477,24 +514,28 @@ plans/{feature-name}/
 ## Tips
 
 ### Setup Phase
+
 - Tag dependencies clearly in breakdown.md
 - Estimate story complexity for better worker distribution
 - Run `/design` on ALL epics before starting `/ralph`
 - Ensure tests can run independently (no shared state)
 
 ### Worker Configuration
+
 - Start with 3-5 workers for typical features
 - Match worker count to CPU cores for CPU-bound tasks
 - Use more workers (8-12) for I/O-bound API work
 - Fewer workers (1-2) for mostly sequential dependencies
 
 ### Monitoring
+
 - Check `task-queue.json` for available vs blocked tasks
 - Monitor `worker-state.json` for stalled workers
 - Tail `progress.txt` for real-time updates
 - Set up alerts for repeated failures on same story
 
 ### Performance
+
 - Sleep 0.5-2s for fast APIs with rate limit headroom
 - Sleep 5-10s when near rate limits
 - Lower iterations (5) for quick tests
@@ -503,21 +544,25 @@ plans/{feature-name}/
 ## Troubleshooting
 
 ### Workers stuck idle?
+
 - Check if all remaining stories have unmet dependencies
 - Verify `task-queue.json` has tasks in "available" array
 - A dependency might be mislabeled in breakdown.md
 
 ### Same story failing repeatedly?
+
 - Check `progress.txt` for error pattern
 - Story may have bad design or missing info
 - Fix manually, mark `[x]`, let workers continue
 
 ### Worker collision issues?
+
 - Increase sleep time to reduce lock contention
 - Reduce worker count
 - Check that lock file cleanup is working
 
 ### Memory issues?
+
 - Reduce worker count
 - Workers may need periodic restart (add auto-restart logic)
 - Check for leaked processes

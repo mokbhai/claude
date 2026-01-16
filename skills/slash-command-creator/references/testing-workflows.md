@@ -5,7 +5,8 @@ This file contains templates and patterns for creating slash commands that handl
 ## 1. Component Testing Command
 
 ### Component Test Generator and Runner
-```markdown
+
+````markdown
 ---
 description: Run tests for a specific component with coverage, debugging, and visual regression
 argument-hint: [component-name] [--coverage] [--watch] [--visual] [--e2e]
@@ -23,8 +24,10 @@ Options: $2
    ```bash
    find src -name "*$1*" -type f
    ```
+````
 
 2. Locate associated test files:
+
    ```bash
    find src -name "*$1*.test.*" -o -name "*$1*.spec.*"
    ```
@@ -37,6 +40,7 @@ Options: $2
 ## Test Execution Commands
 
 ### Unit/Integration Tests
+
 ```bash
 # Run tests with coverage if requested
 npm run test -- --testPathPattern="$1" --coverage --passWithNoTests
@@ -49,6 +53,7 @@ node --inspect-brk node_modules/.bin/jest --testPathPattern="$1"
 ```
 
 ### Visual Regression Tests (if --visual)
+
 ```bash
 # Run Storybook and capture screenshots
 npm run storybook:build
@@ -59,6 +64,7 @@ npm run test:visual -- --update-snapshots
 ```
 
 ### End-to-End Tests (if --e2e)
+
 ```bash
 # Run E2E tests for specific component
 npm run test:e2e -- --spec "$1"
@@ -70,6 +76,7 @@ npm run test:e2e:debug -- --spec "$1"
 ## Test Report Generation
 
 Generate comprehensive test report including:
+
 - Unit test results
 - Coverage metrics
 - Visual diff reports (if applicable)
@@ -79,24 +86,25 @@ Generate comprehensive test report including:
 ## Test Templates (auto-generate if missing)
 
 ### Component Unit Test Template
+
 ```tsx
 // src/components/$1/$1.test.tsx
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { $1 } from './$1';
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { $1 } from "./$1";
 
-describe('$1 Component', () => {
+describe("$1 Component", () => {
   const defaultProps = {
     // Add default props here
   };
 
-  it('renders without crashing', () => {
+  it("renders without crashing", () => {
     render(<$1 {...defaultProps} />);
     // Add assertions
   });
 
-  it('handles user interactions', async () => {
+  it("handles user interactions", async () => {
     const mockFn = vi.fn();
     render(<$1 {...defaultProps} onClick={mockFn} />);
 
@@ -105,18 +113,19 @@ describe('$1 Component', () => {
     // await waitFor(() => expect(mockFn).toHaveBeenCalled());
   });
 
-  it('displays correct states', () => {
+  it("displays correct states", () => {
     render(<$1 {...defaultProps} loading={true} />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
-  it('handles error states', () => {
+  it("handles error states", () => {
     render(<$1 {...defaultProps} error="Test error" />);
-    expect(screen.getByText('Test error')).toBeInTheDocument();
+    expect(screen.getByText("Test error")).toBeInTheDocument();
   });
 });
 ```
-```
+
+````
 
 ## 2. API Testing Command
 
@@ -146,9 +155,10 @@ curl -X GET http://localhost:3000/api/$1
 curl -X POST http://localhost:3000/api/$1 -H "Content-Type: application/json" -d '{}'
 curl -X PUT http://localhost:3000/api/$1
 curl -X DELETE http://localhost:3000/api/$1
-```
+````
 
 ### Authentication Tests
+
 ```bash
 # Test without authentication
 curl http://localhost:3000/api/$1
@@ -161,6 +171,7 @@ curl -H "Authorization: Bearer INVALID_TOKEN" http://localhost:3000/api/$1
 ```
 
 ### Data Validation Tests
+
 ```bash
 # Test with invalid data
 curl -X POST http://localhost:3000/api/$1 \
@@ -179,6 +190,7 @@ curl -X POST http://localhost:3000/api/$1 \
 ```
 
 ### Load Testing (if --load-test)
+
 ```bash
 # Install if not present
 npm install -g autocannon
@@ -192,6 +204,7 @@ autocannon -c 50 -d 60 -m POST -H "Content-Type: application/json" \
 ```
 
 ### Security Tests (if --security)
+
 ```bash
 # SQL Injection attempts
 curl -X GET "http://localhost:3000/api/$1?id=' OR '1'='1"
@@ -211,12 +224,14 @@ wait
 ## Test Report Generation
 
 Generate API test report with:
+
 - Response time statistics
 - Error rates
 - Security vulnerability assessment
 - Load test results
 - Benchmark comparisons
-```
+
+````
 
 ## 3. Performance Testing Command
 
@@ -246,9 +261,10 @@ cat performance-report.json | jq '.audits["first-contentful-paint"].score'
 cat performance-report.json | jq '.audits["largest-contentful-paint"].score'
 cat performance-report.json | jq '.audits["cumulative-layout-shift"].score'
 cat performance-report.json | jq '.audits["total-blocking-time"].score'
-```
+````
 
 ## Bundle Analysis (if --bundle-analyzer)
+
 ```bash
 # Build and analyze bundle
 npm run build
@@ -261,6 +277,7 @@ npx bundlephobia analyze $(cat package.json | jq -r '.dependencies | keys[]')
 ```
 
 ## Memory Profiling (if --memory)
+
 ```bash
 # Run with Node.js memory profiling
 node --inspect dist/server.js
@@ -273,36 +290,39 @@ node --prof-process isolate-*.log > performance-prof.txt
 ```
 
 ## Performance Test Script
+
 ```javascript
 // performance-test.js
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
 
 async function runPerformanceTest(url) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   // Enable performance tracing
-  await page.tracing.start({ path: 'trace.json' });
+  await page.tracing.start({ path: "trace.json" });
 
   // Navigate to page
-  await page.goto(url, { waitUntil: 'networkidle2' });
+  await page.goto(url, { waitUntil: "networkidle2" });
 
   // Get performance metrics
   const metrics = await page.metrics();
-  console.log('Performance Metrics:', metrics);
+  console.log("Performance Metrics:", metrics);
 
   // Get timing metrics
   const timing = await page.evaluate(() => {
-    const navigation = performance.getEntriesByType('navigation')[0];
+    const navigation = performance.getEntriesByType("navigation")[0];
     return {
-      domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+      domContentLoaded:
+        navigation.domContentLoadedEventEnd -
+        navigation.domContentLoadedEventStart,
       loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
-      firstPaint: performance.getEntriesByType('paint')[0].startTime,
-      firstContentfulPaint: performance.getEntriesByType('paint')[1].startTime
+      firstPaint: performance.getEntriesByType("paint")[0].startTime,
+      firstContentfulPaint: performance.getEntriesByType("paint")[1].startTime,
     };
   });
 
-  console.log('Timing Metrics:', timing);
+  console.log("Timing Metrics:", timing);
 
   await page.tracing.stop();
   await browser.close();
@@ -310,7 +330,8 @@ async function runPerformanceTest(url) {
 
 runPerformanceTest(process.argv[2]);
 ```
-```
+
+````
 
 ## 4. Integration Testing Command
 
@@ -339,9 +360,10 @@ NODE_ENV=test npm run migrate
 
 # Seed test data
 NODE_ENV=test npm run seed:test
-```
+````
 
 ### External Services Mock (if --mock-externals)
+
 ```bash
 # Start mock services
 docker-compose -f docker-compose.mock.yml up -d
@@ -354,6 +376,7 @@ export PAYMENT_SERVICE_URL=http://localhost:3002/mock-payment
 ## Integration Test Execution
 
 ### Run Tests
+
 ```bash
 # Run integration tests
 npm run test:integration -- $1
@@ -366,6 +389,7 @@ npm run test:integration:coverage -- $1
 ```
 
 ### Test Database Operations
+
 ```bash
 # Check database state
 psql -h localhost -U test -d test_db -c "\dt"
@@ -378,13 +402,14 @@ npm run db:clean:test
 ```
 
 ## Integration Test Template
+
 ```tsx
 // tests/integration/$1.test.ts
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import { app } from '../src/app';
-import { setupTestDb, cleanupTestDb } from '../src/test-helpers/database';
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import { app } from "../src/app";
+import { setupTestDb, cleanupTestDb } from "../src/test-helpers/database";
 
-describe('$1 Integration Tests', () => {
+describe("$1 Integration Tests", () => {
   beforeAll(async () => {
     await setupTestDb();
   });
@@ -398,14 +423,14 @@ describe('$1 Integration Tests', () => {
     await app.prisma.user.deleteMany();
   });
 
-  it('should handle complete user workflow', async () => {
+  it("should handle complete user workflow", async () => {
     // Create user
-    const createResponse = await app.request('/api/users', {
-      method: 'POST',
+    const createResponse = await app.request("/api/users", {
+      method: "POST",
       body: JSON.stringify({
-        name: 'Test User',
-        email: 'test@example.com'
-      })
+        name: "Test User",
+        email: "test@example.com",
+      }),
     });
 
     expect(createResponse.status).toBe(201);
@@ -413,24 +438,25 @@ describe('$1 Integration Tests', () => {
 
     // Update user
     const updateResponse = await app.request(`/api/users/${user.id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify({
-        name: 'Updated User'
-      })
+        name: "Updated User",
+      }),
     });
 
     expect(updateResponse.status).toBe(200);
 
     // Delete user
     const deleteResponse = await app.request(`/api/users/${user.id}`, {
-      method: 'DELETE'
+      method: "DELETE",
     });
 
     expect(deleteResponse.status).toBe(204);
   });
 });
 ```
-```
+
+````
 
 ## 5. Cross-Browser Testing Command
 
@@ -458,9 +484,10 @@ docker-compose -f docker-compose.selenium.yml up -d
 
 # Start BrowserStack tunnel (if using BrowserStack)
 BrowserStackLocal --key $BROWSERSTACK_KEY
-```
+````
 
 ### Test Execution
+
 ```bash
 # Run on specific browsers
 npm run test:cross-browser -- --browsers=chrome,firefox,safari $1
@@ -473,59 +500,61 @@ npm run test:mobile -- --devices="iPhone 12,Samsung Galaxy S20" $1
 ```
 
 ## Playwright Configuration
+
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-    { name: 'Mobile Chrome', use: { ...devices['Pixel 5'] } },
-    { name: 'Mobile Safari', use: { ...devices['iPhone 12'] } },
-    { name: 'Tablet', use: { ...devices['iPad Pro'] } }
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+    { name: "webkit", use: { ...devices["Desktop Safari"] } },
+    { name: "Mobile Chrome", use: { ...devices["Pixel 5"] } },
+    { name: "Mobile Safari", use: { ...devices["iPhone 12"] } },
+    { name: "Tablet", use: { ...devices["iPad Pro"] } },
   ],
 
   webServer: {
-    command: 'npm run dev',
-    port: 3000
-  }
+    command: "npm run dev",
+    port: 3000,
+  },
 });
 ```
 
 ## Cross-Browser Test Template
+
 ```typescript
 // tests/cross-browser/$1.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('$1 Cross-Browser Tests', () => {
-  test('renders consistently across browsers', async ({ page }) => {
-    await page.goto('/$1');
+test.describe("$1 Cross-Browser Tests", () => {
+  test("renders consistently across browsers", async ({ page }) => {
+    await page.goto("/$1");
 
     // Take screenshot for visual comparison
-    await expect(page).toHaveScreenshot('$1.png');
+    await expect(page).toHaveScreenshot("$1.png");
   });
 
-  test('handles responsive design', async ({ page }) => {
-    await page.goto('/$1');
+  test("handles responsive design", async ({ page }) => {
+    await page.goto("/$1");
 
     // Test mobile view
     await page.setViewportSize({ width: 375, height: 667 });
-    await expect(page.locator('.mobile-menu')).toBeVisible();
+    await expect(page.locator(".mobile-menu")).toBeVisible();
 
     // Test desktop view
     await page.setViewportSize({ width: 1200, height: 800 });
-    await expect(page.locator('.desktop-nav')).toBeVisible();
+    await expect(page.locator(".desktop-nav")).toBeVisible();
   });
 
-  test('works across different browsers', async ({ page, browserName }) => {
-    await page.goto('/$1');
+  test("works across different browsers", async ({ page, browserName }) => {
+    await page.goto("/$1");
 
     // Perform browser-specific tests
-    if (browserName === 'webkit') {
+    if (browserName === "webkit") {
       // Safari-specific behavior
-    } else if (browserName === 'firefox') {
+    } else if (browserName === "firefox") {
       // Firefox-specific behavior
     }
   });

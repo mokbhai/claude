@@ -77,6 +77,7 @@ Follow this systematic release approach for: **$ARGUMENTS**
 ## Pre-Release Checklist
 
 ### Code Quality
+
 - [ ] All tests passing (unit, integration, E2E)
 - [ ] Code reviewed and approved
 - [ ] No linting errors
@@ -84,18 +85,21 @@ Follow this systematic release approach for: **$ARGUMENTS**
 - [ ] Build succeeds
 
 ### Documentation
+
 - [ ] README updated
 - [ ] API docs updated
 - [ ] CHANGELOG updated
 - [ ] Migration docs updated (if needed)
 
 ### Testing
+
 - [ ] Smoke tests passing
 - [ ] Manual testing complete
 - [ ] Performance acceptable
 - [ ] Security verified
 
 ### Deployment Readiness
+
 - [ ] Database migrations prepared
 - [ ] Environment variables configured
 - [ ] Third-party services configured
@@ -117,6 +121,7 @@ Examples:
 ### Version Bump Commands
 
 #### JavaScript/Node.js (npm)
+
 ```bash
 # Patch version
 npm version patch
@@ -132,6 +137,7 @@ npm version prerelease --preid beta
 ```
 
 #### Python
+
 ```bash
 # Update version in setup.py or pyproject.toml
 # Then create git tag
@@ -140,6 +146,7 @@ git push origin v1.2.3
 ```
 
 #### Ruby/Rails
+
 ```bash
 # Update version in lib/version.rb
 # Then create git tag
@@ -148,6 +155,7 @@ git push origin v1.2.3
 ```
 
 #### Go
+
 ```bash
 # Go uses git tags directly
 git tag v1.2.3
@@ -167,32 +175,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.0] - 2025-01-15
 
 ### Added
+
 - User authentication feature
 - Password reset functionality
 - Email notifications
 
 ### Changed
+
 - Updated dependencies to latest versions
 - Improved error handling
 
 ### Fixed
+
 - Fixed login bug on mobile devices
 - Fixed database connection timeout
 
 ### Security
+
 - Updated bcrypt to version 5.0.0
 - Added rate limiting to API endpoints
 
 ## [1.1.0] - 2024-12-01
+
 [... previous entries]
 
 ## [1.0.0] - 2024-11-01
+
 [... initial release]
 ```
 
 ## Deployment Strategies
 
 ### Blue-Green Deployment
+
 ```
 Current: Blue Environment
 New: Green Environment
@@ -206,6 +221,7 @@ Steps:
 ```
 
 ### Canary Deployment
+
 ```
 Steps:
 1. Deploy to canary (small % of traffic)
@@ -216,6 +232,7 @@ Steps:
 ```
 
 ### Rolling Deployment
+
 ```
 Steps:
 1. Update servers one by one
@@ -227,6 +244,7 @@ Steps:
 ## Deployment Commands
 
 ### Docker
+
 ```bash
 # Build new image
 docker build -t myapp:v1.2.0 .
@@ -245,6 +263,7 @@ kubectl rollout status deployment/myapp
 ```
 
 ### Serverless (AWS Lambda)
+
 ```bash
 # Update function code
 aws lambda update-function-code \
@@ -265,6 +284,7 @@ aws lambda update-alias \
 ```
 
 ### Traditional (SSH)
+
 ```bash
 # Deploy to server
 ssh user@server "cd /var/www/myapp && git pull origin main"
@@ -284,22 +304,22 @@ ssh user@server "systemctl restart myapp"
 Critical quick tests after deployment:
 
 ```typescript
-describe('Smoke Tests', () => {
-  it('should load homepage', async () => {
-    const response = await fetch('https://example.com');
+describe("Smoke Tests", () => {
+  it("should load homepage", async () => {
+    const response = await fetch("https://example.com");
     expect(response.status).toBe(200);
   });
 
-  it('should authenticate user', async () => {
-    const response = await fetch('https://api.example.com/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
+  it("should authenticate user", async () => {
+    const response = await fetch("https://api.example.com/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
     });
     expect(response.status).toBe(200);
   });
 
-  it('should access main database', async () => {
-    const result = await db.query('SELECT 1');
+  it("should access main database", async () => {
+    const result = await db.query("SELECT 1");
     expect(result).toBeTruthy();
   });
 });
@@ -308,6 +328,7 @@ describe('Smoke Tests', () => {
 ## Monitoring Checks
 
 ### Health Checks
+
 ```bash
 # Check application health
 curl https://api.example.com/health
@@ -321,6 +342,7 @@ curl https://api.example.com/health
 ```
 
 ### Key Metrics to Monitor
+
 - Error rate (should be < 0.1%)
 - Response time (p95 should be < 500ms)
 - CPU usage (should be < 80%)
@@ -331,12 +353,14 @@ curl https://api.example.com/health
 ## Rollback Plan
 
 ### Pre-Deployment
+
 1. Document rollback steps
 2. Ensure previous version is accessible
 3. Test rollback process
 4. Set up rollback triggers
 
 ### Rollback Triggers
+
 - Error rate > 5% for 5 minutes
 - Response time p95 > 5 seconds
 - More than 100 errors in 1 minute
@@ -344,6 +368,7 @@ curl https://api.example.com/health
 - Database corruption detected
 
 ### Rollback Execution
+
 ```bash
 # Docker/Kubernetes
 kubectl rollout undo deployment/myapp
@@ -365,6 +390,7 @@ aws lambda update-alias \
 ## Release Communication
 
 ### Team Notification
+
 ```markdown
 ## Release Notification: v1.2.0
 
@@ -373,62 +399,75 @@ aws lambda update-alias \
 **Environment**: Production
 
 ### What's New
+
 - User authentication
 - Password reset
 - Email notifications
 
 ### Breaking Changes
+
 - None
 
 ### Known Issues
+
 - None
 
 ### Monitoring
+
 - Error rate: Normal
 - Response time: Normal
 - All health checks: Passing
 
 ### Next Steps
+
 - Monitor for 24 hours
 - Schedule retrospective
 ```
 
 ### User Release Notes
+
 ```markdown
 ## What's New in Version 1.2.0
 
 ### 🎉 New Features
+
 - **User Accounts**: You can now create an account and sign in
 - **Password Reset**: Forgot your password? Reset it easily
 - **Email Notifications**: Get notified about important updates
 
 ### 🐛 Bug Fixes
+
 - Fixed login issues on mobile devices
 - Fixed crash when uploading large files
 
 ### 🔒 Security
+
 - Improved password security
 - Added rate limiting to prevent abuse
 
 ### Upgrade Instructions
+
 No action required. The update is automatic.
 ```
 
 ## Post-Release Tasks
 
 ### Immediate (Day 0)
+
 - [ ] Verify all systems operational
 - [ ] Check error logs for issues
 - [ ] Monitor key metrics
 - [ ] Respond to any user reports
 
 ### Short-term (Day 1-7)
+
 - [ ] Continue monitoring
 - [ ] Address any issues found
 - [ ] Gather user feedback
 - [ ] Document lessons learned
 
 ### Long-term
+
 - [ ] Release retrospective
 - [ ] Update documentation
 - [ ] Plan next release
@@ -440,30 +479,35 @@ No action required. The update is automatic.
 # Release Complete: v1.2.0
 
 ## Release Summary
+
 **Version**: 1.2.0
 **Type**: Minor Feature Release
 **Date**: 2025-01-15
 **Status**: ✅ Success
 
 ## Deployment Details
+
 - **Started**: 2025-01-15 09:00 UTC
 - **Completed**: 2025-01-15 10:00 UTC
 - **Duration**: 1 hour
 - **Strategy**: Blue-Green Deployment
 
 ## Changes Included
+
 - **Features**: 3 new features
 - **Bug Fixes**: 5 bug fixes
 - **Security**: 2 security updates
 - **Breaking Changes**: None
 
 ## Testing Results
+
 - **Unit Tests**: ✅ All passing (coverage: 85%)
 - **Integration Tests**: ✅ All passing
 - **E2E Tests**: ✅ All passing
 - **Smoke Tests**: ✅ All passing
 
 ## Deployment Verification
+
 - [ ] Health checks passing
 - [ ] Error rates normal (< 0.1%)
 - [ ] Response times normal (p95 < 500ms)
@@ -472,32 +516,38 @@ No action required. The update is automatic.
 - [ ] Database connections normal
 
 ## Monitoring (24 Hours)
+
 - [ ] Monitor error rates
 - [ ] Monitor performance metrics
 - [ ] Check for user reports
 - [ ] Verify integrations working
 
 ## Rollback Plan
+
 - **Previous Version**: v1.1.0
 - **Rollback Command**: `kubectl rollout undo deployment/myapp`
 - **Rollback Time**: ~2 minutes
 
 ## Communication
+
 - [ ] Team notified: ✅
 - [ ] Stakeholders notified: ✅
 - [ ] Release notes published: ✅
 
 ## Post-Release Tasks
+
 - [ ] Close related issues
 - [ ] Archive release branch
 - [ ] Update metrics
 - [ ] Schedule retrospective
 
 ## Next Release
+
 - **Target Date**: 2025-02-01
 - **Planned Features**: [list]
 
 ## Sign-off
+
 - Release verified: ✅
 - Ready for normal operations: ✅
 ```
@@ -505,6 +555,7 @@ No action required. The update is automatic.
 ## Tips
 
 ### Before Release
+
 - Test thoroughly in staging
 - Have a rollback plan ready
 - Notify stakeholders in advance
@@ -512,6 +563,7 @@ No action required. The update is automatic.
 - Have on-call person ready
 
 ### During Release
+
 - Monitor continuously
 - Communicate progress
 - Be ready to rollback
@@ -519,6 +571,7 @@ No action required. The update is automatic.
 - Keep calm under pressure
 
 ### After Release
+
 - Monitor for 24-48 hours
 - Respond quickly to issues
 - Document lessons learned
@@ -526,6 +579,7 @@ No action required. The update is automatic.
 - Plan improvements for next release
 
 ### General
+
 - Automate what you can
 - Keep releases small and frequent
 - Use feature flags for risky features

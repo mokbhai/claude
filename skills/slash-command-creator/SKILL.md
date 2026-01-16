@@ -10,6 +10,7 @@ This skill helps create custom slash commands for Claude Code by analyzing requi
 ## When to Use This Skill
 
 Use this skill when users say:
+
 - "Create a slash command for..."
 - "Help me make a custom command"
 - "I need a new slash command that..."
@@ -20,6 +21,7 @@ Use this skill when users say:
 ### 1. Analyze Command Requirements
 
 First, understand what the command should do:
+
 - Identify the primary purpose and functionality
 - Determine if it needs arguments (positional or all arguments)
 - Check if it requires special tools (Bash, Read, Write, etc.)
@@ -30,6 +32,7 @@ First, understand what the command should do:
 Based on requirements, choose the appropriate command pattern:
 
 **Simple Text Expansion**: No arguments, static prompt
+
 ```yaml
 ---
 description: Brief description of the command
@@ -38,6 +41,7 @@ Static prompt text here
 ```
 
 **Single Argument**: Uses $ARGUMENTS for all input
+
 ```yaml
 ---
 description: Description of what the command does
@@ -48,6 +52,7 @@ Process $ARGUMENTS here
 ```
 
 **Positional Arguments**: Uses $1, $2, etc. for specific parameters
+
 ```yaml
 ---
 description: Description with parameter roles
@@ -58,6 +63,7 @@ Process $1 as first parameter, $2 as second, etc.
 ```
 
 **Bash Integration**: Execute shell commands with `!` prefix
+
 ```yaml
 ---
 allowed-tools: Bash(git:*), Bash(npm:*)
@@ -73,11 +79,11 @@ Execute based on the above context
 ```
 
 **File References**: Include files with `@` prefix
+
 ```yaml
 ---
 description: Command that references files
 ---
-
 Analyze the implementation in @src/components/Button.tsx
 Compare @src/old-file.js with @src/new-file.js
 ```
@@ -87,7 +93,8 @@ Compare @src/old-file.js with @src/new-file.js
 Use these common templates as starting points:
 
 #### Component Testing Command
-```markdown
+
+````markdown
 ---
 description: Run tests for a specific component with coverage and debugging
 argument-hint: [component-name] [--coverage] [--debug]
@@ -111,9 +118,11 @@ Options: $2
 ```bash
 npm test -- --testPathPattern=$1 $2
 ```
+````
 
 Check test results and report any failures.
-```
+
+````
 
 #### API Implementation Command
 ```markdown
@@ -172,8 +181,9 @@ const ComponentName = () => {
 
   // Render component
 };
-```
-```
+````
+
+````
 
 #### Documentation Generation Command
 ```markdown
@@ -248,8 +258,9 @@ Uses CSS variables from the Mitra theme:
 
 - React hooks: useState, useEffect
 - No external dependencies
-```
-```
+````
+
+````
 
 #### Issue Fixing Command
 ```markdown
@@ -274,7 +285,7 @@ Branch name: $2
 2. **Create Feature Branch**:
    ```bash
    git checkout -b fix/issue-$1
-   ```
+````
 
 3. **Implement Fix**:
    - Locate relevant files
@@ -288,6 +299,7 @@ Branch name: $2
    - Check for regressions
 
 5. **Commit Changes**:
+
    ```bash
    git add .
    git commit -m "fix: Resolve issue #$1 - [brief description]"
@@ -298,6 +310,7 @@ Branch name: $2
    - Link to the original issue
    - Include description of changes
    - Request review if needed
+
 ```
 
 ### 4. Best Practices for Command Creation
@@ -362,3 +375,4 @@ Use the provided scripts for common tasks:
 - `scripts/validate-command.js` - Validate command syntax and frontmatter
 - `scripts/test-command.js` - Test command execution with sample inputs
 - `scripts/generate-template.js` - Generate command templates for specific patterns
+```

@@ -55,9 +55,11 @@ Examples:
 Prefix a line with exclamation mark to run a bash command before the prompt executes. The pattern is: exclamation mark followed by backtick, then the command, then closing backtick.
 
 Example format under a Context section:
+
 ```markdown
 ## Context
-Current git status: !`git status
+
+Current git status: !`git status`
 ```
 
 If you use bash execution, add allowed-tools in frontmatter to permit the specific bash commands.
@@ -113,10 +115,12 @@ allowed-tools:
 ## Context
 
 To run bash commands before execution, use this format:
-- Description: !`bash command here
+
+- Description: !`bash command here`
 
 Example:
-- Current git status: !`git status
+
+- Current git status: !`git status`
 
 ## Your task
 

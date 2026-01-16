@@ -83,22 +83,25 @@ Check the configuration in @package.json
 ## Task
 
 Process the referenced files and execute the task.
-`
+`,
 };
 
 function generateTemplate(pattern, commandName) {
   const template = templates[pattern];
 
   if (!template) {
-    console.error('❌ Unknown pattern. Available patterns:', Object.keys(templates).join(', '));
+    console.error(
+      "❌ Unknown pattern. Available patterns:",
+      Object.keys(templates).join(", "),
+    );
     process.exit(1);
   }
 
-  const output = template(commandName || 'command');
+  const output = template(commandName || "command");
 
   if (commandName) {
     const fileName = `${commandName}.md`;
-    require('fs').writeFileSync(fileName, output);
+    require("fs").writeFileSync(fileName, output);
     console.log(`✅ Generated ${fileName}`);
   } else {
     console.log(output);
@@ -109,8 +112,8 @@ const pattern = process.argv[2];
 const commandName = process.argv[3];
 
 if (!pattern) {
-  console.error('Usage: node generate-template.js <pattern> [command-name]');
-  console.error('Patterns:', Object.keys(templates).join(', '));
+  console.error("Usage: node generate-template.js <pattern> [command-name]");
+  console.error("Patterns:", Object.keys(templates).join(", "));
   process.exit(1);
 }
 

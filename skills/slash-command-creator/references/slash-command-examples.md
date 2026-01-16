@@ -5,7 +5,8 @@ This file contains advanced command patterns and examples for creating sophistic
 ## 1. Workflow Automation Commands
 
 ### Deploy Command with Environment Detection
-```markdown
+
+````markdown
 ---
 description: Deploy application with environment-specific configuration
 argument-hint: [environment] [--dry-run] [--skip-tests]
@@ -27,13 +28,16 @@ Options: $2
 ## Environment-specific Deployment
 
 ### Staging ($1 = "staging" or default)
+
 ```bash
 docker-compose -f docker-compose.staging.yml build
 docker-compose -f docker-compose.staging.yml push
 kubectl apply -f k8s/staging/
 ```
+````
 
 ### Production ($1 = "production")
+
 ```bash
 # Additional checks for production
 npm run security-audit
@@ -52,11 +56,13 @@ kubectl rollout status deployment/app
 ## Rollback Procedure
 
 If deployment fails:
+
 ```bash
 kubectl rollout undo deployment/app
 kubectl rollout status deployment/app
 ```
-```
+
+````
 
 ### CI/CD Pipeline Trigger
 ```markdown
@@ -98,12 +104,13 @@ Options: $2
 - Slack notifications on start/complete
 - Email on failure
 - GitHub status updates
-```
+````
 
 ## 2. Data Processing Commands
 
 ### Database Migration Command
-```markdown
+
+````markdown
 ---
 description: Run database migrations with rollback capability
 argument-hint: [migration-name] [--dry-run] [--force]
@@ -125,6 +132,7 @@ Options: $2
 ## Migration Templates
 
 ### Create Table Migration
+
 ```sql
 -- Migration: $1
 BEGIN;
@@ -139,8 +147,10 @@ CREATE INDEX idx_table_name_created_at ON table_name(created_at);
 
 COMMIT;
 ```
+````
 
 ### Add Column Migration
+
 ```sql
 -- Migration: $1
 BEGIN;
@@ -159,6 +169,7 @@ COMMIT;
 ## Rollback Plan
 
 Always include down migration:
+
 ```sql
 -- Rollback for $1
 BEGIN;
@@ -169,7 +180,8 @@ ALTER TABLE table_name DROP COLUMN new_column;
 
 COMMIT;
 ```
-```
+
+````
 
 ## 3. Code Generation Commands
 
@@ -225,8 +237,9 @@ export const $1: React.FC<$1Props> = ({
 };
 
 export default $1;
-```
-```
+````
+
+````
 
 ### API Client Generator
 ```markdown
@@ -252,16 +265,18 @@ Options: $3
 
 ## Client Structure
 
-```
+````
+
 src/api/
-├── client.ts          # Main API client
-├── types.ts           # Generated types
-├── endpoints/         # Endpoint methods
-│   ├── auth.ts
-│   ├── users.ts
-│   └── posts.ts
-└── mocks/             # Mock data (optional)
-```
+├── client.ts # Main API client
+├── types.ts # Generated types
+├── endpoints/ # Endpoint methods
+│ ├── auth.ts
+│ ├── users.ts
+│ └── posts.ts
+└── mocks/ # Mock data (optional)
+
+````
 
 ## Generated Client Example
 
@@ -290,8 +305,9 @@ export class ApiClient {
     return response.json();
   }
 }
-```
-```
+````
+
+````
 
 ## 4. Monitoring and Debugging Commands
 
@@ -342,9 +358,10 @@ Generate HTML report with:
 - Timeline of events
 - Top error patterns
 - Recommendations
-```
+````
 
 ### Health Check Command
+
 ```markdown
 ---
 description: Perform comprehensive system health check
@@ -359,18 +376,21 @@ Options: $1
 ## Health Checks
 
 ### Basic Health (default)
+
 - Application status: !`curl -f http://localhost:3000/health`
 - Database connectivity
 - Redis connection
 - External API endpoints
 
 ### Deep Health (--deep)
+
 - Resource usage (CPU, memory, disk)
 - Database performance metrics
 - Response time distribution
 - Error rate analysis
 
 ### Service-Specific (--service-specific)
+
 - Custom service health endpoints
 - Business metric validation
 - SLA compliance check
@@ -378,6 +398,7 @@ Options: $1
 ## Health Check Results
 
 Generate report with:
+
 - Overall system status (UP/DOWN)
 - Individual service statuses
 - Response times
@@ -395,6 +416,7 @@ Generate report with:
 ## 5. Testing Commands
 
 ### E2E Test Runner
+
 ```markdown
 ---
 description: Run end-to-end tests with specific scenarios
@@ -418,18 +440,21 @@ Options: $2
 ## Test Scenarios
 
 ### User Journey Tests
+
 - Registration flow
 - Login/logout
 - Main user workflows
 - Error scenarios
 
 ### API Integration Tests
+
 - CRUD operations
 - Authentication flows
 - Rate limiting
 - Error handling
 
 ### Performance Tests
+
 - Load testing
 - Stress testing
 - Concurrent users

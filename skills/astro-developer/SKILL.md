@@ -37,6 +37,7 @@ npm create astro@latest -- --template blog
 ```
 
 Essential project structure to create:
+
 ```
 src/
 ├── components/          # Reusable Astro/UI framework components
@@ -232,8 +233,8 @@ export async function GET() {
   return Response.json({
     posts: [
       { id: 1, title: "First post" },
-      { id: 2, title: "Second post" }
-    ]
+      { id: 2, title: "Second post" },
+    ],
   });
 }
 
@@ -252,7 +253,7 @@ Organize and validate content with type safety:
 
 ```typescript
 // src/content/config.ts
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, z } from "astro:content";
 
 const blog = defineCollection({
   schema: z.object({
@@ -311,7 +312,7 @@ This skill emphasizes Tailwind CSS as the primary styling solution for all Astro
 
 ```javascript
 // astro.config.mjs
-import tailwind from '@astrojs/tailwind';
+import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   integrations: [tailwind()],
@@ -319,32 +320,34 @@ export default defineConfig({
 ```
 
 Configure Tailwind for optimal performance:
+
 ```javascript
 // tailwind.config.js
 export default {
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  darkMode: 'class',  // Enables dark mode with .dark class
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
+  darkMode: "class", // Enables dark mode with .dark class
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ["Inter", "system-ui", "sans-serif"],
       },
       colors: {
         // Define brand colors
         primary: {
-          50: '#eff6ff',
-          500: '#3b82f6',
-          600: '#2563eb',
-          900: '#1e3a8a',
-        }
-      }
+          50: "#eff6ff",
+          500: "#3b82f6",
+          600: "#2563eb",
+          900: "#1e3a8a",
+        },
+      },
     },
   },
   plugins: [],
-}
+};
 ```
 
 Global styles setup:
+
 ```css
 /* src/styles/global.css */
 @tailwind base;
@@ -363,6 +366,7 @@ Global styles setup:
 #### Tailwind CSS Best Practices
 
 1. **Use Custom Brand Colors**: Always use the predefined brand colors from `global.css`
+
    ```astro
    <!-- ✅ Use brand colors -->
    <div class="bg-mitra-blue text-warm-cream">
@@ -379,25 +383,29 @@ Global styles setup:
    - Gradients: `bg-magic-gradient` (custom utility), `bg-linear-to-br` with brand colors
 
 2. **Variant-based styling**: Use JavaScript objects with brand colors
+
    ```javascript
    const buttonVariants = {
-     primary: 'bg-mitra-blue hover:bg-mitra-blue-dark text-white',
-     secondary: 'bg-warm-cream hover:bg-grey-100 text-charcoal-grey',
-     accent: 'bg-warm-orange hover:bg-warm-orange-dark text-white'
+     primary: "bg-mitra-blue hover:bg-mitra-blue-dark text-white",
+     secondary: "bg-warm-cream hover:bg-grey-100 text-charcoal-grey",
+     accent: "bg-warm-orange hover:bg-warm-orange-dark text-white",
    };
    ```
 
 3. **Responsive design**: Use Tailwind's responsive prefixes
+
    ```astro
    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
    ```
 
 4. **Dark mode**: Implement with `dark:` prefix
+
    ```astro
    <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
    ```
 
 5. **Composition**: Combine utility classes with brand colors
+
    ```astro
    <!-- ✅ Using brand colors -->
    <div class="flex flex-col items-center justify-center p-8 bg-linear-to-br from-mitra-blue/10 to-lush-green/10 rounded-2xl shadow-xl">
@@ -419,6 +427,7 @@ Global styles setup:
 - `grayscale-[30%]` → `grayscale-30` (remove brackets for percentage values)
 
 **Examples**:
+
 ```astro
 <!-- Correct (Tailwind v4) -->
 <div class="bg-linear-to-r from-blue-500 to-purple-600 shrink-0 aspect-3/2 grayscale-30">
@@ -435,7 +444,7 @@ Global styles setup:
 
 ```javascript
 // astro.config.mjs
-import react from '@astrojs/react';
+import react from "@astrojs/react";
 
 export default defineConfig({
   integrations: [react()],
@@ -446,7 +455,7 @@ export default defineConfig({
 
 ```javascript
 // astro.config.mjs
-import mdx from '@astrojs/mdx';
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   integrations: [mdx()],
@@ -506,42 +515,38 @@ import { ViewTransitions } from 'astro:transitions';
 #### Optimize astro.config.mjs
 
 ```javascript
-import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
-import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
+import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
+import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   // Site metadata for SEO
-  site: 'https://yoursite.com',
-  base: '/subpath',  // If deploying to subdirectory
+  site: "https://yoursite.com",
+  base: "/subpath", // If deploying to subdirectory
 
   // Integrations
-  integrations: [
-    react(),
-    tailwind(),
-    sitemap(),
-  ],
+  integrations: [react(), tailwind(), sitemap()],
 
   // Build optimizations
   build: {
-    format: 'directory',  // Clean URLs
-    assets: '_assets',    // Custom assets path
+    format: "directory", // Clean URLs
+    assets: "_assets", // Custom assets path
   },
 
   // Vite configurations
   vite: {
     optimizeDeps: {
-      exclude: ['some-large-package'],
+      exclude: ["some-large-package"],
     },
   },
 
   // Server options for SSR
-  output: 'hybrid',  // or 'server' or 'static'
+  output: "hybrid", // or 'server' or 'static'
 
   // Security headers
   security: {
-    allowedHosts: ['yoursite.com'],
+    allowedHosts: ["yoursite.com"],
   },
 });
 ```
@@ -557,7 +562,7 @@ export default defineConfig({
     "paths": {
       "@/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],
-      "@/layouts/*": ["./src/layouts/*"],
+      "@/layouts/*": ["./src/layouts/*"]
     },
     "types": ["@astrojs/image/client"]
   },
@@ -574,6 +579,7 @@ npm run build  # Creates static files in dist/
 ```
 
 Deploy to:
+
 - Vercel, Netlify, Cloudflare Pages
 - GitHub Pages, GitLab Pages
 - Any static hosting
@@ -597,14 +603,15 @@ export const prerender = false;
 ```javascript
 // astro.config.mjs
 export default defineConfig({
-  output: 'server',
+  output: "server",
   adapter: node({
-    mode: 'standalone',
+    mode: "standalone",
   }),
 });
 ```
 
 Deploy to:
+
 - Node.js servers
 - Docker containers
 - Serverless platforms (Vercel, Netlify Functions)
@@ -674,16 +681,13 @@ import Layout from '@/layouts/Layout.astro';
 ```javascript
 // src/pages/error/[...code].astro
 export function getStaticPaths() {
-  return [
-    { params: { code: '403' } },
-    { params: { code: '500' } },
-  ];
+  return [{ params: { code: "403" } }, { params: { code: "500" } }];
 }
 
 const { code } = Astro.params;
 const errorMessages = {
-  '403': 'Forbidden',
-  '500': 'Internal Server Error',
+  403: "Forbidden",
+  500: "Internal Server Error",
 };
 ```
 
@@ -715,6 +719,7 @@ Common issues when migrating from Tailwind CSS v3 to v4:
 ### File Path Resolution
 
 If you encounter errors about missing files that should exist:
+
 1. Check if the file exists at the expected path
 2. The error might be from an outdated diagnostic cache
 3. Files may have been renamed or moved
@@ -730,6 +735,7 @@ The scripts/ directory contains automation utilities:
 - `generate-sitemap.js` - Custom sitemap generation
 
 Execute scripts without loading into context:
+
 ```bash
 node scripts/create-component.js --name MyComponent --type astro
 ```
@@ -744,6 +750,7 @@ Reference materials for detailed information:
 - `performance-tips.md` - Advanced optimization techniques
 
 Load reference materials when specific detailed information is needed:
+
 ```
 Read references/component-patterns.md when implementing complex component interactions
 ```
@@ -757,6 +764,7 @@ Templates and boilerplate code:
 - `page-templates/` - Page boilerplate for different use cases
 
 Use assets as starting points:
+
 - Copy component templates for new components
 - Reference layout templates for consistent structure
 - Adapt page templates for common page types

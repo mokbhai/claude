@@ -84,31 +84,38 @@ Follow this systematic approach to create a PRD for: **$ARGUMENTS**
 # Product Requirements Document: [Feature/Product Name]
 
 ## 1. Executive Summary
+
 [2-3 paragraph overview of the PRD]
 
 ## 2. Problem Statement
+
 [From discovery phase]
 
 ## 3. Product Vision
+
 [From discovery phase]
 
 ## 4. Success Metrics
+
 [From discovery phase]
 
 ## 5. User Personas
 
 ### Persona 1: [Name]
+
 - **Role**: [job role]
 - **Goals**: [what they want to achieve]
 - **Pain Points**: [current problems]
 - **Skill Level**: [beginner/intermediate/advanced]
 
 ### Persona 2: [Name]
+
 [... repeat for each persona]
 
 ## 6. Use Cases
 
 ### Use Case 1: [Title]
+
 - **Actor**: [user type]
 - **Precondition**: [what must be true before]
 - **Main Flow**: [step-by-step interaction]
@@ -116,43 +123,50 @@ Follow this systematic approach to create a PRD for: **$ARGUMENTS**
 - **Alternative Flows**: [error cases, exceptions]
 
 ### Use Case 2: [Title]
+
 [... repeat for each use case]
 
 ## 7. Functional Requirements
 
-| ID | Requirement | Priority | Acceptance Criteria |
-|----|-------------|----------|---------------------|
-| FR-001 | [description] | Must | [criteria] |
-| FR-002 | [description] | Should | [criteria] |
-| FR-003 | [description] | Nice | [criteria] |
+| ID     | Requirement   | Priority | Acceptance Criteria |
+| ------ | ------------- | -------- | ------------------- |
+| FR-001 | [description] | Must     | [criteria]          |
+| FR-002 | [description] | Should   | [criteria]          |
+| FR-003 | [description] | Nice     | [criteria]          |
 
 ## 8. Non-Functional Requirements
 
 ### Performance
+
 - Response time: [specification]
 - Throughput: [specification]
 - Latency: [specification]
 
 ### Security
+
 - Authentication: [specification]
 - Authorization: [specification]
 - Data protection: [specification]
 
 ### Scalability
+
 - Concurrent users: [specification]
 - Data growth: [specification]
 
 ### Reliability
+
 - Uptime target: [specification]
 - Error handling: [specification]
 
 ### Usability
+
 - Accessibility: [WCAG level, etc.]
 - Learnability: [specification]
 
 ## 9. User Stories
 
 ### Epic 1: [Title]
+
 - **Story 1**: As a [user], I want [feature], so that [benefit]
   - Acceptance Criteria:
     - [ ] [Criterion 1]
@@ -168,39 +182,47 @@ Follow this systematic approach to create a PRD for: **$ARGUMENTS**
 ## 10. User Interface/Experience
 
 ### Key Screens
+
 - **Screen 1**: [description]
 - **Screen 2**: [description]
 
 ### User Flow
+
 [Diagram or text-based flow description]
 
 ## 11. Data Requirements
+
 - Data to store: [list]
 - Data sources: [list]
 - Retention policy: [specification]
 - Privacy considerations: [specification]
 
 ## 12. Integration Requirements
+
 - System 1: [integration details]
 - System 2: [integration details]
 - APIs: [to use or provide]
 
 ## 13. Constraints
+
 - Time: [deadlines]
 - Resources: [team, budget]
 - Technical: [limitations]
 
 ## 14. Risks & Mitigation
-| Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
+
+| Risk     | Impact       | Probability  | Mitigation |
+| -------- | ------------ | ------------ | ---------- |
 | [Risk 1] | High/Med/Low | High/Med/Low | [strategy] |
 | [Risk 2] | High/Med/Low | High/Med/Low | [strategy] |
 
 ## 15. Open Questions
+
 - [Question 1]: [proposed resolution]
 - [Question 2]: [proposed resolution]
 
 ## 16. Next Steps
+
 - [ ] Review PRD with stakeholders
 - [ ] Get sign-off
 - [ ] Proceed to /breakdown

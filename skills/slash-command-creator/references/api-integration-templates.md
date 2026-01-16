@@ -5,7 +5,8 @@ This file contains templates and patterns for creating slash commands that integ
 ## 1. REST API Component Generator
 
 ### Basic CRUD Component Template
-```markdown
+
+````markdown
 ---
 description: Generate React component from REST API curl examples
 argument-hint: [component-name] [api-endpoints-json]
@@ -20,6 +21,7 @@ Using APIs: $2
 ## API Analysis Process
 
 1. Parse the provided JSON configuration:
+
 ```json
 {
   "endpoints": [
@@ -39,6 +41,7 @@ Using APIs: $2
   ]
 }
 ```
+````
 
 2. Generate TypeScript interfaces from response structures
 3. Create API service functions
@@ -49,8 +52,8 @@ Using APIs: $2
 
 ```tsx
 // src/components/$1/$1.tsx
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/Button';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/Button";
 
 interface Item {
   id: string;
@@ -76,12 +79,12 @@ export const $1: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/items');
-      if (!response.ok) throw new Error('Failed to fetch items');
+      const response = await fetch("/api/items");
+      if (!response.ok) throw new Error("Failed to fetch items");
       const data: ApiResponse = await response.json();
       setItems(data.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -106,7 +109,7 @@ export const $1: React.FC = () => {
         <div>Loading...</div>
       ) : (
         <div className="space-y-2">
-          {items.map(item => (
+          {items.map((item) => (
             <div key={item.id} className="border p-3 rounded">
               <h3 className="font-semibold">{item.name}</h3>
               {item.description && (
@@ -122,7 +125,8 @@ export const $1: React.FC = () => {
 
 export default $1;
 ```
-```
+
+````
 
 ## 2. GraphQL Component Generator
 
@@ -198,8 +202,9 @@ export const useCreateItem = () => {
     error
   };
 };
-```
-```
+````
+
+````
 
 ## 3. WebSocket Component Template
 
@@ -296,8 +301,9 @@ export const $1: React.FC = () => {
     </div>
   );
 };
-```
-```
+````
+
+````
 
 ## 4. Multi-API Integration Template
 
@@ -353,12 +359,13 @@ APIs Configuration: $2
     }
   ]
 }
-```
+````
 
 ## Generated Component
+
 ```tsx
 // src/components/$1/$1.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface User {
   id: number;
@@ -387,26 +394,26 @@ export const $1: React.FC = () => {
       try {
         // Fetch all APIs concurrently
         const [usersRes, postsRes] = await Promise.all([
-          fetch('https://jsonplaceholder.typicode.com/users'),
-          fetch('https://jsonplaceholder.typicode.com/posts')
+          fetch("https://jsonplaceholder.typicode.com/users"),
+          fetch("https://jsonplaceholder.typicode.com/posts"),
         ]);
 
         if (!usersRes.ok || !postsRes.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
 
         const users: User[] = await usersRes.json();
         const posts: Post[] = await postsRes.json();
 
         // Aggregate data
-        const userWithPosts: UserWithPosts[] = users.map(user => ({
+        const userWithPosts: UserWithPosts[] = users.map((user) => ({
           ...user,
-          posts: posts.filter(post => post.userId === user.id)
+          posts: posts.filter((post) => post.userId === user.id),
         }));
 
         setData(userWithPosts);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
@@ -423,7 +430,7 @@ export const $1: React.FC = () => {
       {error && <div className="text-red-600">Error: {error}</div>}
 
       <div className="space-y-4">
-        {data.map(user => (
+        {data.map((user) => (
           <div key={user.id} className="border rounded p-4">
             <h2 className="text-lg font-semibold">{user.name}</h2>
             <p className="text-gray-600">{user.email}</p>
@@ -431,7 +438,7 @@ export const $1: React.FC = () => {
             <div className="mt-2">
               <h3 className="font-medium">Posts ({user.posts.length})</h3>
               <div className="ml-4 space-y-1">
-                {user.posts.map(post => (
+                {user.posts.map((post) => (
                   <div key={post.id} className="text-sm">
                     <span className="font-medium">{post.title}</span>
                   </div>
@@ -445,7 +452,8 @@ export const $1: React.FC = () => {
   );
 };
 ```
-```
+
+````
 
 ## 5. File Upload API Integration
 
@@ -598,7 +606,8 @@ export const $1: React.FC = () => {
     </div>
   );
 };
-```
+````
+
 ```
 
 ## Best Practices for API Integration Commands
@@ -613,3 +622,4 @@ export const $1: React.FC = () => {
 8. **Authentication**: Securely handle API keys and tokens
 9. **Rate Limiting**: Respect API rate limits
 10. **Data Transformation**: Transform API responses to component-friendly formats
+```
