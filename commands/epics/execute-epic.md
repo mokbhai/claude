@@ -1,24 +1,25 @@
 ---
 allowed-tools: *
-argument-hint: [epic-id] [story-id] [options]
-description: Execute epic or story tasks from REPOSITORY_EPICS.md
+argument-hint: [epic-file] [epic-id] [options]
+description: Execute epic or story tasks from a specified epics file
 ---
 
 # Execute Epic Task
 
-You are executing epic/task $1 from the repository implementation plan.
+You are executing epic/story $2 from the file: $1
 
 ## Context
 
-- **Epic/Story ID**: $1
-- **Options**: ${@:2}
+- **Epic File**: $1
+- **Epic/Story ID**: $2
+- **Options**: $ARGUMENTS
 
 ## Your Task
 
 1. **Read the Epic/Story**:
 
-- Read the file `nimbalyst-local/epics/api-service-layer-implementation_epics.md`
-- Then find the section for the epic/story with ID "$1"
+- Read the file specified by: $1
+- Then find the section for the epic/story with ID "$2"
 
 2. **Understand the Requirements**:
    - Read the Description, Acceptance Criteria, and Technical Tasks
@@ -74,6 +75,7 @@ You are executing epic/task $1 from the repository implementation plan.
 ## Example Usage
 
 ```
-/execute-epic EPIC-REPO-001
-/execute-epic STORY-REPO-003
+/execute-epic plans/api-service-layer-implementation_epics.md EPIC-REPO-001
+/execute-epic plans/api-service-layer-implementation_epics.md STORY-REPO-003
+/execute-epic REPOSITORY_EPICS.md EPIC-REPO-001
 ```

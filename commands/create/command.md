@@ -50,13 +50,19 @@ Examples:
 - `/fix-issue 123 high-priority` → `$ARGUMENTS` becomes `"123 high-priority"`.
 - `/review-pr 456 high alice` → `$1="456"`, `$2="high"`, `$3="alice"`.
 
-### Bash command execution (`!`)
+### Bash command execution
 
-Prefix a line with `!` to run a bash command before the prompt executes; its output is included in context.
+Prefix a line with exclamation mark to run a bash command before the prompt executes. The pattern is: exclamation mark followed by backtick, then the command, then closing backtick.
 
-If you use any `!` lines, add `allowed-tools` in frontmatter to permit the specific bash commands you intend to run.
+Example format under a Context section:
+```markdown
+## Context
+Current git status: !`git status
+```
 
-Recommended style in this repo: use standalone lines that begin with `!` under a `## Context` heading.
+If you use bash execution, add allowed-tools in frontmatter to permit the specific bash commands.
+
+Recommended style: use standalone lines under a Context heading.
 
 ### File references (`@`)
 
@@ -105,16 +111,23 @@ allowed-tools:
 ---
 
 ## Context
-!git status
+
+To run bash commands before execution, use this format:
+- Description: !`bash command here
+
+Example:
+- Current git status: !`git status
 
 ## Your task
+
 Do the thing using: $ARGUMENTS
 
 ## Output
+
 - Summary of actions taken
 - Files changed (if any)
 ```
 
-Use `$ARGUMENTS` when you just need “the rest of the user input”. Use `$1`, `$2`, etc. when argument roles matter.
+Use $ARGUMENTS when you just need "the rest of the user input". Use $1, $2, etc. when argument roles matter.
 
 Avoid custom XML-like tag blocks. Use plain Markdown headings and lists instead.
