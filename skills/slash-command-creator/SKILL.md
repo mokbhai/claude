@@ -71,8 +71,7 @@ description: Command that needs shell execution
 ---
 
 ## Context
-- Git status: !`git status`
-- Recent commits: !`git log --oneline -5`
+- Git: !`git --help`
 
 ## Your task
 Execute based on the above context
