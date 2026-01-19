@@ -1,590 +1,308 @@
 ---
-description: Orchestrate parallel autonomous implementation across stories (Ralph loop)
-argument-hint: '"feature-name" [workers] [max-iterations-per-story] [sleep-seconds]'
+description: Orchestrate autonomous implementation using AI agents (Ralph loop)
+argument-hint: '"feature-name" [options]'
 ---
 
-# Ralph Loop - Parallel Autonomous Implementation
-
-**Purpose**: Set up and manage parallel autonomous agents to implement all stories from breakdown
-
-**What it does**:
-
-- Creates worker scripts that run in parallel when stories are independent
-- Analyzes dependencies to schedule work efficiently
-- Coordinates workers through shared state management
-- Runs autonomously until all stories are complete
-
-## Usage
-
-```bash
-/ralph "feature-name" [workers] [max-iterations-per-story] [sleep-seconds]
-```
-
-**Parameters**:
-
-- `feature-name`: Name of the feature (matches plans directory)
-- `workers`: Number of parallel workers (default: 3)
-- `max-iterations-per-story`: Max retry attempts per story (default: 10)
-- `sleep-seconds`: Delay between worker polls (default: 2)
-
-**Examples**:
-
-```bash
-/ralph "User Authentication"              # 3 workers, 10 iterations each, 2s sleep
-/ralph "User Authentication" 5            # 5 parallel workers
-/ralph "User Authentication" 8 20 3       # 8 workers, 20 iterations, 3s sleep
-```
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Ralph Orchestration Layer                   │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  plans/{feature-name}/                                           │
-│  ├── breakdown.md         → Stories with dependencies           │
-│  ├── design.md            → Technical specifications             │
-│  ├── stories/             → Story-specific designs               │
-│  ├── implement.md         → Implementation guidelines            │
-│  ├── task-queue.json      → Available tasks (lock-protected)     │
-│  ├── worker-state.json    → Worker status coordination           │
-│  ├── progress.txt         → Combined progress log               │
-│  └── workers/             → Generated worker scripts             │
-│      ├── worker-1.sh                                         │
-│      ├── worker-2.sh                                         │
-│      └── worker-N.sh                                         │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-## How It Works
-
-### Phase 1: Setup (One-Time)
-
-When you run `/ralph "feature-name"`, the system:
-
-1. **Analyzes Dependencies** from `breakdown.md`
-
-   ```markdown
-   ## Epic 1: User Registration
-
-   ### Story 1.1: Create registration endpoint
-
-   - Depends on: None
-   - [ ] Implement endpoint
-
-   ### Story 1.2: Email verification
-
-   - Depends on: Story 1.1
-   - [ ] Implement verification
-   ```
-
-2. **Creates Task Queue** (`task-queue.json`)
-
-   ```json
-   {
-     "available": ["1.1", "2.1", "3.1"],
-     "in-progress": {},
-     "completed": [],
-     "dependencies": {
-       "1.2": ["1.1"],
-       "2.2": ["2.1"]
-     }
-   }
-   ```
-
-3. **Generates N Worker Scripts** (`workers/worker-{1..N}.sh`)
-   - Each worker is an independent script
-   - Workers poll the shared task queue
-   - Workers claim tasks using atomic file locking
-   - Workers run until all tasks complete
-
-4. **Starts All Workers in Parallel**
-   ```bash
-   # Background processes that run autonomously
-   ./workers/worker-1.sh &
-   ./workers/worker-2.sh &
-   ./workers/worker-3.sh &
-   ```
-
-### Phase 2: Worker Execution Loop
-
-Each worker continuously:
-
-1. **Acquire Lock** on `task-queue.json`
-2. **Check** if any tasks are:
-   - Available (no unmet dependencies)
-   - Not already claimed by another worker
-3. **Claim Task** by moving it to "in-progress"
-4. **Release Lock**
-5. **Read Design** for the claimed story
-6. **Implement** with tests
-7. **Run Tests** (type check, lint, test suite)
-8. **Update State**:
-   - **If pass**: Mark complete, commit, claim next task
-   - **If fail**: Release task back to queue, record error
-9. **Repeat** until no tasks available
-
-### Phase 3: Dependency Resolution
-
-```
-Initial State:
-  Task 1.1 [No deps]     → Worker 1 claims ✓
-  Task 1.2 [Depends: 1.1] → Blocked until 1.1 completes
-  Task 2.1 [No deps]     → Worker 2 claims ✓
-  Task 2.2 [Depends: 2.1] → Blocked until 2.1 completes
-  Task 3.1 [No deps]     → Worker 3 claims ✓
-
-After Worker 1 completes 1.1:
-  Task 1.2 becomes available → Worker 1 (or any worker) claims
-```
-
-## Coordination Mechanism
-
-### Shared State Files
-
-**`task-queue.json`** - Thread-safe task distribution
-
-```json
-{
-  "available": ["2.1", "3.1"],
-  "in-progress": { "1.1": "worker-1" },
-  "completed": [],
-  "failed": {},
-  "dependencies": { "1.2": ["1.1"] },
-  "last-updated": "2025-01-15T10:30:00Z"
-}
-```
-
-**`worker-state.json`** - Worker health tracking
-
-```json
-{
-  "worker-1": {
-    "status": "working",
-    "current-task": "1.1",
-    "tasks-completed": 3,
-    "last-heartbeat": "2025-01-15T10:30:05Z"
-  },
-  "worker-2": {
-    "status": "idle",
-    "current-task": null,
-    "tasks-completed": 2,
-    "last-heartbeat": "2025-01-15T10:30:04Z"
-  }
-}
-```
-
-### Lock Protocol
-
-```bash
-# Worker claiming a task
-acquire_lock() {
-  local lockfile="plans/${FEATURE}/.taskqueue.lock"
-  local timeout=30
-  local elapsed=0
-
-  while ! mkdir "$lockfile" 2>/dev/null; do
-    sleep 0.1
-    elapsed=$((elapsed + 1))
-    if [ $elapsed -gt $timeout ]; then
-      echo "Lock timeout"
-      return 1
-    fi
-  done
-  echo $$ > "$lockfile/pid"
-  return 0
-}
-
-release_lock() {
-  rm -rf "plans/${FEATURE}/.taskqueue.lock"
-}
-```
-
-## Example Run
-
-```bash
-$ /ralph "User Authentication" 5
-
-🔧 Setting up Ralph parallel execution environment...
-   Found 15 stories across 4 epics
-   Detected 8 stories with no dependencies (parallelizable)
-   Generated 5 worker scripts
-
-📊 Dependency Map:
-   Epic 1: 1.1 → 1.2 → 1.3 (sequential)
-   Epic 2: 2.1 → 2.2 (sequential)
-   Epic 3: 3.1, 3.2, 3.3 (parallel - no deps!)
-   Epic 4: 4.1, 4.2, 4.3 (parallel - no deps!)
-
-🚀 Starting 5 parallel workers...
-   [WORKER-1] PID: 12345 - Started
-   [WORKER-2] PID: 12346 - Started
-   [WORKER-3] PID: 12347 - Started
-   [WORKER-4] PID: 12348 - Started
-   [WORKER-5] PID: 12349 - Started
-
-📋 Worker Dashboard (refresh every 5s):
-   WORKER    STATUS    TASK      COMPLETED    LAST ACTION
-   ─────────────────────────────────────────────────────────────
-   worker-1  working   1.1       3            Implementing...
-   worker-2  working   3.1       2            Testing...
-   worker-3  idle      -         4            Waiting for task
-   worker-4  working   4.2       1            Reading design...
-   worker-5  working   2.1       3            Committing...
-
-   Overall Progress: 13/15 stories (87%)
-   Elapsed: 8m 32s
-
-💡 Monitor with:
-   tail -f plans/User\ Authentication/progress.txt
-   cat plans/User\ Authentication/worker-state.json | jq .
-
-✨ Workers will run until all stories complete.
-   To stop: pkill -f "workers/worker-"
-```
-
-## Progress Tracking
-
-**`progress.txt`** - Unified progress from all workers
-
-```markdown
-# Ralph Progress - User Authentication
-
-## Worker Activity
-
-- Total Workers: 5
-- Active: 4, Idle: 1
-- Started: 2025-01-15 10:22:00
-
-## Completed Stories
-
-### Story 1.1: Create registration endpoint
-
-- Worker: worker-2
-- Completed: 2025-01-15 10:24:15
-- Duration: 2m 15s
-- Files: src/api/auth.ts, tests/auth.test.ts
-- Commit: feat: implement registration endpoint
-
-### Story 3.1: Create user profile model
-
-- Worker: worker-4
-- Completed: 2025-01-15 10:23:42
-- Duration: 1m 48s
-- Files: src/models/User.ts
-- Commit: feat: add user profile model
-
-### Story 4.1: Design settings UI
-
-- Worker: worker-1
-- Completed: 2025-01-15 10:25:30
-- Duration: 3m 05s
-- Files: src/components/Settings.tsx, tests/Settings.test.tsx
-- Commit: feat: implement settings UI component
-
-## Failed Attempts
-
-### Story 2.2: Payment integration
-
-- Worker: worker-3
-- Attempts: 2/10
-- Last Error: Stripe API key not configured
-- Action: Released to queue, will retry
-
-## Remaining
-
-- Stories: 3
-- Est. Time: 6-10 minutes
-```
-
-## When All Complete
-
-When all stories are done, workers:
-
-1. Detect empty task queue
-2. Verify all tests pass
-3. Generate summary report
-4. Clean up and exit
-5. Output: `<promise>COMPLETE</promise>`
-
-```bash
-✨ All workers finished after 18m 42s
-
-📊 Final Statistics:
-   Total Stories: 15
-   Completed: 15
-   Failed: 0
-   Retries: 2
-
-👷 Worker Performance:
-   worker-1: 4 stories (fastest: 45s per story)
-   worker-2: 3 stories (avg: 2m 12s per story)
-   worker-3: 3 stories (avg: 2m 45s per story)
-   worker-4: 3 stories (avg: 1m 58s per story)
-   worker-5: 2 stories (slowest: 3m 30s per story)
-
-🎉 Feature: User Authentication - READY FOR REVIEW
-<promise>COMPLETE</promise>
-```
-
-## Managing Workers
-
-### Monitor Workers
-
-```bash
-# Real-time progress
-tail -f plans/{feature}/progress.txt
-
-# Worker status
-cat plans/{feature}/worker-state.json | jq '.'
-
-# Task queue status
-cat plans/{feature}/task-queue.json | jq '.available | length'
-```
-
-### Stop Workers
-
-```bash
-# Graceful stop (workers finish current task)
-pkill -TERM -f "workers/worker-"
-
-# Immediate stop
-pkill -KILL -f "workers/worker-"
-
-# Stop specific worker
-pkill -f "workers/worker-3.sh"
-```
-
-### Resume After Stop
-
-```bash
-# Workers read current state and continue
-# No special command needed - just run workers directly
-./plans/{feature}/workers/worker-1.sh &
-./plans/{feature}/workers/worker-2.sh &
-```
-
-## Best Practices
-
-### Choosing Worker Count
-
-```bash
-# Rule of thumb: min(#CPU cores, #parallelizable stories)
-
-# CPU with 8 cores, 12 stories
-/ralph "Feature" 8
-
-# CPU with 4 cores, 3 stories (mostly sequential deps)
-/ralph "Feature" 2
-
-# Large feature with 20+ independent stories
-/ralph "Feature" 10
-```
-
-### Structuring for Parallelism
-
-```markdown
-## Good for Parallelism ✅
-
-### Epic 1: User Service (Backend)
-
-### Story 1.1: User model - No deps
-
-### Story 1.2: Auth service - No deps
-
-### Story 1.3: User controller - No deps
-
-### Epic 2: User UI (Frontend)
-
-### Story 2.1: Login page - No deps
-
-### Story 2.2: Signup page - No deps
-
-→ 5 workers can tackle 1.1, 1.2, 1.3, 2.1, 2.2 simultaneously
-
-## Bad for Parallelism ❌
-
-### Story 1.1: Base model
-
-### Story 1.2: Extends 1.1
-
-### Story 1.3: Extends 1.2
-
-→ Must run sequentially, only 1 worker effective
-```
-
-### Sleep Time Tuning
-
-```bash
-# Fast network, powerful API → Lower sleep
-/ralph "Feature" 5 10 0.5
-
-# Rate limiting concerns → Higher sleep
-/ralph "Feature" 5 10 5
-
-# Overnight run → Longer sleep to be safe
-/ralph "Feature" 8 20 10
-```
-
-## Safety Features
-
-1. **Atomic Locks**: Prevent race conditions on task queue
-2. **Heartbeat Monitoring**: Detect stalled workers
-3. **Automatic Retry**: Failed tasks return to queue
-4. **State Persistence**: Recover from interruption
-5. **Test Gates**: No commits without passing tests
-6. **Dependency Validation**: Never run tasks with unmet deps
-
-## Document Structure
-
-The breakdown.md should include dependencies for parallel execution:
-
-```markdown
-## Epic 1: User Registration
-
-### Story 1.1: Create registration endpoint
-
-**Dependencies**: None
-**Estimated**: 2 hours
-
-- [ ] Implement POST /api/auth/register
-- [ ] Add input validation
-- [ ] Add error handling
-- [ ] Write unit tests
-- [ ] Write integration tests
-
-### Story 1.2: Email verification
-
-**Dependencies**: Story 1.1 (needs registration endpoint)
-**Estimated**: 1.5 hours
-
-- [ ] Implement verification email
-- [ ] Add verification endpoint
-- [ ] Write tests
-
-## Epic 2: User Profile (can run in parallel with Epic 1)
-
-### Story 2.1: Create profile model
-
-**Dependencies**: None
-**Estimated**: 1 hour
-
-- [ ] Define User schema
-- [ ] Add database migrations
-- [ ] Write model tests
-```
-
-Workers will:
-
-- Parse dependencies from each story
-- Only claim stories with all dependencies met
-- Mark complete `[x]` when done
-- Commit after each successful story
-- Track progress in `progress.txt`
-
-## Integration with Lifecycle
-
-```
-/discover → /prd → /breakdown → /design → /ralph → /review → /test → /release
-                                      ↑
-                            Parallel autonomous workers
-```
-
-## Files Created/Used
-
-```
-plans/{feature-name}/
-├── breakdown.md         ← Original: tasks with dependencies
-├── design.md            ← Original: technical details
-├── stories/             ← Original: story-specific designs
-│   ├── 1.1.md
-│   └── 1.2.md
-├── implement.md         ← Original: implementation guidelines
-├── task-queue.json      ← CREATED: shared task state
-├── worker-state.json    ← CREATED: worker coordination
-├── progress.txt         ← CREATED/UPDATED: combined log
-└── workers/             ← CREATED: generated worker scripts
-    ├── worker-1.sh      ← Each worker is autonomous
-    ├── worker-2.sh
-    └── worker-N.sh
-```
-
-## Tips
-
-### Setup Phase
-
-- Tag dependencies clearly in breakdown.md
-- Estimate story complexity for better worker distribution
-- Run `/design` on ALL epics before starting `/ralph`
-- Ensure tests can run independently (no shared state)
-
-### Worker Configuration
-
-- Start with 3-5 workers for typical features
-- Match worker count to CPU cores for CPU-bound tasks
-- Use more workers (8-12) for I/O-bound API work
-- Fewer workers (1-2) for mostly sequential dependencies
-
-### Monitoring
-
-- Check `task-queue.json` for available vs blocked tasks
-- Monitor `worker-state.json` for stalled workers
-- Tail `progress.txt` for real-time updates
-- Set up alerts for repeated failures on same story
-
-### Performance
-
-- Sleep 0.5-2s for fast APIs with rate limit headroom
-- Sleep 5-10s when near rate limits
-- Lower iterations (5) for quick tests
-- Higher iterations (20+) for overnight runs
-
-## Troubleshooting
-
-### Workers stuck idle?
-
-- Check if all remaining stories have unmet dependencies
-- Verify `task-queue.json` has tasks in "available" array
-- A dependency might be mislabeled in breakdown.md
-
-### Same story failing repeatedly?
-
-- Check `progress.txt` for error pattern
-- Story may have bad design or missing info
-- Fix manually, mark `[x]`, let workers continue
-
-### Worker collision issues?
-
-- Increase sleep time to reduce lock contention
-- Reduce worker count
-- Check that lock file cleanup is working
-
-### Memory issues?
-
-- Reduce worker count
-- Workers may need periodic restart (add auto-restart logic)
-- Check for leaked processes
-
-## Example Worker Script Output
-
-```
-[WORKER-2] Starting...
-[WORKER-2] Reading task queue...
-[WORKER-2] Found 3 available tasks
-[WORKER-2] Acquired lock, claiming task: 1.1
-[WORKER-2] Released lock
-[WORKER-2] Reading design: plans/User Auth/stories/1.1.md
-[WORKER-2] Implementing story: Create registration endpoint
-[WORKER-2] Created: src/api/auth.ts
-[WORKER-2] Created: src/services/authService.ts
-[WORKER-2] Running tests...
-[WORKER-2] ✅ 18 tests passed
-[WORKER-2] Committing: feat: implement registration endpoint (a1b2c3d)
-[WORKER-2] Updating breakdown.md: [x] Story 1.1
-[WORKER-2] Acquired lock, marking task complete
-[WORKER-2] Checking for next task...
-[WORKER-2] Task 1.2 now available (dependency 1.1 met)
-[WORKER-2] Acquired lock, claiming task: 1.2
-```
+# Ralph Loop - Autonomous Implementation
+
+purpose: Run autonomous AI agents to implement all stories from breakdown until complete
+
+capabilities:
+  - Runs AI agents (Claude Code, OpenCode, Cursor, or Codex) to work through tasks
+  - Each agent implements one story, writes tests, and commits changes
+  - Repeats until all tasks in breakdown.md are complete
+  - Supports multiple AI engines, retry logic, branch-per-task workflow, and PR creation
+
+usage:
+  command: ralph-loop.sh <feature-name> [options]
+  required:
+    - feature-name: Name of the feature (matches plans directory)
+
+ai_engine_options:
+  - flag: --claude
+    description: Use Claude Code (default)
+  - flag: --opencode
+    description: Use OpenCode
+  - flag: --cursor
+    description: Use Cursor agent
+  - flag: --codex
+    description: Use Codex CLI
+
+workflow_options:
+  - flag: --no-tests
+    description: Skip writing and running tests
+  - flag: --no-lint
+    description: Skip linting
+  - flag: --fast
+    description: Skip both tests and linting
+
+execution_options:
+  - flag: --max-iterations N
+    description: Stop after N iterations (0 = unlimited)
+  - flag: --max-retries N
+    description: Max retries per task on failure (default: 3)
+  - flag: --retry-delay N
+    description: Seconds between retries (default: 5)
+  - flag: --dry-run
+    description: Show what would be done without executing
+
+git_branch_options:
+  - flag: --branch-per-task
+    description: Create a new git branch for each task
+  - flag: --base-branch NAME
+    description: Base branch to create task branches from (default: current)
+  - flag: --create-pr
+    description: Create a pull request after each task (requires gh CLI)
+  - flag: --draft-pr
+    description: Create PRs as drafts
+
+other_options:
+  - flag: -v, --verbose
+    description: Show debug output
+  - flag: -h, --help
+    description: Show this help
+  - flag: --version
+    description: Show version number
+
+examples:
+  - command: ralph-loop.sh "User Authentication"
+    description: Basic usage - run with Claude Code until complete
+  - command: ralph-loop.sh "User Authentication" --fast
+    description: Fast mode - skip tests and linting
+  - command: ralph-loop.sh "User Authentication" --branch-per-task --create-pr
+    description: Branch per task workflow with PRs
+  - command: ralph-loop.sh "User Authentication" --cursor
+    description: Use Cursor agent instead
+  - command: ralph-loop.sh "User Authentication" --opencode --max-iterations 20
+    description: Limit iterations and use OpenCode
+  - command: ralph-loop.sh "User Authentication" --dry-run --verbose
+    description: Dry run to see what would happen
+
+architecture:
+  ai_engine_support:
+    - Claude Code (default)
+    - OpenCode
+    - Cursor Agent
+    - Codex CLI
+
+  directory_structure:
+    plans/{feature-name}/:
+      - breakdown.md: Stories with [ ] checkboxes
+      - design.md: Technical specifications
+      - stories/: Story-specific designs
+      - implement.md: Implementation guidelines
+      - progress.txt: Progress log
+
+  features:
+    - Retry logic with configurable attempts
+    - Progress monitoring with spinners
+    - Token tracking and cost estimation
+    - Branch-per-task workflow
+    - Automatic PR creation
+    - Proper cleanup handlers
+
+execution_loop:
+  steps:
+    1. Read progress.txt for learnings
+    2. Get next task from breakdown.md
+    3. Read design.md and story-specific design
+    4. Build AI prompt with context
+    5. Execute AI agent
+    6. Monitor progress with spinner
+    7. Parse results and track tokens
+    8. Verify task completion
+    9. Update breakdown.md (mark [x])
+    10. Update progress.txt
+    11. Commit changes
+    12. Optionally create PR
+
+  termination:
+    - condition: All tasks marked [x]
+    - condition: max_iterations reached
+    - action: Show summary with cost tracking
+
+retry_logic:
+  max_retries: 3 (default)
+  retry_delay: 5 seconds (default)
+  flow:
+    - Task starts
+    - AI agent execution
+    - Success? → YES → Complete task, continue to next
+    - Success? → NO → Retry (attempt 2/MAX_RETRIES)
+    - All retries failed → Log error, continue to next task
+
+progress_monitoring:
+  spinner_states:
+    - state: Thinking/Reading code
+      color: cyan
+    - state: Implementing/Writing tests
+      color: magenta
+    - state: Testing/Linting
+      color: yellow
+    - state: Staging/Committing
+      color: green
+
+  display_format: "⠙ Implementing │ Create user registration endpoint [02:15]"
+
+token_tracking:
+  metrics:
+    - Input tokens
+    - Output tokens
+    - Total tokens
+    - Estimated cost (or actual cost for OpenCode)
+    - API duration (for Cursor)
+
+  summary_output:
+    """
+    ============================================
+    PRD complete! Finished 15 task(s).
+    ============================================
+
+    >>> Cost Summary
+    Input tokens:  125000
+    Output tokens: 45000
+    Total tokens:  170000
+    Est. cost:     $1.0875
+    ============================================
+    """
+
+branch_workflow:
+  branch_per_task:
+    - Creates branches like: ralph/{task-name-slug}
+    - Example: "ralph/create-user-registration-endpoint"
+    - Each branch can have its own PR with --create-pr
+
+  options:
+    - --base-branch: Specify base branch for task branches
+    - --create-pr: Auto-create PR for each task branch
+    - --draft-pr: Create PRs as drafts for manual review
+
+breakdown_format:
+  structure:
+    """
+    ## Epic 1: User Registration
+
+    ### Story 1: Create registration endpoint
+
+    - [ ] Implement POST /api/auth/register
+    - [ ] Add input validation
+    - [ ] Add error handling
+    - [ ] Write unit tests
+    - [ ] Write integration tests
+
+    ### Story 2: Email verification
+
+    - [ ] Implement verification email
+    - [ ] Add verification endpoint
+    - [ ] Write tests
+    """
+
+  workflow:
+    - Ralph finds first [ ] task
+    - Implements it completely
+    - Changes to [x]
+    - Moves to next task
+    - Repeats until all are [x]
+
+best_practices:
+  setup_phase:
+    - Ensure /breakdown and /design are complete
+    - Verify all stories have clear checkboxes [ ]
+    - Test that AI CLI works independently
+
+  execution_phase:
+    - Monitor progress.txt to see learnings
+    - Use --dry-run to preview what will happen
+    - Keep Ralph running overnight for large features
+
+  completion_phase:
+    - Review commits Ralph created
+    - Run comprehensive tests
+    - Manual code review is recommended
+
+integration:
+  lifecycle:
+    - /discover → /prd → /breakdown → /design → /ralph-loop.sh → /review → /test → /release
+    - Ralph Loop fits after design phase
+    - Outputs: Commits, branches, PRs
+
+  position: 5
+  steps:
+    1: /discover - Find feature requirements
+    2: /prd - Create product requirements document
+    3: /breakdown - Break down into stories
+    4: /design - Create technical design
+    5: ralph-loop.sh - Implement autonomously (CURRENT)
+    6: /review - Review implementation
+    7: /test - Run comprehensive tests
+    8: /release - Release the feature
+
+files_used:
+  plans/{feature-name}/:
+    breakdown.md:
+      action: read + update
+      description: Tasks to implement
+    design.md:
+      action: read-only
+      description: Technical design
+    stories/:
+      action: read-only
+      description: Story-specific designs
+      files:
+        - 1.1.md
+        - 1.2.md
+    implement.md:
+      action: read-only
+      description: Implementation guidelines
+    progress.txt:
+      action: create + update
+      description: Progress log
+
+troubleshooting:
+  issue: Ralph stops early
+  solutions:
+    - Check if max-iterations is set
+    - Check progress.txt for errors
+    - Verify AI CLI is installed and working
+
+  issue: Same task failing repeatedly
+  solutions:
+    - Check progress.txt for error details
+    - The design might be incomplete
+    - Fix the task manually, mark [x], re-run Ralph
+
+  issue: Token costs too high
+  solutions:
+    - Use --fast to skip tests during development
+    - Use --max-iterations to limit total work
+    - Consider using a cheaper AI engine
+
+  issue: Branch workflow issues
+  solutions:
+    - Ensure clean git state before starting
+    - Use --base-branch to specify base explicitly
+    - Check that gh CLI is installed for --create-pr
+
+comparison_with_ralphy:
+  similarities:
+    - Autonomous AI coding loop
+    - Multiple AI engine support
+    - Retry logic and error handling
+    - Progress monitoring
+    - Token tracking
+    - Branch-per-task workflow
+
+  differences:
+    - Integrated with Claude Code lifecycle commands
+    - Uses plans/{feature} directory structure
+    - Works with breakdown.md format
+    - Simpler sequential execution
+    - Focused on feature development workflow
+
+future_enhancements:
+  - Parallel task execution with git worktrees
+  - YAML task format support
+  - GitHub Issues integration
+  - AI-powered merge conflict resolution
+  - Worker dashboard with real-time status
+  - Cost optimization strategies
