@@ -1,6 +1,6 @@
 ---
 name: astro-developer
-description: This skill provides comprehensive guidance for Astro web framework development. Use when building, configuring, or troubleshooting Astro projects, creating components, setting up routing, implementing islands architecture, or working with Astro's ecosystem including integrations, content collections, and deployment strategies.
+description: Comprehensive Astro web framework development guidance for 2026. Use when building, configuring, or troubleshooting Astro projects; creating components; setting up routing; implementing islands architecture; working with React, Tailwind CSS, and Node.js integrations; testing; performance optimization; or deployment strategies. Includes TypeScript patterns, state management, API routes, and common pitfalls solutions.
 ---
 
 # Astro Developer Skill
@@ -15,9 +15,12 @@ Identify the task type and follow the corresponding workflow:
 
 1. **New Project Setup** → Use "Project Initialization" workflow
 2. **Component Development** → Use "Component Creation" guidelines with Tailwind CSS
-3. **Performance Optimization** → Use "Islands Architecture" patterns
-4. **Content Management** → Use "Content Collections" workflow
-5. **Configuration & Deployment** → Use "Configuration" and "Deployment" sections
+3. **Testing Setup** → See [Testing Guide](references/testing-guide.md) for Vitest/Playwright
+4. **Performance Optimization** → Use "Islands Architecture" patterns, see [Performance Guide](references/performance-optimization.md)
+5. **State Management** → See [State Management Guide](references/state-management.md) for React islands
+6. **Troubleshooting Issues** → See [Common Pitfalls Guide](references/common-pitfalls.md)
+7. **Content Management** → Use "Content Collections" workflow
+8. **Configuration & Deployment** → Use "Configuration" and "Deployment" sections
 
 ## Core Capabilities
 
@@ -616,6 +619,138 @@ Deploy to:
 - Docker containers
 - Serverless platforms (Vercel, Netlify Functions)
 
+### 10. Testing Strategies
+
+See [Testing Guide](references/testing-guide.md) for comprehensive testing documentation.
+
+#### Vitest for Unit Testing
+
+```bash
+npm install -D vitest @vitest/ui jsdom
+```
+
+```typescript
+// vitest.config.ts
+import { getViteConfig } from 'astro/config';
+
+export default getViteConfig({
+  test: {
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+  },
+});
+```
+
+#### Playwright for E2E Testing
+
+```bash
+npm init playwright@latest
+```
+
+```typescript
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  webServer: {
+    command: 'npm run preview',
+    url: 'http://localhost:4321/',
+  },
+});
+```
+
+#### Container API for Astro Components
+
+```javascript
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { expect, test } from 'vitest';
+import Card from '../src/components/Card.astro';
+
+test('Card renders with props', async () => {
+  const container = await AstroContainer.create();
+  const result = await container.renderToString(Card, {
+    props: { title: 'Test' },
+  });
+  expect(result).toContain('Test');
+});
+```
+
+### 11. TypeScript Best Practices
+
+See [Common Pitfalls Guide](references/common-pitfalls.md) for TypeScript-specific issues.
+
+#### Strict Mode Configuration
+
+```json
+// tsconfig.json
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/layouts/*": ["./src/layouts/*"]
+    }
+  }
+}
+```
+
+#### Type-Safe Props
+
+```astro
+---
+export interface Props {
+  title: string;
+  count: number;
+  isActive?: boolean;
+  tags: string[];
+}
+
+const { title, count, isActive = false, tags } = Astro.props;
+---
+```
+
+### 12. State Management for React Islands
+
+See [State Management Guide](references/state-management.md) for comprehensive patterns.
+
+#### Zustand (Recommended)
+
+```typescript
+// src/store/useStore.ts
+import { create } from 'zustand';
+
+export const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+}));
+```
+
+#### Usage Across Islands
+
+```jsx
+// Component 1
+import { useStore } from '@/store/useStore';
+
+function Counter() {
+  const { increment } = useStore();
+  return <button onClick={increment}>+</button>;
+}
+
+// Component 2
+import { useStore } from '@/store/useStore';
+
+function Display() {
+  const count = useStore((state) => state.count);
+  return <div>{count}</div>;
+}
+```
+
 ## Common Patterns & Solutions
 
 ### Environment Variables
@@ -693,6 +828,50 @@ const errorMessages = {
 
 ## Common Issues & Solutions
 
+### Component Not Interactive
+
+**Problem**: React/Vue components render but don't respond to user interaction.
+
+**Solution**: Add `client:*` directive. By default, Astro strips all client-side JavaScript.
+
+```astro
+---
+import ReactComponent from '@/components/ReactComponent.jsx';
+---
+
+<!-- ❌ Wrong: No client directive -->
+<ReactComponent />
+
+<!-- ✅ Correct: Add appropriate client directive -->
+<ReactComponent client:load />
+```
+
+### Context API Not Working Across Islands
+
+**Problem**: React Context providers don't share state between different component islands.
+
+**Solution**: Each Astro island hydrates in isolation. Use external state management (Zustand, Redux, MobX) for cross-island state sharing.
+
+See [State Management Guide](references/state-management.md) for detailed patterns.
+
+### `document` or `window` is Not Defined
+
+**Problem**: Error accessing browser APIs during server-side rendering.
+
+**Solution**: Move browser-only code to `<script>` tags or use lifecycle methods in framework components.
+
+```astro
+---
+// ❌ Wrong: Browser API in frontmatter
+const width = window.innerWidth;
+---
+
+<!-- ✅ Correct: Move to script tag -->
+<script>
+  const width = window.innerWidth;
+</script>
+```
+
 ### TypeScript Ref Callback Errors
 
 When using React refs with arrays in TypeScript, avoid this common error:
@@ -745,14 +924,19 @@ node scripts/create-component.js --name MyComponent --type astro
 Reference materials for detailed information:
 
 - `component-patterns.md` - Common Astro component patterns
-- `integration-guide.md` - Detailed integration setup guides
-- `deployment-checklist.md` - Pre-deployment verification steps
-- `performance-tips.md` - Advanced optimization techniques
+- `integration-guide.md` - Detailed integration setup guides (React, Vue, Tailwind, MDX, etc.)
+- `testing-guide.md` - **NEW**: Comprehensive testing strategies with Vitest, Playwright, and Container API
+- `common-pitfalls.md` - **NEW**: Common mistakes and solutions for islands architecture, client directives, SSR vs static rendering
+- `performance-optimization.md` - **NEW**: Build optimization, image optimization, code splitting, deployment strategies
+- `state-management.md` - **NEW**: State management patterns for React islands (Zustand, Redux Toolkit, Jotai, TanStack Query)
 
 Load reference materials when specific detailed information is needed:
 
 ```
-Read references/component-patterns.md when implementing complex component interactions
+Read references/testing-guide.md when setting up testing infrastructure
+Read references/common-pitfalls.md when troubleshooting hydration or directive issues
+Read references/performance-optimization.md when optimizing build size or load times
+Read references/state-management.md when implementing cross-island state sharing
 ```
 
 ### assets/
