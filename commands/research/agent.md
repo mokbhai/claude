@@ -1,7 +1,7 @@
 ---
 description: Orchestrates comprehensive research by asking clarifying questions and spawning parallel research subagents for different aspects of the topic
 argument-hint: [research-topic]
-allowed-tools: AskUserQuestion, Task, Glob, Grep, Read, Edit, Write, mcp__search__SearchAgent
+allowed-tools: AskUserQuestion, Task, Glob, Grep, Read, Edit, Write, mcp__search__*
 model: sonnet
 ---
 
