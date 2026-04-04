@@ -20,6 +20,7 @@ allowed-tools:
   - AskUserQuestion
   - WebSearch
 ---
+
 <!-- AUTO-GENERATED from SKILL.md.tmpl — do not edit directly -->
 <!-- Regenerate: bun run gen:skill-docs -->
 
@@ -123,6 +124,7 @@ ask the user about telemetry. Use AskUserQuestion:
 > Change anytime with `gstack-config set telemetry off`.
 
 Options:
+
 - A) Help gstack get better! (recommended)
 - B) No thanks
 
@@ -130,10 +132,11 @@ If A: run `~/.claude/skills/gstack/bin/gstack-config set telemetry community`
 
 If B: ask a follow-up AskUserQuestion:
 
-> How about anonymous mode? We just learn that *someone* used gstack — no unique ID,
+> How about anonymous mode? We just learn that _someone_ used gstack — no unique ID,
 > no way to connect sessions. Just a counter that helps us know if anyone's out there.
 
 Options:
+
 - A) Sure, anonymous is fine
 - B) No thanks, fully off
 
@@ -141,6 +144,7 @@ If B→A: run `~/.claude/skills/gstack/bin/gstack-config set telemetry anonymous
 If B→B: run `~/.claude/skills/gstack/bin/gstack-config set telemetry off`
 
 Always run:
+
 ```bash
 touch ~/.gstack/.telemetry-prompted
 ```
@@ -155,6 +159,7 @@ ask the user about proactive behavior. Use AskUserQuestion:
 > a bug. We recommend keeping this on — it speeds up every part of your workflow.
 
 Options:
+
 - A) Keep it on (recommended)
 - B) Turn it off — I'll type /commands myself
 
@@ -162,6 +167,7 @@ If A: run `~/.claude/skills/gstack/bin/gstack-config set proactive true`
 If B: run `~/.claude/skills/gstack/bin/gstack-config set proactive false`
 
 Always run:
+
 ```bash
 touch ~/.gstack/.proactive-prompted
 ```
@@ -178,13 +184,13 @@ Use AskUserQuestion:
 > instead of answering directly. It's a one-time addition, about 15 lines.
 
 Options:
+
 - A) Add routing rules to CLAUDE.md (recommended)
 - B) No thanks, I'll invoke skills manually
 
 If A: Append this section to the end of CLAUDE.md:
 
 ```markdown
-
 ## Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill
@@ -192,6 +198,7 @@ tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
 The skill has specialized workflows that produce better results than ad-hoc answers.
 
 Key routing rules:
+
 - Product ideas, "is this worth building", brainstorming → invoke office-hours
 - Bugs, errors, "why is this broken", 500 errors → invoke investigate
 - Ship, deploy, push, create PR → invoke ship
@@ -246,6 +253,7 @@ Use concrete tools, workflows, commands, files, outputs, evals, and tradeoffs wh
 Avoid filler, throat-clearing, generic optimism, founder cosplay, and unsupported claims.
 
 **Writing rules:**
+
 - No em dashes. Use commas, periods, or "..." instead.
 - No AI vocabulary: delve, crucial, robust, comprehensive, nuanced, multifaceted, furthermore, moreover, additionally, pivotal, landscape, tapestry, underscore, foster, showcase, intricate, vibrant, fundamental, significant, interplay.
 - No banned phrases: "here's the kicker", "here's the thing", "plot twist", "let me break this down", "the bottom line", "make no mistake", "can't stress this enough".
@@ -307,6 +315,7 @@ available]. [Health score if available]." Keep it to 2-3 sentences.
 ## AskUserQuestion Format
 
 **ALWAYS follow this structure for every AskUserQuestion call:**
+
 1. **Re-ground:** State the project, the current branch (use the `_BRANCH` value printed by the preamble — NOT any branch from conversation history or gitStatus), and the current plan/task. (1-2 sentences)
 2. **Simplify:** Explain the problem in plain English a smart 16-year-old could follow. No raw function names, no internal jargon, no implementation details. Use concrete examples and analogies. Say what it DOES, not what it's called.
 3. **Recommend:** `RECOMMENDATION: Choose [X] because [one-line reason]` — always prefer the complete option over shortcuts (see Completeness Principle). Include `Completeness: X/10` for each option. Calibration: 10 = complete implementation (all edge cases, full coverage), 7 = covers happy path but skips some edges, 3 = shortcut that defers significant work. If both options are 8+, pick the higher; if one is ≤5, flag it.
@@ -322,18 +331,19 @@ AI makes completeness near-free. Always recommend the complete option over short
 
 **Effort reference** — always show both scales:
 
-| Task type | Human team | CC+gstack | Compression |
-|-----------|-----------|-----------|-------------|
-| Boilerplate | 2 days | 15 min | ~100x |
-| Tests | 1 day | 15 min | ~50x |
-| Feature | 1 week | 30 min | ~30x |
-| Bug fix | 4 hours | 15 min | ~20x |
+| Task type   | Human team | CC+gstack | Compression |
+| ----------- | ---------- | --------- | ----------- |
+| Boilerplate | 2 days     | 15 min    | ~100x       |
+| Tests       | 1 day      | 15 min    | ~50x        |
+| Feature     | 1 week     | 30 min    | ~30x        |
+| Bug fix     | 4 hours    | 15 min    | ~20x        |
 
 Include `Completeness: X/10` for each option (10=all edge cases, 7=happy path, 3=shortcut).
 
 ## Repo Ownership — See Something, Say Something
 
 `REPO_MODE` controls how to handle issues outside your branch:
+
 - **`solo`** — You own everything. Investigate and offer to fix proactively.
 - **`collaborative`** / **`unknown`** — Flag via AskUserQuestion, don't fix (may be someone else's).
 
@@ -342,9 +352,11 @@ Always flag anything that looks wrong — one sentence, what you noticed and its
 ## Search Before Building
 
 Before building anything unfamiliar, **search first.** See `~/.claude/skills/gstack/ETHOS.md`.
+
 - **Layer 1** (tried and true) — don't reinvent. **Layer 2** (new and popular) — scrutinize. **Layer 3** (first principles) — prize above all.
 
 **Eureka:** When first-principles reasoning contradicts conventional wisdom, name it and log:
+
 ```bash
 jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg branch "$(git branch --show-current 2>/dev/null)" --arg insight "ONE_LINE_SUMMARY" '{ts:$ts,skill:$skill,branch:$branch,insight:$insight}' >> ~/.gstack/analytics/eureka.jsonl 2>/dev/null || true
 ```
@@ -352,6 +364,7 @@ jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg b
 ## Completion Status Protocol
 
 When completing a skill workflow, report status using one of:
+
 - **DONE** — All steps completed successfully. Evidence provided for each claim.
 - **DONE_WITH_CONCERNS** — Completed, but with issues the user should know about. List each concern.
 - **BLOCKED** — Cannot proceed. State what is blocking and what was tried.
@@ -362,11 +375,13 @@ When completing a skill workflow, report status using one of:
 It is always OK to stop and say "this is too hard for me" or "I'm not confident in this result."
 
 Bad work is worse than no work. You will not be penalized for escalating.
+
 - If you have attempted a task 3 times without success, STOP and escalate.
 - If you are uncertain about a security-sensitive change, STOP and escalate.
 - If the scope of work exceeds what you can verify, STOP and escalate.
 
 Escalation format:
+
 ```
 STATUS: BLOCKED | NEEDS_CONTEXT
 REASON: [1-2 sentences]
@@ -377,6 +392,7 @@ RECOMMENDATION: [what the user should do next]
 ## Operational Self-Improvement
 
 Before completing, reflect on this session:
+
 - Did any commands fail unexpectedly?
 - Did you take a wrong approach and have to backtrack?
 - Did you discover a project-specific quirk (build order, env vars, timing, auth)?
@@ -464,15 +480,16 @@ Then write a `## GSTACK REVIEW REPORT` section to the end of the plan file:
 - If the output is `NO_REVIEWS` or empty: write this placeholder table:
 
 \`\`\`markdown
+
 ## GSTACK REVIEW REPORT
 
-| Review | Trigger | Why | Runs | Status | Findings |
-|--------|---------|-----|------|--------|----------|
-| CEO Review | \`/plan-ceo-review\` | Scope & strategy | 0 | — | — |
-| Codex Review | \`/codex review\` | Independent 2nd opinion | 0 | — | — |
-| Eng Review | \`/plan-eng-review\` | Architecture & tests (required) | 0 | — | — |
-| Design Review | \`/plan-design-review\` | UI/UX gaps | 0 | — | — |
-| DX Review | \`/plan-devex-review\` | Developer experience gaps | 0 | — | — |
+| Review        | Trigger                 | Why                             | Runs | Status | Findings |
+| ------------- | ----------------------- | ------------------------------- | ---- | ------ | -------- |
+| CEO Review    | \`/plan-ceo-review\`    | Scope & strategy                | 0    | —      | —        |
+| Codex Review  | \`/codex review\`       | Independent 2nd opinion         | 0    | —      | —        |
+| Eng Review    | \`/plan-eng-review\`    | Architecture & tests (required) | 0    | —      | —        |
+| Design Review | \`/plan-design-review\` | UI/UX gaps                      | 0    | —      | —        |
+| DX Review     | \`/plan-devex-review\`  | Developer experience gaps       | 0    | —      | —        |
 
 **VERDICT:** NO REVIEWS YET — run \`/autoplan\` for full review pipeline, or individual reviews above.
 \`\`\`
@@ -500,14 +517,17 @@ Determine which branch this PR/MR targets, or the repo's default branch if no
 PR/MR exists. Use the result as "the base branch" in all subsequent steps.
 
 **If GitHub:**
+
 1. `gh pr view --json baseRefName -q .baseRefName` — if succeeds, use it
 2. `gh repo view --json defaultBranchRef -q .defaultBranchRef.name` — if succeeds, use it
 
 **If GitLab:**
+
 1. `glab mr view -F json 2>/dev/null` and extract the `target_branch` field — if succeeds, use it
 2. `glab repo view -F json 2>/dev/null` and extract the `default_branch` field — if succeeds, use it
 
 **Git-native fallback (if unknown platform, or CLI commands fail):**
+
 1. `git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||'`
 2. If that fails: `git rev-parse --verify origin/main 2>/dev/null` → use `main`
 3. If that fails: `git rev-parse --verify origin/master 2>/dev/null` → use `master`
@@ -551,15 +571,15 @@ These are the laws. Every recommendation traces back to one of these.
 
 ## The Seven DX Characteristics
 
-| # | Characteristic | What It Means | Gold Standard |
-|---|---------------|---------------|---------------|
-| 1 | **Usable** | Simple to install, set up, use. Intuitive APIs. Fast feedback. | Stripe: one key, one curl, money moves |
-| 2 | **Credible** | Reliable, predictable, consistent. Clear deprecation. Secure. | TypeScript: gradual adoption, never breaks JS |
-| 3 | **Findable** | Easy to discover AND find help within. Strong community. Good search. | React: every question answered on SO |
-| 4 | **Useful** | Solves real problems. Features match actual use cases. Scales. | Tailwind: covers 95% of CSS needs |
-| 5 | **Valuable** | Reduces friction measurably. Saves time. Worth the dependency. | Next.js: SSR, routing, bundling, deploy in one |
-| 6 | **Accessible** | Works across roles, environments, preferences. CLI + GUI. | VS Code: works for junior to principal |
-| 7 | **Desirable** | Best-in-class tech. Reasonable pricing. Community momentum. | Vercel: devs WANT to use it, not tolerate it |
+| #   | Characteristic | What It Means                                                         | Gold Standard                                  |
+| --- | -------------- | --------------------------------------------------------------------- | ---------------------------------------------- |
+| 1   | **Usable**     | Simple to install, set up, use. Intuitive APIs. Fast feedback.        | Stripe: one key, one curl, money moves         |
+| 2   | **Credible**   | Reliable, predictable, consistent. Clear deprecation. Secure.         | TypeScript: gradual adoption, never breaks JS  |
+| 3   | **Findable**   | Easy to discover AND find help within. Strong community. Good search. | React: every question answered on SO           |
+| 4   | **Useful**     | Solves real problems. Features match actual use cases. Scales.        | Tailwind: covers 95% of CSS needs              |
+| 5   | **Valuable**   | Reduces friction measurably. Saves time. Worth the dependency.        | Next.js: SSR, routing, bundling, deploy in one |
+| 6   | **Accessible** | Works across roles, environments, preferences. CLI + GUI.             | VS Code: works for junior to principal         |
+| 7   | **Desirable**  | Best-in-class tech. Reasonable pricing. Community momentum.           | Vercel: devs WANT to use it, not tolerate it   |
 
 ## Cognitive Patterns — How Great DX Leaders Think
 
@@ -578,25 +598,25 @@ Internalize these; don't enumerate them.
 
 ## DX Scoring Rubric (0-10 calibration)
 
-| Score | Meaning |
-|-------|---------|
-| 9-10 | Best-in-class. Stripe/Vercel tier. Developers rave about it. |
-| 7-8 | Good. Developers can use it without frustration. Minor gaps. |
-| 5-6 | Acceptable. Works but with friction. Developers tolerate it. |
-| 3-4 | Poor. Developers complain. Adoption suffers. |
-| 1-2 | Broken. Developers abandon after first attempt. |
-| 0 | Not addressed. No thought given to this dimension. |
+| Score | Meaning                                                      |
+| ----- | ------------------------------------------------------------ |
+| 9-10  | Best-in-class. Stripe/Vercel tier. Developers rave about it. |
+| 7-8   | Good. Developers can use it without frustration. Minor gaps. |
+| 5-6   | Acceptable. Works but with friction. Developers tolerate it. |
+| 3-4   | Poor. Developers complain. Adoption suffers.                 |
+| 1-2   | Broken. Developers abandon after first attempt.              |
+| 0     | Not addressed. No thought given to this dimension.           |
 
 **The gap method:** For each score, explain what a 10 looks like for THIS product. Then fix toward 10.
 
 ## TTHW Benchmarks (Time to Hello World)
 
-| Tier | Time | Adoption Impact |
-|------|------|-----------------|
-| Champion | < 2 min | 3-4x higher adoption |
-| Competitive | 2-5 min | Baseline |
-| Needs Work | 5-10 min | Significant drop-off |
-| Red Flag | > 10 min | 50-70% abandon |
+| Tier        | Time     | Adoption Impact      |
+| ----------- | -------- | -------------------- |
+| Champion    | < 2 min  | 3-4x higher adoption |
+| Competitive | 2-5 min  | Baseline             |
+| Needs Work  | 5-10 min | Significant drop-off |
+| Red Flag    | > 10 min | 50-70% abandon       |
 
 ## Hall of Fame Reference
 
@@ -623,6 +643,7 @@ git diff $(git merge-base HEAD main 2>/dev/null || echo HEAD~10) --stat 2>/dev/n
 ```
 
 Then read:
+
 - The plan file (current plan or branch diff)
 - CLAUDE.md for project conventions
 - README.md for current getting started experience
@@ -631,6 +652,7 @@ Then read:
 - CHANGELOG.md if it exists
 
 **Design doc check:**
+
 ```bash
 setopt +o nomatch 2>/dev/null || true
 SLUG=$(~/.claude/skills/gstack/browse/bin/remote-slug 2>/dev/null || basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")
@@ -639,14 +661,16 @@ DESIGN=$(ls -t ~/.gstack/projects/$SLUG/*-$BRANCH-design-*.md 2>/dev/null | head
 [ -z "$DESIGN" ] && DESIGN=$(ls -t ~/.gstack/projects/$SLUG/*-design-*.md 2>/dev/null | head -1)
 [ -n "$DESIGN" ] && echo "Design doc found: $DESIGN" || echo "No design doc found"
 ```
+
 If a design doc exists, read it.
 
 Map:
-* What is the developer-facing surface area of this plan?
-* What type of developer product is this? (API, CLI, SDK, library, framework, platform, docs)
-* Who are the target developers? (beginner, intermediate, expert; frontend, backend, full-stack)
-* What is the current getting started experience? (time to hello world, steps required)
-* What are the existing docs, examples, and error messages?
+
+- What is the developer-facing surface area of this plan?
+- What type of developer product is this? (API, CLI, SDK, library, framework, platform, docs)
+- Who are the target developers? (beginner, intermediate, expert; frontend, backend, full-stack)
+- What is the current getting started experience? (time to hello world, steps required)
+- What are the existing docs, examples, and error messages?
 
 ## Prerequisite Skill Offer
 
@@ -661,6 +685,7 @@ Say to the user via AskUserQuestion:
 > not per-product — it captures the thinking behind this specific change."
 
 Options:
+
 - A) Run /office-hours now (we'll pick up the review right after)
 - B) Skip — proceed with standard review
 
@@ -677,6 +702,7 @@ Read the `/office-hours` skill file at `~/.claude/skills/gstack/office-hours/SKI
 **If unreadable:** Skip with "Could not load /office-hours — skipping." and continue.
 
 Follow its instructions from top to bottom, **skipping these sections** (already handled by the parent skill):
+
 - Preamble (run first)
 - AskUserQuestion Format
 - Completeness Principle — Boil the Lake
@@ -693,6 +719,7 @@ Follow its instructions from top to bottom, **skipping these sections** (already
 Execute every other section at full depth. When the loaded skill's instructions are complete, continue with the next step below.
 
 After /office-hours completes, re-run the design doc check:
+
 ```bash
 setopt +o nomatch 2>/dev/null || true  # zsh compat
 SLUG=$(~/.claude/skills/gstack/browse/bin/remote-slug 2>/dev/null || basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")
@@ -778,6 +805,7 @@ gaps are {X, Y, Z}. I'll review all 8 DX dimensions. Want me to focus on specifi
 areas, or do the full review?"
 
 Options:
+
 - A) Full DX review, all 8 dimensions (recommended)
 - B) Focus on [specific gaps identified]
 - C) Just the getting started / onboarding experience
@@ -791,6 +819,7 @@ For each DX section, rate the plan 0-10. If it's not a 10, explain WHAT would ma
 it a 10, then do the work to get it there.
 
 Pattern:
+
 1. Rate: "Getting Started Experience: 4/10"
 2. Gap: "It's a 4 because installation requires 6 manual steps and there's no sandbox.
    A 10 would have one command or a web playground with zero install."
@@ -824,6 +853,7 @@ If `CROSS_PROJECT` is `unset` (first time): Use AskUserQuestion:
 > where cross-contamination would be a concern.
 
 Options:
+
 - A) Enable cross-project learnings (recommended)
 - B) Keep learnings project-scoped only
 
@@ -850,6 +880,7 @@ eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
 ```
 
 If prior reviews exist, display the trend:
+
 ```
 DX TREND (prior reviews):
   Dimension        | Prior Score | Notes
@@ -864,6 +895,7 @@ Rate 0-10: Can a developer go from zero to hello world in under 5 minutes?
 Load reference: Read the "## Pass 1" section from `~/.claude/skills/gstack/plan-devex-review/dx-hall-of-fame.md`.
 
 Evaluate:
+
 - **Installation**: One command? One click? No prerequisites?
 - **First run**: Does the first command produce visible, meaningful output?
 - **Sandbox/Playground**: Can developers try before installing?
@@ -887,6 +919,7 @@ Rate 0-10: Is the interface intuitive, consistent, and complete?
 Load reference: Read the "## Pass 2" section from `~/.claude/skills/gstack/plan-devex-review/dx-hall-of-fame.md`.
 
 Evaluate:
+
 - **Naming**: Guessable without docs? Consistent grammar?
 - **Defaults**: Every parameter has a sensible default? Simplest call gives useful result?
 - **Consistency**: Same patterns across the entire API surface?
@@ -910,6 +943,7 @@ For each error path in the plan, evaluate against the formula:
 **What happened** + **Why** + **How to fix** + **Where to learn more** + **Actual values**
 
 Also evaluate:
+
 - **Permission/sandbox/safety model**: What can go wrong? How clear is the blast radius?
 - **Debug mode**: Verbose output available?
 - **Stack traces**: Useful or internal framework noise?
@@ -923,6 +957,7 @@ Rate 0-10: Can a developer find what they need and learn by doing?
 Load reference: Read the "## Pass 4" section from `~/.claude/skills/gstack/plan-devex-review/dx-hall-of-fame.md`.
 
 Evaluate:
+
 - **Information architecture**: Find what they need in under 2 minutes?
 - **Progressive disclosure**: Beginners see simple, experts find advanced?
 - **Code examples**: Copy-paste complete? Work as-is? Real context?
@@ -939,6 +974,7 @@ Rate 0-10: Can developers upgrade without fear?
 Load reference: Read the "## Pass 5" section from `~/.claude/skills/gstack/plan-devex-review/dx-hall-of-fame.md`.
 
 Evaluate:
+
 - **Backward compatibility**: What breaks? Blast radius limited?
 - **Deprecation warnings**: Advance notice? Actionable? ("use newMethod() instead")
 - **Migration guides**: Step-by-step for every breaking change?
@@ -954,6 +990,7 @@ Rate 0-10: Does this integrate into developers' existing workflows?
 Load reference: Read the "## Pass 6" section from `~/.claude/skills/gstack/plan-devex-review/dx-hall-of-fame.md`.
 
 Evaluate:
+
 - **Editor integration**: Language server? Autocomplete? Inline docs?
 - **CI/CD**: Works in GitHub Actions, GitLab CI? Non-interactive mode?
 - **TypeScript support**: Types included? Good IntelliSense?
@@ -972,6 +1009,7 @@ Rate 0-10: Is there a community, and does the plan invest in ecosystem health?
 Load reference: Read the "## Pass 7" section from `~/.claude/skills/gstack/plan-devex-review/dx-hall-of-fame.md`.
 
 Evaluate:
+
 - **Open source**: Code open? Permissive license?
 - **Community channels**: Where do devs ask questions? Someone answering?
 - **Examples**: Real-world, runnable? Not just hello world?
@@ -988,6 +1026,7 @@ Rate 0-10: Does the plan include ways to measure and improve DX over time?
 Load reference: Read the "## Pass 8" section from `~/.claude/skills/gstack/plan-devex-review/dx-hall-of-fame.md`.
 
 Evaluate:
+
 - **TTHW tracking**: Can you measure getting started time?
 - **Journey analytics**: Where do devs drop off?
 - **Feedback mechanisms**: Bug reports? NPS? Feedback button?
@@ -1032,6 +1071,7 @@ Use AskUserQuestion:
 > thorough review. Completeness: A=9/10, B=7/10.
 
 Options:
+
 - A) Get the outside voice (recommended)
 - B) Skip — proceed to outputs
 
@@ -1066,6 +1106,7 @@ codex exec "<prompt>" -C "$_REPO_ROOT" -s read-only -c 'model_reasoning_effort="
 ```
 
 Use a 5-minute timeout (`timeout: 300000`). After the command completes, read stderr:
+
 ```bash
 cat "$TMPERR_PV"
 ```
@@ -1080,6 +1121,7 @@ CODEX SAYS (plan review — outside voice):
 ```
 
 **Error handling:** All errors are non-blocking — the outside voice is informational.
+
 - Auth failure (stderr contains "auth", "login", "unauthorized"): "Codex auth failed. Run \`codex login\` to authenticate."
 - Timeout: "Codex timed out after 5 minutes."
 - Empty response: "Codex returned no response."
@@ -1119,9 +1161,10 @@ For each substantive tension point, use AskUserQuestion:
 > argues [Y]. [One sentence on what context you might be missing.]"
 >
 > RECOMMENDATION: Choose [A or B] because [one-line reason explaining which argument
-> is more compelling and why]. Completeness: A=X/10, B=Y/10.
+> > is more compelling and why]. Completeness: A=X/10, B=Y/10.
 
 Options:
+
 - A) Accept the outside voice's recommendation (I'll apply this change)
 - B) Keep the current approach (reject the outside voice)
 - C) Investigate further before deciding
@@ -1133,6 +1176,7 @@ outside voice. If the user chooses B, the current approach stands — do not re-
 If no tension points exist, note: "No cross-model tension — both reviewers agree."
 
 **Persist the result:**
+
 ```bash
 ~/.claude/skills/gstack/bin/gstack-review-log '{"skill":"codex-plan-review","timestamp":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'","status":"STATUS","source":"SOURCE","commit":"'"$(git rev-parse --short HEAD)"'"}'
 ```
@@ -1149,41 +1193,47 @@ SOURCE = "codex" if Codex ran, "claude" if subagent ran.
 Follow the AskUserQuestion format from the Preamble above. Additional rules for
 DX reviews:
 
-* **One issue = one AskUserQuestion call.** Never combine multiple issues.
-* Describe the DX gap concretely, with what the developer will experience if it's
+- **One issue = one AskUserQuestion call.** Never combine multiple issues.
+- Describe the DX gap concretely, with what the developer will experience if it's
   not fixed. Make the developer's pain real.
-* Present 2-3 options. For each: effort to fix, impact on developer adoption.
-* **Map to DX First Principles above.** One sentence connecting your recommendation
+- Present 2-3 options. For each: effort to fix, impact on developer adoption.
+- **Map to DX First Principles above.** One sentence connecting your recommendation
   to a specific principle (e.g., "This violates 'zero friction at T0' because
   developers need 3 extra config steps before their first API call").
-* **Escape hatch:** If a section has no issues, say so and move on. If a gap has an
+- **Escape hatch:** If a section has no issues, say so and move on. If a gap has an
   obvious fix, state what you'll add and move on, don't waste a question.
-* Assume the user hasn't looked at this window in 20 minutes. Re-ground every question.
+- Assume the user hasn't looked at this window in 20 minutes. Re-ground every question.
 
 ## Required Outputs
 
 ### Developer Journey Map
+
 The journey map from Step 0A, updated with all fixes and decisions from the review.
 
 ### Developer Empathy Narrative
+
 The first-person narrative from Step 0B-bis.
 
 ### "NOT in scope" section
+
 DX improvements considered and explicitly deferred, with one-line rationale each.
 
 ### "What already exists" section
+
 Existing docs, examples, error handling, and DX patterns that the plan should reuse.
 
 ### TODOS.md updates
+
 After all review passes are complete, present each potential TODO as its own individual
 AskUserQuestion. Never batch. For DX debt: missing error messages, unspecified upgrade
 paths, documentation gaps, missing SDK languages. Each TODO gets:
-* **What:** One-line description
-* **Why:** The concrete developer pain it causes
-* **Pros:** What you gain (adoption, retention, satisfaction)
-* **Cons:** Cost, complexity, or risks
-* **Context:** Enough detail for someone to pick this up in 3 months
-* **Depends on / blocked by:** Prerequisites
+
+- **What:** One-line description
+- **Why:** The concrete developer pain it causes
+- **Pros:** What you gain (adoption, retention, satisfaction)
+- **Cons:** Cost, complexity, or risks
+- **Context:** Enough detail for someone to pick this up in 3 months
+- **Depends on / blocked by:** Prerequisites
 
 Options: **A)** Add to TODOS.md **B)** Skip **C)** Build it now
 
@@ -1246,6 +1296,7 @@ DX IMPLEMENTATION CHECKLIST
 ```
 
 ### Unresolved Decisions
+
 If any AskUserQuestion goes unanswered, note here. Never silently default.
 
 ## Review Log
@@ -1294,6 +1345,7 @@ Display:
 ```
 
 **Review tiers:**
+
 - **Eng Review (required by default):** The only review that gates shipping. Covers architecture, code quality, tests, performance. Can be disabled globally with \`gstack-config set skip_eng_review true\` (the "don't bother me" setting).
 - **CEO Review (optional):** Use your judgment. Recommend it for big product/business changes, new user-facing features, or scope decisions. Skip for bug fixes, refactors, infra, and cleanup.
 - **Design Review (optional):** Use your judgment. Recommend it for UI/UX changes. Skip for backend-only, infra, or prompt-only changes.
@@ -1301,12 +1353,14 @@ Display:
 - **Outside Voice (optional):** Independent plan review from a different AI model. Offered after all review sections complete in /plan-ceo-review and /plan-eng-review. Falls back to Claude subagent if Codex is unavailable. Never gates shipping.
 
 **Verdict logic:**
+
 - **CLEARED**: Eng Review has >= 1 entry within 7 days from either \`review\` or \`plan-eng-review\` with status "clean" (or \`skip_eng_review\` is \`true\`)
 - **NOT CLEARED**: Eng Review missing, stale (>7 days), or has open issues
 - CEO, Design, and Codex reviews are shown for context but never block shipping
 - If \`skip_eng_review\` config is \`true\`, Eng Review shows "SKIPPED (global)" and verdict is CLEARED
 
 **Staleness detection:** After displaying the dashboard, check if any existing reviews may be stale:
+
 - Parse the \`---HEAD---\` section from the bash output to get the current HEAD commit hash
 - For each review entry that has a \`commit\` field: compare it against the current HEAD. If different, count elapsed commits: \`git rev-list --count STORED_COMMIT..HEAD\`. Display: "Note: {skill} review from {date} may be stale — {N} commits since review"
 - For entries without a \`commit\` field (legacy entries): display "Note: {skill} review from {date} has no commit tracking — consider re-running for accurate staleness detection"
@@ -1349,15 +1403,17 @@ Summary. For prior reviews, use the JSONL fields directly — they contain all r
 Produce this markdown table:
 
 \`\`\`markdown
+
 ## GSTACK REVIEW REPORT
 
-| Review | Trigger | Why | Runs | Status | Findings |
-|--------|---------|-----|------|--------|----------|
-| CEO Review | \`/plan-ceo-review\` | Scope & strategy | {runs} | {status} | {findings} |
-| Codex Review | \`/codex review\` | Independent 2nd opinion | {runs} | {status} | {findings} |
-| Eng Review | \`/plan-eng-review\` | Architecture & tests (required) | {runs} | {status} | {findings} |
-| Design Review | \`/plan-design-review\` | UI/UX gaps | {runs} | {status} | {findings} |
-| DX Review | \`/plan-devex-review\` | Developer experience gaps | {runs} | {status} | {findings} |
+| Review        | Trigger                 | Why                             | Runs   | Status   | Findings   |
+| ------------- | ----------------------- | ------------------------------- | ------ | -------- | ---------- |
+| CEO Review    | \`/plan-ceo-review\`    | Scope & strategy                | {runs} | {status} | {findings} |
+| Codex Review  | \`/codex review\`       | Independent 2nd opinion         | {runs} | {status} | {findings} |
+| Eng Review    | \`/plan-eng-review\`    | Architecture & tests (required) | {runs} | {status} | {findings} |
+| Design Review | \`/plan-design-review\` | UI/UX gaps                      | {runs} | {status} | {findings} |
+| DX Review     | \`/plan-devex-review\`  | Developer experience gaps       | {runs} | {status} | {findings} |
+
 \`\`\`
 
 Below the table, add these lines (omit any that are empty/not applicable):
@@ -1424,6 +1480,7 @@ developer-facing surfaces; design review covers end-user-facing UI.
 be 3 minutes. Did reality match? Run /devex-review on the live product to find out.
 
 Use AskUserQuestion with applicable options:
+
 - **A)** Run /plan-eng-review next (required gate)
 - **B)** Run /plan-design-review (only if UI scope detected)
 - **C)** Ready to implement, run /devex-review after shipping
@@ -1431,8 +1488,8 @@ Use AskUserQuestion with applicable options:
 
 ## Formatting Rules
 
-* NUMBER issues (1, 2, 3...) and LETTERS for options (A, B, C...).
-* Label with NUMBER + LETTER (e.g., "3A", "3B").
-* One sentence max per option.
-* After each pass, pause and wait for feedback before moving on.
-* Rate before and after each pass for scannability.
+- NUMBER issues (1, 2, 3...) and LETTERS for options (A, B, C...).
+- Label with NUMBER + LETTER (e.g., "3A", "3B").
+- One sentence max per option.
+- After each pass, pause and wait for feedback before moving on.
+- Rate before and after each pass for scannability.

@@ -6,7 +6,12 @@ import { spawnSync } from "child_process";
 
 // Import normalizeRemoteUrl for unit testing
 // We test the script end-to-end via CLI and normalizeRemoteUrl via import
-const scriptPath = join(import.meta.dir, "..", "bin", "gstack-global-discover.ts");
+const scriptPath = join(
+  import.meta.dir,
+  "..",
+  "bin",
+  "gstack-global-discover.ts",
+);
 
 describe("gstack-global-discover", () => {
   describe("normalizeRemoteUrl", () => {
@@ -20,32 +25,36 @@ describe("gstack-global-discover", () => {
 
     test("strips .git suffix", () => {
       expect(normalizeRemoteUrl("https://github.com/user/repo.git")).toBe(
-        "https://github.com/user/repo"
+        "https://github.com/user/repo",
       );
     });
 
     test("converts SSH to HTTPS", () => {
       expect(normalizeRemoteUrl("git@github.com:user/repo.git")).toBe(
-        "https://github.com/user/repo"
+        "https://github.com/user/repo",
       );
     });
 
     test("converts SSH without .git to HTTPS", () => {
       expect(normalizeRemoteUrl("git@github.com:user/repo")).toBe(
-        "https://github.com/user/repo"
+        "https://github.com/user/repo",
       );
     });
 
     test("lowercases host", () => {
       expect(normalizeRemoteUrl("https://GitHub.COM/user/repo")).toBe(
-        "https://github.com/user/repo"
+        "https://github.com/user/repo",
       );
     });
 
     test("SSH and HTTPS for same repo normalize to same URL", () => {
       const ssh = normalizeRemoteUrl("git@github.com:garrytan/gstack.git");
-      const https = normalizeRemoteUrl("https://github.com/garrytan/gstack.git");
-      const httpsNoDotGit = normalizeRemoteUrl("https://github.com/garrytan/gstack");
+      const https = normalizeRemoteUrl(
+        "https://github.com/garrytan/gstack.git",
+      );
+      const httpsNoDotGit = normalizeRemoteUrl(
+        "https://github.com/garrytan/gstack",
+      );
       expect(ssh).toBe(https);
       expect(https).toBe(httpsNoDotGit);
     });
@@ -58,7 +67,7 @@ describe("gstack-global-discover", () => {
 
     test("handles GitLab SSH URLs", () => {
       expect(normalizeRemoteUrl("git@gitlab.com:org/project.git")).toBe(
-        "https://gitlab.com/org/project"
+        "https://gitlab.com/org/project",
       );
     });
   });
@@ -95,7 +104,7 @@ describe("gstack-global-discover", () => {
       const result = spawnSync(
         "bun",
         ["run", scriptPath, "--since", "7d", "--format", "json"],
-        { encoding: "utf-8", timeout: 30000 }
+        { encoding: "utf-8", timeout: 30000 },
       );
       expect(result.status).toBe(0);
       const json = JSON.parse(result.stdout);
@@ -111,7 +120,7 @@ describe("gstack-global-discover", () => {
       const result = spawnSync(
         "bun",
         ["run", scriptPath, "--since", "7d", "--format", "summary"],
-        { encoding: "utf-8", timeout: 30000 }
+        { encoding: "utf-8", timeout: 30000 },
       );
       expect(result.status).toBe(0);
       expect(result.stdout).toContain("Window: 7d");
@@ -123,7 +132,7 @@ describe("gstack-global-discover", () => {
       const result = spawnSync(
         "bun",
         ["run", scriptPath, "--since", "1h", "--format", "json"],
-        { encoding: "utf-8", timeout: 30000 }
+        { encoding: "utf-8", timeout: 30000 },
       );
       expect(result.status).toBe(0);
       const json = JSON.parse(result.stdout);
@@ -136,7 +145,7 @@ describe("gstack-global-discover", () => {
       const result = spawnSync(
         "bun",
         ["run", scriptPath, "--since", "30d", "--format", "json"],
-        { encoding: "utf-8", timeout: 30000 }
+        { encoding: "utf-8", timeout: 30000 },
       );
       expect(result.status).toBe(0);
       const json = JSON.parse(result.stdout);
@@ -158,7 +167,7 @@ describe("gstack-global-discover", () => {
       const result = spawnSync(
         "bun",
         ["run", scriptPath, "--since", "30d", "--format", "json"],
-        { encoding: "utf-8", timeout: 30000 }
+        { encoding: "utf-8", timeout: 30000 },
       );
       const json = JSON.parse(result.stdout);
 
@@ -174,7 +183,7 @@ describe("gstack-global-discover", () => {
       const result = spawnSync(
         "bun",
         ["run", scriptPath, "--since", "30d", "--format", "json"],
-        { encoding: "utf-8", timeout: 30000 }
+        { encoding: "utf-8", timeout: 30000 },
       );
       const json = JSON.parse(result.stdout);
 

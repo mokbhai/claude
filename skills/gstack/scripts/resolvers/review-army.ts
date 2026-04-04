@@ -9,7 +9,7 @@
  *
  * Shipped as Release 2 of the self-learning roadmap (SELF_LEARNING_V0.md).
  */
-import type { TemplateContext } from './types';
+import type { TemplateContext } from "./types";
 
 function generateSpecialistSelection(ctx: TemplateContext): string {
   return `## Step 4.5: Review Army — Specialist Dispatch
@@ -177,7 +177,7 @@ If the Red Team subagent fails or times out, skip silently and continue.`;
 
 export function generateReviewArmy(ctx: TemplateContext): string {
   // Codex host: strip entirely — Codex should not run Review Army
-  if (ctx.host === 'codex') return '';
+  if (ctx.host === "codex") return "";
 
   const sections = [
     generateSpecialistSelection(ctx),
@@ -186,5 +186,5 @@ export function generateReviewArmy(ctx: TemplateContext): string {
     generateRedTeam(ctx),
   ];
 
-  return sections.join('\n\n---\n\n');
+  return sections.join("\n\n---\n\n");
 }

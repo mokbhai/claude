@@ -63,11 +63,14 @@ export async function serve(options: ServeOptions): Promise<void> {
       const url = new URL(req.url);
 
       // Serve the comparison board HTML
-      if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
+      if (
+        req.method === "GET" &&
+        (url.pathname === "/" || url.pathname === "/index.html")
+      ) {
         // Inject the server URL so the board can POST feedback
         const injected = htmlContent.replace(
           "</head>",
-          `<script>window.__GSTACK_SERVER_URL = '${url.origin}';</script>\n</head>`
+          `<script>window.__GSTACK_SERVER_URL = '${url.origin}';</script>\n</head>`,
         );
         return new Response(injected, {
           headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -123,7 +126,9 @@ export async function serve(options: ServeOptions): Promise<void> {
 
     const isSubmit = body.regenerated === false;
     const isRegenerate = body.regenerated === true;
-    const action = isSubmit ? "submitted" : (body.regenerateAction || "regenerate");
+    const action = isSubmit
+      ? "submitted"
+      : body.regenerateAction || "regenerate";
 
     console.error(`SERVE_FEEDBACK_RECEIVED: type=${action}`);
 
@@ -178,7 +183,7 @@ export async function serve(options: ServeOptions): Promise<void> {
     if (!newHtmlPath || !fs.existsSync(newHtmlPath)) {
       return Response.json(
         { error: `HTML file not found: ${newHtmlPath}` },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

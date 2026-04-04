@@ -25,6 +25,7 @@ This is my open source software factory. I use it every day. I'm sharing it beca
 Fork it. Improve it. Make it yours. And if you want to hate on free open source software — you're welcome to, but I'd rather you just try it first.
 
 **Who this is for:**
+
 - **Founders and CEOs** — especially technical ones who still want to ship
 - **First-time Claude Code users** — structured roles instead of a blank prompt
 - **Tech leads and staff engineers** — rigorous review, QA, and release automation on every PR
@@ -55,6 +56,7 @@ Open Claude Code and paste this. Claude does the rest.
 Real files get committed to your repo (not a submodule), so `git clone` just works. Everything lives inside `.claude/`. Nothing touches your PATH or runs in the background.
 
 > **Contributing or need full history?** The commands above use `--depth 1` for a fast install. If you plan to contribute or need full git history, do a full clone instead:
+>
 > ```bash
 > git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
 > ```
@@ -160,55 +162,55 @@ gstack is a process, not a collection of tools. The skills run in the order a sp
 
 Each skill feeds into the next. `/office-hours` writes a design doc that `/plan-ceo-review` reads. `/plan-eng-review` writes a test plan that `/qa` picks up. `/review` catches bugs that `/ship` verifies are fixed. Nothing falls through the cracks because every step knows what came before it.
 
-| Skill | Your specialist | What they do |
-|-------|----------------|--------------|
-| `/office-hours` | **YC Office Hours** | Start here. Six forcing questions that reframe your product before you write code. Pushes back on your framing, challenges premises, generates implementation alternatives. Design doc feeds into every downstream skill. |
-| `/plan-ceo-review` | **CEO / Founder** | Rethink the problem. Find the 10-star product hiding inside the request. Four modes: Expansion, Selective Expansion, Hold Scope, Reduction. |
-| `/plan-eng-review` | **Eng Manager** | Lock in architecture, data flow, diagrams, edge cases, and tests. Forces hidden assumptions into the open. |
-| `/plan-design-review` | **Senior Designer** | Rates each design dimension 0-10, explains what a 10 looks like, then edits the plan to get there. AI Slop detection. Interactive — one AskUserQuestion per design choice. |
-| `/plan-devex-review` | **Developer Experience Lead** | Evaluates plans through Addy Osmani's DX framework: zero friction, learn by doing, fight uncertainty. Rates 8 DX dimensions 0-10 with a DX Scorecard. Use for developer-facing products — APIs, CLIs, SDKs, libraries, platforms, docs. |
-| `/design-consultation` | **Design Partner** | Build a complete design system from scratch. Researches the landscape, proposes creative risks, generates realistic product mockups. |
-| `/review` | **Staff Engineer** | Find the bugs that pass CI but blow up in production. Auto-fixes the obvious ones. Flags completeness gaps. |
-| `/investigate` | **Debugger** | Systematic root-cause debugging. Iron Law: no fixes without investigation. Traces data flow, tests hypotheses, stops after 3 failed fixes. |
-| `/design-review` | **Designer Who Codes** | Same audit as /plan-design-review, then fixes what it finds. Atomic commits, before/after screenshots. |
-| `/devex-review` | **DX Tester** | Live developer experience audit. Actually tests your onboarding: navigates docs, tries the getting started flow, times TTHW, screenshots errors. Compares against `/plan-devex-review` scores — the boomerang that shows if your plan matched reality. |
-| `/design-shotgun` | **Design Explorer** | Generate multiple AI design variants, open a comparison board in your browser, and iterate until you approve a direction. Taste memory biases toward your preferences. |
-| `/design-html` | **Design Engineer** | Generates production-quality HTML with Pretext for computed text layout. Works with approved mockups, CEO plans, design reviews, or from scratch. Text reflows on resize, heights adjust to content. Smart API routing picks the right Pretext patterns per design type. Framework detection for React/Svelte/Vue. |
-| `/qa` | **QA Lead** | Test your app, find bugs, fix them with atomic commits, re-verify. Auto-generates regression tests for every fix. |
-| `/qa-only` | **QA Reporter** | Same methodology as /qa but report only. Pure bug report without code changes. |
-| `/cso` | **Chief Security Officer** | OWASP Top 10 + STRIDE threat model. Zero-noise: 17 false positive exclusions, 8/10+ confidence gate, independent finding verification. Each finding includes a concrete exploit scenario. |
-| `/ship` | **Release Engineer** | Sync main, run tests, audit coverage, push, open PR. Bootstraps test frameworks if you don't have one. |
-| `/land-and-deploy` | **Release Engineer** | Merge the PR, wait for CI and deploy, verify production health. One command from "approved" to "verified in production." |
-| `/canary` | **SRE** | Post-deploy monitoring loop. Watches for console errors, performance regressions, and page failures. |
-| `/benchmark` | **Performance Engineer** | Baseline page load times, Core Web Vitals, and resource sizes. Compare before/after on every PR. |
-| `/document-release` | **Technical Writer** | Update all project docs to match what you just shipped. Catches stale READMEs automatically. |
-| `/retro` | **Eng Manager** | Team-aware weekly retro. Per-person breakdowns, shipping streaks, test health trends, growth opportunities. `/retro global` runs across all your projects and AI tools (Claude Code, Codex, Gemini). |
-| `/browse` | **QA Engineer** | Give the agent eyes. Real Chromium browser, real clicks, real screenshots. ~100ms per command. `$B connect` launches your real Chrome as a headed window — watch every action live. |
-| `/setup-browser-cookies` | **Session Manager** | Import cookies from your real browser (Chrome, Arc, Brave, Edge) into the headless session. Test authenticated pages. |
-| `/autoplan` | **Review Pipeline** | One command, fully reviewed plan. Runs CEO → design → eng review automatically with encoded decision principles. Surfaces only taste decisions for your approval. |
-| `/learn` | **Memory** | Manage what gstack learned across sessions. Review, search, prune, and export project-specific patterns, pitfalls, and preferences. Learnings compound across sessions so gstack gets smarter on your codebase over time. |
+| Skill                    | Your specialist               | What they do                                                                                                                                                                                                                                                                                                       |
+| ------------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/office-hours`          | **YC Office Hours**           | Start here. Six forcing questions that reframe your product before you write code. Pushes back on your framing, challenges premises, generates implementation alternatives. Design doc feeds into every downstream skill.                                                                                          |
+| `/plan-ceo-review`       | **CEO / Founder**             | Rethink the problem. Find the 10-star product hiding inside the request. Four modes: Expansion, Selective Expansion, Hold Scope, Reduction.                                                                                                                                                                        |
+| `/plan-eng-review`       | **Eng Manager**               | Lock in architecture, data flow, diagrams, edge cases, and tests. Forces hidden assumptions into the open.                                                                                                                                                                                                         |
+| `/plan-design-review`    | **Senior Designer**           | Rates each design dimension 0-10, explains what a 10 looks like, then edits the plan to get there. AI Slop detection. Interactive — one AskUserQuestion per design choice.                                                                                                                                         |
+| `/plan-devex-review`     | **Developer Experience Lead** | Evaluates plans through Addy Osmani's DX framework: zero friction, learn by doing, fight uncertainty. Rates 8 DX dimensions 0-10 with a DX Scorecard. Use for developer-facing products — APIs, CLIs, SDKs, libraries, platforms, docs.                                                                            |
+| `/design-consultation`   | **Design Partner**            | Build a complete design system from scratch. Researches the landscape, proposes creative risks, generates realistic product mockups.                                                                                                                                                                               |
+| `/review`                | **Staff Engineer**            | Find the bugs that pass CI but blow up in production. Auto-fixes the obvious ones. Flags completeness gaps.                                                                                                                                                                                                        |
+| `/investigate`           | **Debugger**                  | Systematic root-cause debugging. Iron Law: no fixes without investigation. Traces data flow, tests hypotheses, stops after 3 failed fixes.                                                                                                                                                                         |
+| `/design-review`         | **Designer Who Codes**        | Same audit as /plan-design-review, then fixes what it finds. Atomic commits, before/after screenshots.                                                                                                                                                                                                             |
+| `/devex-review`          | **DX Tester**                 | Live developer experience audit. Actually tests your onboarding: navigates docs, tries the getting started flow, times TTHW, screenshots errors. Compares against `/plan-devex-review` scores — the boomerang that shows if your plan matched reality.                                                             |
+| `/design-shotgun`        | **Design Explorer**           | Generate multiple AI design variants, open a comparison board in your browser, and iterate until you approve a direction. Taste memory biases toward your preferences.                                                                                                                                             |
+| `/design-html`           | **Design Engineer**           | Generates production-quality HTML with Pretext for computed text layout. Works with approved mockups, CEO plans, design reviews, or from scratch. Text reflows on resize, heights adjust to content. Smart API routing picks the right Pretext patterns per design type. Framework detection for React/Svelte/Vue. |
+| `/qa`                    | **QA Lead**                   | Test your app, find bugs, fix them with atomic commits, re-verify. Auto-generates regression tests for every fix.                                                                                                                                                                                                  |
+| `/qa-only`               | **QA Reporter**               | Same methodology as /qa but report only. Pure bug report without code changes.                                                                                                                                                                                                                                     |
+| `/cso`                   | **Chief Security Officer**    | OWASP Top 10 + STRIDE threat model. Zero-noise: 17 false positive exclusions, 8/10+ confidence gate, independent finding verification. Each finding includes a concrete exploit scenario.                                                                                                                          |
+| `/ship`                  | **Release Engineer**          | Sync main, run tests, audit coverage, push, open PR. Bootstraps test frameworks if you don't have one.                                                                                                                                                                                                             |
+| `/land-and-deploy`       | **Release Engineer**          | Merge the PR, wait for CI and deploy, verify production health. One command from "approved" to "verified in production."                                                                                                                                                                                           |
+| `/canary`                | **SRE**                       | Post-deploy monitoring loop. Watches for console errors, performance regressions, and page failures.                                                                                                                                                                                                               |
+| `/benchmark`             | **Performance Engineer**      | Baseline page load times, Core Web Vitals, and resource sizes. Compare before/after on every PR.                                                                                                                                                                                                                   |
+| `/document-release`      | **Technical Writer**          | Update all project docs to match what you just shipped. Catches stale READMEs automatically.                                                                                                                                                                                                                       |
+| `/retro`                 | **Eng Manager**               | Team-aware weekly retro. Per-person breakdowns, shipping streaks, test health trends, growth opportunities. `/retro global` runs across all your projects and AI tools (Claude Code, Codex, Gemini).                                                                                                               |
+| `/browse`                | **QA Engineer**               | Give the agent eyes. Real Chromium browser, real clicks, real screenshots. ~100ms per command. `$B connect` launches your real Chrome as a headed window — watch every action live.                                                                                                                                |
+| `/setup-browser-cookies` | **Session Manager**           | Import cookies from your real browser (Chrome, Arc, Brave, Edge) into the headless session. Test authenticated pages.                                                                                                                                                                                              |
+| `/autoplan`              | **Review Pipeline**           | One command, fully reviewed plan. Runs CEO → design → eng review automatically with encoded decision principles. Surfaces only taste decisions for your approval.                                                                                                                                                  |
+| `/learn`                 | **Memory**                    | Manage what gstack learned across sessions. Review, search, prune, and export project-specific patterns, pitfalls, and preferences. Learnings compound across sessions so gstack gets smarter on your codebase over time.                                                                                          |
 
 ### Which review should I use?
 
-| Building for... | Plan stage (before code) | Live audit (after shipping) |
-|-----------------|--------------------------|----------------------------|
-| **End users** (UI, web app, mobile) | `/plan-design-review` | `/design-review` |
-| **Developers** (API, CLI, SDK, docs) | `/plan-devex-review` | `/devex-review` |
-| **Architecture** (data flow, perf, tests) | `/plan-eng-review` | `/review` |
-| **All of the above** | `/autoplan` (runs CEO → design → eng → DX, auto-detects which apply) | — |
+| Building for...                           | Plan stage (before code)                                             | Live audit (after shipping) |
+| ----------------------------------------- | -------------------------------------------------------------------- | --------------------------- |
+| **End users** (UI, web app, mobile)       | `/plan-design-review`                                                | `/design-review`            |
+| **Developers** (API, CLI, SDK, docs)      | `/plan-devex-review`                                                 | `/devex-review`             |
+| **Architecture** (data flow, perf, tests) | `/plan-eng-review`                                                   | `/review`                   |
+| **All of the above**                      | `/autoplan` (runs CEO → design → eng → DX, auto-detects which apply) | —                           |
 
 ### Power tools
 
-| Skill | What it does |
-|-------|-------------|
-| `/codex` | **Second Opinion** — independent code review from OpenAI Codex CLI. Three modes: review (pass/fail gate), adversarial challenge, and open consultation. Cross-model analysis when both `/review` and `/codex` have run. |
-| `/careful` | **Safety Guardrails** — warns before destructive commands (rm -rf, DROP TABLE, force-push). Say "be careful" to activate. Override any warning. |
-| `/freeze` | **Edit Lock** — restrict file edits to one directory. Prevents accidental changes outside scope while debugging. |
-| `/guard` | **Full Safety** — `/careful` + `/freeze` in one command. Maximum safety for prod work. |
-| `/unfreeze` | **Unlock** — remove the `/freeze` boundary. |
-| `/connect-chrome` | **Chrome Controller** — launch Chrome with the Side Panel extension. Watch every action live, inspect CSS on any element, clean up pages, and take screenshots. Each tab gets its own agent. |
-| `/setup-deploy` | **Deploy Configurator** — one-time setup for `/land-and-deploy`. Detects your platform, production URL, and deploy commands. |
-| `/gstack-upgrade` | **Self-Updater** — upgrade gstack to latest. Detects global vs vendored install, syncs both, shows what changed. |
+| Skill             | What it does                                                                                                                                                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/codex`          | **Second Opinion** — independent code review from OpenAI Codex CLI. Three modes: review (pass/fail gate), adversarial challenge, and open consultation. Cross-model analysis when both `/review` and `/codex` have run. |
+| `/careful`        | **Safety Guardrails** — warns before destructive commands (rm -rf, DROP TABLE, force-push). Say "be careful" to activate. Override any warning.                                                                         |
+| `/freeze`         | **Edit Lock** — restrict file edits to one directory. Prevents accidental changes outside scope while debugging.                                                                                                        |
+| `/guard`          | **Full Safety** — `/careful` + `/freeze` in one command. Maximum safety for prod work.                                                                                                                                  |
+| `/unfreeze`       | **Unlock** — remove the `/freeze` boundary.                                                                                                                                                                             |
+| `/connect-chrome` | **Chrome Controller** — launch Chrome with the Side Panel extension. Watch every action live, inspect CSS on any element, clean up pages, and take screenshots. Each tab gets its own agent.                            |
+| `/setup-deploy`   | **Deploy Configurator** — one-time setup for `/land-and-deploy`. Detects your platform, production URL, and deploy commands.                                                                                            |
+| `/gstack-upgrade` | **Self-Updater** — upgrade gstack to latest. Detects global vs vendored install, syncs both, shows what changed.                                                                                                        |
 
 **[Deep dives with examples and philosophy for every skill →](docs/skills.md)**
 
@@ -218,7 +220,7 @@ gstack works well with one sprint. It gets interesting with ten running at once.
 
 **Design is at the heart.** `/design-consultation` builds your design system from scratch, researches the space, proposes creative risks, and writes `DESIGN.md`. `/design-shotgun` generates multiple visual variants and opens a comparison board so you can pick a direction. `/design-html` takes that approved mockup and generates production-quality HTML with Pretext, where text actually reflows on resize instead of breaking with hardcoded heights. Then `/design-review` and `/plan-eng-review` read what you chose. Design decisions flow through the whole system.
 
-**`/qa` was a massive unlock.** It let me go from 6 to 12 parallel workers. Claude Code saying *"I SEE THE ISSUE"* and then actually fixing it, generating a regression test, and verifying the fix — that changed how I work. The agent has eyes now.
+**`/qa` was a massive unlock.** It let me go from 6 to 12 parallel workers. Claude Code saying _"I SEE THE ISSUE"_ and then actually fixing it, generating a regression test, and verifying the fix — that changed how I work. The agent has eyes now.
 
 **Smart review routing.** Just like at a well-run startup: CEO doesn't have to look at infra bug fixes, design review isn't needed for backend changes. gstack tracks what reviews are run, figures out what's appropriate, and just does the smart thing. The Review Readiness Dashboard tells you where you stand before you ship.
 
@@ -260,14 +262,14 @@ I open sourced how I build software. You can fork it and make it your own.
 
 ## Docs
 
-| Doc | What it covers |
-|-----|---------------|
-| [Skill Deep Dives](docs/skills.md) | Philosophy, examples, and workflow for every skill (includes Greptile integration) |
-| [Builder Ethos](ETHOS.md) | Builder philosophy: Boil the Lake, Search Before Building, three layers of knowledge |
-| [Architecture](ARCHITECTURE.md) | Design decisions and system internals |
-| [Browser Reference](BROWSER.md) | Full command reference for `/browse` |
-| [Contributing](CONTRIBUTING.md) | Dev setup, testing, contributor mode, and dev mode |
-| [Changelog](CHANGELOG.md) | What's new in every version |
+| Doc                                | What it covers                                                                       |
+| ---------------------------------- | ------------------------------------------------------------------------------------ |
+| [Skill Deep Dives](docs/skills.md) | Philosophy, examples, and workflow for every skill (includes Greptile integration)   |
+| [Builder Ethos](ETHOS.md)          | Builder philosophy: Boil the Lake, Search Before Building, three layers of knowledge |
+| [Architecture](ARCHITECTURE.md)    | Design decisions and system internals                                                |
+| [Browser Reference](BROWSER.md)    | Full command reference for `/browse`                                                 |
+| [Contributing](CONTRIBUTING.md)    | Dev setup, testing, contributor mode, and dev mode                                   |
+| [Changelog](CHANGELOG.md)          | What's new in every version                                                          |
 
 ## Privacy & Telemetry
 
