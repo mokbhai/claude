@@ -17,6 +17,28 @@ import urllib.parse
 import ssl
 import certifi
 from base64 import b64encode
+from pathlib import Path
+
+
+def _load_env():
+    """Walk up from script dir to find and load .env file."""
+    current = Path(__file__).resolve().parent
+    for _ in range(10):  # max 10 levels up
+        env_file = current / ".env"
+        if env_file.is_file():
+            with open(env_file) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, _, value = line.partition("=")
+                        os.environ.setdefault(key.strip(), value.strip())
+            return
+        if current.parent == current:
+            break
+        current = current.parent
+
+
+_load_env()
 
 # Configuration (from environment variables)
 API_ENDPOINT = os.environ.get("SEARXNG_API_ENDPOINT", "https://ser.jainparichay.in/search")
