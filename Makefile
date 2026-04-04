@@ -16,7 +16,7 @@ install: setup
 
 setup:
 	@mkdir -p ~/.claude
-	@cp -r agents commands hooks.settings.json skills ~/.claude
+	@cp -r agents commands hooks.settings.json skills settings-zai.json ~/.claude
 	@echo "✓ Files copied to ~/.claude"
 
 run:
@@ -33,5 +33,5 @@ format:
 
 clean:
 	@echo "Cleaning up..."
-	@rm -rf ~/.claude/agents ~/.claude/commands ~/.claude/hooks.settings.json ~/.claude/skills 2>/dev/null || true
+	@rm -rf ~/.claude/agents ~/.claude/commands ~/.claude/hooks.settings.json ~/.claude/skills ~/.claude/settings-zai.json 2>/dev/null || true
 	@echo "✓ Cleanup complete"
