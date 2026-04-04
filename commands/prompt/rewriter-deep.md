@@ -23,6 +23,7 @@ You may add helpful constraints, assumptions, or formatting instructions **only 
 **ONLY if the `--no-q` flag is NOT present:** After your initial exploration, if you are uncertain about any aspect of the original prompt or the correct approach, you MUST conduct a thorough, continuous interview using the AskUserQuestion tool.
 
 **When to interview:**
+
 - The prompt's intent is ambiguous or could be interpreted multiple ways
 - Technical implementation details are missing or unclear
 - You cannot determine the optimal solution from codebase exploration alone
@@ -59,6 +60,7 @@ You may add helpful constraints, assumptions, or formatting instructions **only 
 ## Phase 3: Rewrite with Full Context
 
 **After completing exploration:**
+
 - If `--no-q` flag was present: Proceed directly to rewriting using only codebase context
 - If `--no-q` flag was NOT present: Synthesize all gathered context from both codebase exploration AND user interviews, incorporating the nuanced understanding gained from deep questioning
 

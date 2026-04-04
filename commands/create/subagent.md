@@ -16,6 +16,7 @@ You are creating a custom subagent. Subagents are specialized AI assistants that
 ### Step 1: Determine Scope
 
 Based on the flags provided:
+
 - **--user**: Creates a user-level subagent at `~/.claude/agents/` (available in all projects)
 - **--project** (default): Creates a project-level subagent at `.claude/agents/` (available only in this project)
 
@@ -81,16 +82,19 @@ When designing your subagent:
 Choose a pattern that matches your needs:
 
 **Read-Only Analyzer**: Review code or analyze data without modifications
+
 ```yaml
 tools: Read, Grep, Glob, Bash
 ```
 
 **Code Modifier**: Fix bugs, refactor code, implement features
+
 ```yaml
 tools: Read, Edit, Write, Bash, Grep, Glob
 ```
 
 **Database Query Executor**: Execute specific commands with validation
+
 ```yaml
 tools: Bash
 hooks:
@@ -106,10 +110,12 @@ hooks:
 Once you provide the configuration, I will create a Markdown file with YAML frontmatter:
 
 **File Location**:
+
 - User-level: `~/.claude/agents/$1.md`
 - Project-level: `.claude/agents/$1.md`
 
 **File Format**:
+
 ```yaml
 ---
 name: $1
@@ -119,7 +125,6 @@ model: [selected model]
 permissionMode: [optional permission mode]
 hooks: [optional hooks]
 ---
-
 [your system prompt]
 ```
 
@@ -128,26 +133,34 @@ hooks: [optional hooks]
 For reference, here are some effective subagent patterns:
 
 ### Code Reviewer
+
 Read-only analysis of code quality, security, and best practices
+
 - Tools: Read, Grep, Glob, Bash
 - Model: inherit
 - Description: "Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code."
 
 ### Debugger
+
 Analyze and fix issues with full modification capabilities
+
 - Tools: Read, Edit, Bash, Grep, Glob
 - Model: inherit
 - Description: "Debugging specialist for errors, test failures, and unexpected behavior. Use proactively when encountering any issues."
 
 ### Database Reader
+
 Execute read-only queries with command validation
+
 - Tools: Bash
 - Model: sonnet
 - Description: "Execute read-only database queries. Use when analyzing data or generating reports."
 - Hooks: PreToolUse validation for SELECT-only queries
 
 ### Data Scientist
+
 SQL and BigQuery analysis specialist
+
 - Tools: Bash, Read, Write
 - Model: sonnet
 - Description: "Data analysis expert for SQL queries, BigQuery operations, and data insights. Use proactively for data analysis tasks and queries."
@@ -155,6 +168,7 @@ SQL and BigQuery analysis specialist
 ## Next Steps
 
 Please provide:
+
 1. A clear description of when Claude should delegate to this subagent
 2. The system prompt (instructions for the subagent)
 3. Which tools it should have access to (or leave empty to inherit all)
