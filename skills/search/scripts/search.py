@@ -41,8 +41,8 @@ def _load_env():
 _load_env()
 
 # Configuration (from environment variables)
-API_ENDPOINT = os.environ.get("SEARXNG_API_ENDPOINT", "https://ser.jainparichay.in/search")
-AUTH_USER = os.environ.get("SEARXNG_AUTH_USER", "admin")
+API_ENDPOINT = os.environ.get("SEARXNG_API_ENDPOINT", "")
+AUTH_USER = os.environ.get("SEARXNG_AUTH_USER", "")
 AUTH_PASS = os.environ.get("SEARXNG_AUTH_PASS", "")
 
 
